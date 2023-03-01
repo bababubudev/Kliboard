@@ -1,0 +1,12 @@
+{
+  "name": "serverside",
+  "version": "1.0.0",
+  "description": "serverside for the app",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "author": "Prabesh Dai",
+  "license": "ISC"
+}
