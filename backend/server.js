@@ -1,10 +1,15 @@
 import express from "express"
 import env from "dotenv"
-import morgan from "morgan";
+import mongoose from "mongoose"
+import morgan from "morgan"
 
 import router from "./routes/all_routes.js";
 
 env.config();
+mongoose.connect(process.env.DBURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(on_connect).catch(on_fail);
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -12,6 +17,15 @@ const port = process.env.PORT || 5001;
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use(router);
+app.use("/api", router);
 
-app.listen(port, () => { console.log(`Port: ${port}`); });
+function on_connect()
+{
+    console.log(`Successfully connected to the database!`)
+    app.listen(port, () => { console.log(`Listening on port ${port}...`); });
+}
+
+function on_fail(err)
+{
+    console.error(`Failed to connect to the database \n${err}`);
+}
