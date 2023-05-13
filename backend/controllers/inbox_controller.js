@@ -8,6 +8,19 @@ async function get_inbox(req, res)
     try
     {
         const inbox = await model.findById(id);
+        res.status(200).json({ inbox });
+    }
+    catch (err)
+    {
+        res.status(400).json({ error: err.message });
+    }
+}
+
+async function get_all_inbox(req, res)
+{
+    try
+    {
+        const inbox = await model.find();
         res.status(200).json(inbox);
     }
     catch (err)
@@ -47,8 +60,8 @@ async function update_inbox(req, res)
             throw new Error("Sent request is not valid!")
         }
 
-        const inbox = await model.findOneAndUpdate({ _id: id }, req.body);
-        await res.status(200).json({ message: `${inbox.space_name} successfully updated!` });
+        const inbox = await model.findOneAndUpdate({ _id: id }, req.body, { new: true });
+        res.status(200).json({ message: `${inbox.space_name} successfully updated!`, inbox });
     }
     catch (err)
     {
@@ -73,6 +86,6 @@ async function delete_inbox(req, res)
 
 export
 {
-    get_inbox, post_inbox,
+    get_inbox, get_all_inbox, post_inbox,
     update_inbox, delete_inbox
 }

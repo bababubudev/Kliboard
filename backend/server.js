@@ -1,5 +1,6 @@
 import express from "express"
 import env from "dotenv"
+import cors from "cors"
 import mongoose from "mongoose"
 import morgan from "morgan"
 
@@ -15,9 +16,10 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 app.use(express.json());
+app.use(cors());
 app.use(morgan("dev"));
 
-app.use("/api", router);
+app.use("/api/", router);
 
 function on_connect()
 {
