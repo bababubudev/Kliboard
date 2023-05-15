@@ -35,8 +35,16 @@ async function post_inbox(req, res)
 
     try
     {
+        const contains = await model.exists({ space_name });
+
+        if (contains)
+        {
+            const inbox = await model.findById(contains["_id"]);
+            return res.status(200).json(inbox);
+        }
+
         const inbox = await model.create({ space_name, space_text, removal });
-        res.status(200).json(inbox);
+        return res.status(200).json(inbox);
     }
     catch (err)
     {
