@@ -7,24 +7,24 @@ import UnsavedInboxDetail from "../components/UnsavedInboxDetail";
 import IInbox from "../interfaces/Inbox";
 
 function Inbox() {
-    const [data, setData] = useState<IInbox>();
+    const [data, set_data] = useState<IInbox | undefined>(undefined);
 
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function fetch_data() {
-        const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
-
+    async function fetch_data(): Promise<void> {
         try {
-            const json = await response.json();
-            setData(json);
-        }
-        catch (err) {
+            const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
+
             if (response.status === 204) {
-                console.log("User not found!");
+                console.log(`User of name ${name} not found!`);
                 return;
             }
 
+            const json = await response.json();
+            set_data(json);
+        }
+        catch (err) {
             console.error(err);
         }
     }
@@ -35,13 +35,23 @@ function Inbox() {
         }
     }, [data]);
 
+    async function update_inbox(updated: IInbox): Promise<void> {
+        try {
+            const response = await fetch(`http://localhost:5000/api/inbox/${updated._id}`, { method: "GET" });
+            const json = await response.json();
+
+            set_data(json);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <div className="home">
             <div className="data">
                 {data
-                    ? <SavedInboxDetail key={data._id} inbox={data} />
-                    : <UnsavedInboxDetail space_name={name} />
+                    ? <SavedInboxDetail inbox={data} on_update={update_inbox} />
+                    : <UnsavedInboxDetail space_name={name} on_update={update_inbox} />
                 }
             </div>
         </div>

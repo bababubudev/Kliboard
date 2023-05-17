@@ -46,7 +46,7 @@ async function post_inbox(req, res)
         if (contains)
         {
             console.log("[ Duplicate entry found! ]");
-            const inbox = await model.findById();
+            const inbox = await model.findById(contains["_id"]);
             return res.status(200).json(inbox);
         }
 

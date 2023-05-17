@@ -3,18 +3,19 @@ import IInbox from "../interfaces/Inbox"
 import InboxArea from "./InboxArea";
 
 interface IDetails {
-    inbox: IInbox
+    inbox: IInbox;
+    on_update: (inbox: IInbox) => void;
 }
 
-function SavedInboxDetails({ inbox }: IDetails) {
-    const [text, setText] = useState<string>(inbox.space_text || "");
-    const [removal, setRemoval] = useState<Number>(inbox.removal || 0);
+function SavedInboxDetails({ inbox, on_update }: IDetails) {
+    const [text, set_text] = useState<string>(inbox.space_text || "");
+    const [removal_time, set_removal_time] = useState<Number>(inbox.removal || 0);
 
     const updatedDate = new Date(inbox.updatedAt).toLocaleDateString();
 
     const content = {
         space_text: text,
-        removal: removal
+        removal: removal_time
     }
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -29,23 +30,26 @@ function SavedInboxDetails({ inbox }: IDetails) {
         try {
             const json = await response.json();
             console.log(json);
+            on_update(json);
         }
         catch (err) {
-            if (response.status === 204) {
-                console.log("User not found!");
-                return;
-            }
-
             console.error(err);
         }
     }
 
     function handle_change(event: ChangeEvent<HTMLInputElement>): void {
-        setText(event.target.value);
+        set_text(event.target.value);
     }
 
     return (
-        <InboxArea inbox=inbox />
+        <InboxArea
+            space_name={inbox.space_name}
+            current_text={text}
+            updated_date={updatedDate}
+
+            handle_submit={handle_submit}
+            handle_change={handle_change}
+        />
     );
 }
 
