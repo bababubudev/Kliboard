@@ -37,10 +37,14 @@ header a {
     margin: 0 auto;
 }
 
-.home {
+.home form {
     display: grid;
     grid-template-columns: 3fr 1fr;
-    gap: 100px;
+    gap: 10px;
+}
+
+.home input {
+    text-overflow: ellipsis;
 }
 
 .inbox-details {

@@ -8,7 +8,7 @@ async function get_inbox(req, res)
     try
     {
         const inbox = await model.findById(id);
-        res.status(200).json({ inbox });
+        res.status(200).json(inbox);
     }
     catch (err)
     {
@@ -16,12 +16,18 @@ async function get_inbox(req, res)
     }
 }
 
-async function get_all_inbox(req, res)
+async function get_inbox_name(req, res)
 {
+    const name = req.params.name;
+
     try
     {
-        const inbox = await model.find();
-        res.status(200).json(inbox);
+        const inbox = await model.findOne({ space_name: name });
+
+        if (inbox === null)
+            return res.status(204).send();
+
+        return res.status(200).json(inbox);
     }
     catch (err)
     {
@@ -39,7 +45,8 @@ async function post_inbox(req, res)
 
         if (contains)
         {
-            const inbox = await model.findById(contains["_id"]);
+            console.log("[ Duplicate entry found! ]");
+            const inbox = await model.findById();
             return res.status(200).json(inbox);
         }
 
@@ -64,12 +71,12 @@ async function update_inbox(req, res)
 
         if (!isValid)
         {
-            res.status(400)
-            throw new Error("Sent request is not valid!")
+            res.status(400);
+            throw new Error("Sent request is not valid!");
         }
 
         const inbox = await model.findOneAndUpdate({ _id: id }, req.body, { new: true });
-        res.status(200).json({ message: `${inbox.space_name} successfully updated!`, inbox });
+        res.status(200).json([{ message: `${inbox.space_name} successfully updated!` }, { change: req.body }]);
     }
     catch (err)
     {
@@ -94,6 +101,6 @@ async function delete_inbox(req, res)
 
 export
 {
-    get_inbox, get_all_inbox, post_inbox,
+    get_inbox, get_inbox_name, post_inbox,
     update_inbox, delete_inbox
 }

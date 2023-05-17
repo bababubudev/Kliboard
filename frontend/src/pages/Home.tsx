@@ -1,8 +1,33 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+    const [text, setText] = useState<string>("");
+    const navigate = useNavigate();
+
+    function handle_submit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        navigate(`/inbox`, { state: { u_name: text } });
+    }
+
+    function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
+        setText(event.target.value);
+    }
+
     return (
-        <>
-            <h1>Hello</h1>
-        </>
+        <div className="home">
+            <form onSubmit={handle_submit}>
+                <input
+                    type="text"
+                    value={text}
+                    id="input-text"
+                    onChange={handle_change}
+                    placeholder="Create space or enter an existing one..."
+                />
+
+                <button type="submit">Create</button>
+            </form>
+        </div>
     )
 }
 

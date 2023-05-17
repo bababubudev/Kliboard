@@ -8,9 +8,6 @@ function Navbar() {
                     <Link to="/">
                         <h1>Kliboard</h1>
                     </Link>
-                    <Link to="/inbox">
-                        <h3>Inbox</h3>
-                    </Link>
                 </div>
             </header>
         </>
