@@ -1,29 +1,58 @@
 import { useEffect, useState } from "react";
-import InboxDetails from "../components/InboxDetails";
+import { useLocation } from "react-router-dom";
+
+import SavedInboxDetail from "../components/SavedInboxDetail";
+import UnsavedInboxDetail from "../components/UnsavedInboxDetail";
+
 import IInbox from "../interfaces/Inbox";
 
 function Inbox() {
-    const [data, setData] = useState<IInbox[]>([]);
-    async function fetch_data() {
-        const response = await fetch("http://localhost:5000/api/inbox", { method: "GET" });
-        const json = await response.json();
+    const [data, set_data] = useState<IInbox | undefined>(undefined);
 
+    const location = useLocation();
+    const name: string = location.state?.u_name;
+
+    async function fetch_data(): Promise<void> {
         try {
-            setData(json);
+            const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
+
+            if (response.status === 204) {
+                console.log(`User of name ${name} not found!`);
+                return;
+            }
+
+            const json = await response.json();
+            set_data(json);
         }
         catch (err) {
             console.error(err);
         }
     }
 
-    useEffect(() => { fetch_data(); }, []);
+    useEffect(() => {
+        if (name && !data) {
+            fetch_data();
+        }
+    }, [data]);
+
+    async function update_inbox(updated: IInbox): Promise<void> {
+        try {
+            const response = await fetch(`http://localhost:5000/api/inbox/${updated._id}`, { method: "GET" });
+            const json = await response.json();
+
+            set_data(json);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     return (
         <div className="home">
             <div className="data">
-                {data && data.map((inbox) => (
-                    <InboxDetails key={inbox._id} inbox={inbox} />
-                ))}
+                {data
+                    ? <SavedInboxDetail inbox={data} on_update={update_inbox} />
+                    : <UnsavedInboxDetail space_name={name} on_update={update_inbox} />
+                }
             </div>
         </div>
     );

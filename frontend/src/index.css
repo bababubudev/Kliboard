@@ -37,30 +37,10 @@ header a {
     margin: 0 auto;
 }
 
-.form-obj {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-    gap: 10px;
-
-    max-width: 700px;
-}
-
-.home {
+.home form {
     display: grid;
     grid-template-columns: 3fr 1fr;
     gap: 100px;
-}
-
-.home-btn {
-    background-color: var(--primary);
-    color: white;
-
-    padding: 10px;
-
-    border-radius: 5px;
-
-    text-decoration: none;
-    text-align: center;
 }
 
 .inbox-details {
