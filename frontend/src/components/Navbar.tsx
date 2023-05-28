@@ -9,7 +9,7 @@ function Navbar() {
                         <h1>Kliboard</h1>
                     </Link>
                     <Link to="/inbox">
-                        <h3>Inbox</h3>
+                        <h1>Inbox</h1>
                     </Link>
                 </div>
             </header>
