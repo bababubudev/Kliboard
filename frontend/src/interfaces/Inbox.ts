@@ -1,4 +1,4 @@
-interface IInbox {
+export interface IInbox {
     _id: number;
     space_name: string;
     space_text?: string;
@@ -8,4 +8,12 @@ interface IInbox {
     __v: number;
 }
 
-export default IInbox
+export const emptyInbox = {
+    _id: 0,
+    space_name: "",
+    space_text: "",
+    removal: -1,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    __v: -1,
+}

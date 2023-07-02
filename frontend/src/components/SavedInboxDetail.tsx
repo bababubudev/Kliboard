@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import IInbox from "../interfaces/Inbox"
+import { IInbox, emptyInbox } from "../interfaces/Inbox"
 import InboxArea from "./InboxArea";
 
 interface IDetails {
@@ -9,7 +9,7 @@ interface IDetails {
 
 function SavedInboxDetails({ inbox, on_update }: IDetails) {
     const [text, set_text] = useState<string>(inbox.space_text || "");
-    const [removal_time, set_removal_time] = useState<Number>(inbox.removal || 0);
+    const [removal_time] = useState<Number>(inbox.removal || 0);
 
     const updatedDate = new Date(inbox.updatedAt).toLocaleDateString();
 
@@ -28,9 +28,9 @@ function SavedInboxDetails({ inbox, on_update }: IDetails) {
         });
 
         try {
-            const json = await response.json();
-            console.log(json);
-            on_update(json);
+            const endData = await response.json();
+
+            on_update(endData ? endData : emptyInbox);
         }
         catch (err) {
             console.error(err);

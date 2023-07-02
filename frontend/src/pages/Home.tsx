@@ -1,29 +1,4 @@
 import { useState } from "react";
-<<<<<<< HEAD
-import { useNavigate, Link } from "react-router-dom";
-
-function Home() {
-    const [inputValue, setInputValue] = useState<string>("");
-    const navigate = useNavigate();
-
-    function handleInput(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        const formData = new FormData(e.currentTarget);
-        const name = formData.get("space-name");
-
-        console.log(name);
-        navigate(`/inbox/${inputValue}`);
-    }
-
-    return (
-        <>
-            <form onSubmit={handleInput} className="form-obj">
-                <input
-                    type="text"
-                    name="space-name"
-                    value={inputValue}
-=======
 import { useNavigate } from "react-router-dom";
 
 function Home() {
@@ -42,22 +17,20 @@ function Home() {
     return (
         <div className="home">
             <form onSubmit={handle_submit}>
+                <label htmlFor="input-text">Create Space</label>
                 <input
                     type="text"
                     value={text}
                     id="input-text"
                     onChange={handle_change}
                     placeholder="Create space or enter an existing one..."
->>>>>>> a48e2c18e0c53cc60448d961a29fad5691bbfb8b
                 />
 
-                <button type="submit">Create</button>
+                <button type="submit" id="enter" className="entry">
+                    Go
+                </button>
             </form>
-<<<<<<< HEAD
-        </>
-=======
         </div>
->>>>>>> a48e2c18e0c53cc60448d961a29fad5691bbfb8b
     )
 }
 

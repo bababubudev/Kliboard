@@ -9,7 +9,7 @@ interface IDetails {
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<Number>(0);
+    const [removal_time] = useState<Number>(0);
 
     const content = {
         space_name: space_name,
