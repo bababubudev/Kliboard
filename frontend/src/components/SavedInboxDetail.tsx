@@ -9,26 +9,27 @@ interface IDetails {
 
 function SavedInboxDetails({ inbox, on_update }: IDetails) {
     const [text, set_text] = useState<string>(inbox.space_text || "");
-    const [removal_time, set_removal_time] = useState<Number>(inbox.removal || 0);
+    const [removal_time, set_removal_time] = useState<Date>(new Date());
 
     const updatedDate = new Date(inbox.updatedAt).toLocaleDateString();
 
     const content = {
         space_text: text,
-        removal: removal_time
+        expires_in: removal_time
     }
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
-        const response = await fetch(`http://localhost:5000/api/inbox/${inbox._id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(content)
-        });
-
         try {
+            const response = await fetch(`http://localhost:5000/api/inbox/${inbox._id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(content)
+            });
+
             const json = await response.json();
+
             console.log(json);
             on_update(json);
         }
@@ -37,7 +38,16 @@ function SavedInboxDetails({ inbox, on_update }: IDetails) {
         }
     }
 
-    function handle_change(event: ChangeEvent<HTMLInputElement>): void {
+    function handle_change(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+        if (event.target instanceof HTMLSelectElement) {
+            const expiration = new Date();
+            console.log("WTF");
+            expiration.setHours(expiration.getHours() + Number(event.target.value));
+            set_removal_time(expiration);
+
+            return;
+        }
+
         set_text(event.target.value);
     }
 

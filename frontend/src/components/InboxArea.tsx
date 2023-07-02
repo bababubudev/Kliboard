@@ -23,12 +23,7 @@ function InboxArea({ space_name, current_text, updated_date, handle_submit, hand
                     placeholder="Insert any text..."
                 />
 
-                <select name="time" id="time-select">
-                    <option value="nvr">Never</option>
-                    <option value="ohr">1 Hour</option>
-                    <option value="thr">12 Hour</option>
-                    <option value="day">1 Day</option>
-                </select>
+
                 <button type="submit">Save</button>
             </form>
             <p>{updated_date}</p>
