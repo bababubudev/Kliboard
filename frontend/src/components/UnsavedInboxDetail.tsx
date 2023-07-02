@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import InboxArea from "./InboxArea";
-import IInbox from "../interfaces/Inbox";
+import { IInbox } from "../interfaces/Inbox";
 
 interface IDetails {
     space_name: string;
@@ -9,7 +9,7 @@ interface IDetails {
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<Date>(new Date());
+    const [removal_time] = useState<Number>(0);
 
     const content = {
         space_name: space_name,
@@ -39,7 +39,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const expiration = new Date();
 
             expiration.setHours(expiration.getHours() + Number(event.target.value));
-            set_removal_time(expiration);
+            // set_removal_time(expiration);
 
             return;
         }

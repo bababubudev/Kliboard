@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import IInbox from "../interfaces/Inbox"
+import { IInbox, emptyInbox } from "../interfaces/Inbox"
 import InboxArea from "./InboxArea";
 
 interface IDetails {
@@ -9,7 +9,7 @@ interface IDetails {
 
 function SavedInboxDetails({ inbox, on_update }: IDetails) {
     const [text, set_text] = useState<string>(inbox.space_text || "");
-    const [removal_time, set_removal_time] = useState<Date>(new Date());
+    const [removal_time] = useState<Number>(inbox.removal || 0);
 
     const updatedDate = new Date(inbox.updatedAt).toLocaleDateString();
 
@@ -41,9 +41,8 @@ function SavedInboxDetails({ inbox, on_update }: IDetails) {
     function handle_change(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
         if (event.target instanceof HTMLSelectElement) {
             const expiration = new Date();
-            console.log("WTF");
             expiration.setHours(expiration.getHours() + Number(event.target.value));
-            set_removal_time(expiration);
+            // set_removal_time(expiration);
 
             return;
         }

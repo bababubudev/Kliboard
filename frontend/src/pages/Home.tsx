@@ -17,6 +17,7 @@ function Home() {
     return (
         <div className="home">
             <form onSubmit={handle_submit}>
+                <label htmlFor="input-text">Create Space</label>
                 <input
                     type="text"
                     value={text}
@@ -25,7 +26,9 @@ function Home() {
                     placeholder="Create space or enter an existing one..."
                 />
 
-                <button type="submit">Create</button>
+                <button type="submit" id="enter" className="entry">
+                    Go
+                </button>
             </form>
         </div>
     )
