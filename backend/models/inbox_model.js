@@ -11,9 +11,10 @@ const inbox_data = {
         type: String,
         default: ""
     },
-    removal: {
-        type: Number,
-        default: 30
+    expiresAt: {
+        type: Date,
+        default: Date.now,
+        index: { expires: "2m" }
     }
 }
 

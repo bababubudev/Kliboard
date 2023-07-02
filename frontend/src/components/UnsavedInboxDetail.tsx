@@ -9,12 +9,12 @@ interface IDetails {
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<Number>(0);
+    const [removal_time, set_removal_time] = useState<Date>(new Date());
 
     const content = {
         space_name: space_name,
         space_text: text,
-        removal: removal_time
+        expires_in: removal_time
     }
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -34,7 +34,16 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         }
     }
 
-    function handle_change(event: ChangeEvent<HTMLInputElement>): void {
+    function handle_change(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
+        if (event.target instanceof HTMLSelectElement) {
+            const expiration = new Date();
+
+            expiration.setHours(expiration.getHours() + Number(event.target.value));
+            set_removal_time(expiration);
+
+            return;
+        }
+
         set_text(event.target.value);
     }
 

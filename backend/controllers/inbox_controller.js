@@ -37,7 +37,7 @@ async function get_inbox_name(req, res)
 
 async function post_inbox(req, res)
 {
-    const { space_name, space_text, removal } = req.body;
+    const { space_name, space_text, expires_in } = req.body;
 
     try
     {
@@ -50,7 +50,7 @@ async function post_inbox(req, res)
             return res.status(200).json(inbox);
         }
 
-        const inbox = await model.create({ space_name, space_text, removal });
+        const inbox = await model.create({ space_name, space_text, expires_in });
         return res.status(200).json(inbox);
     }
     catch (err)
@@ -65,7 +65,7 @@ async function update_inbox(req, res)
 
     try
     {
-        const unchangeable = "space_name";
+        const unchangeable = ["_id", "space_name", "createdAt", "updatedAt"];
         const reqKeys = Object.keys(req.body);
         const isValid = reqKeys.every(key => !(unchangeable === key) && model.schema.path(key));
 
@@ -75,8 +75,9 @@ async function update_inbox(req, res)
             throw new Error("Sent request is not valid!");
         }
 
+
         const inbox = await model.findOneAndUpdate({ _id: id }, req.body, { new: true });
-        res.status(200).json([{ message: `${inbox.space_name} successfully updated!` }, { change: req.body }]);
+        res.status(200).json([{ message: `${inbox.space_name} successfully Fucked Up!` }, { change: req.body }]);
     }
     catch (err)
     {
