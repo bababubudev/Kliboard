@@ -8,6 +8,8 @@ async function get_inbox(req, res)
     try
     {
         const inbox = await model.findById(id);
+
+        console.log(inbox)
         res.status(200).json(inbox);
     }
     catch (err)
@@ -77,7 +79,7 @@ async function update_inbox(req, res)
 
 
         const inbox = await model.findOneAndUpdate({ _id: id }, req.body, { new: true });
-        res.status(200).json([{ message: `${inbox.space_name} successfully Fucked Up!` }, { change: req.body }]);
+        res.status(200).json(inbox);
     }
     catch (err)
     {

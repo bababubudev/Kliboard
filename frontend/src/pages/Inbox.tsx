@@ -12,51 +12,41 @@ function Inbox() {
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function fetch_data(): Promise<void> {
+    async function fetch_data(name: string): Promise<void> {
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
 
             if (response.status === 204) {
-                console.log(`User of name ${name} not found!`);
-                return;
+                throw new Error(`User of name ${name} not found!`)
             }
 
             const json = await response.json();
             set_data(json);
         }
         catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
     useEffect(() => {
         if (name && !data) {
-            fetch_data();
+            fetch_data(name);
         }
-    }, [data]);
+    }, []);
 
     async function update_inbox(updated: IInbox): Promise<void> {
-        console.log(updated._id)
-
-        try {
-            const response = await fetch(`http://localhost:5000/api/inbox/${updated._id}`, { method: "GET" });
-            const endData: IInbox = await response.json();
-
-            set_data(endData);
-        } catch (err) {
-            console.error(err);
-        }
+        fetch_data(updated.space_name)
     }
 
     return (
-        <div className="home">
-            <div className="data">
+        <>
+            <div className="inbox">
                 {data
                     ? <SavedInboxDetail inbox={data} on_update={update_inbox} />
                     : <UnsavedInboxDetail space_name={name} on_update={update_inbox} />
                 }
             </div>
-        </div>
+        </>
     );
 }
 

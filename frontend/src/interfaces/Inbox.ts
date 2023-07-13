@@ -8,12 +8,12 @@ export interface IInbox {
     __v: number;
 }
 
-export const emptyInbox = {
+export const emptyInbox: IInbox = {
     _id: 0,
     space_name: "",
     space_text: "",
     removal: -1,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
     __v: -1,
 }

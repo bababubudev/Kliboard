@@ -13,8 +13,8 @@ interface IAreaDetails {
 function InboxArea({ space_name, current_text, updated_date, handle_submit, handle_change }: IAreaDetails) {
     return (
         <div className="inbox-details">
-            <h4>{space_name}</h4>
             <form onSubmit={handle_submit}>
+                <label htmlFor="input-text">{space_name}</label>
                 <input
                     type="text"
                     value={current_text}
@@ -22,7 +22,6 @@ function InboxArea({ space_name, current_text, updated_date, handle_submit, hand
                     onChange={handle_change}
                     placeholder="Insert any text..."
                 />
-
 
                 <button type="submit">Save</button>
             </form>
