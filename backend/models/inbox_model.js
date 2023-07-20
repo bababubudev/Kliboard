@@ -11,14 +11,19 @@ const inbox_data = {
         type: String,
         default: ""
     },
-    expiresAt: {
+    removal: {
+        type: Number,
+        default: 0,
+    },
+    expireAt: {
         type: Date,
-        default: Date.now,
-        index: { expires: "2m" }
+        default: Date.now
     }
 }
 
 const Schema = mongoose.Schema;
 const inbox_schema = new Schema(inbox_data, { timestamps: true });
+
+inbox_schema.index({ expireAt: 1 }, { expireAfterSeconds: 60 });
 
 export default mongoose.model("inbox", inbox_schema);

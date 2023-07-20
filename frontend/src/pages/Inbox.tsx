@@ -34,15 +34,15 @@ function Inbox() {
         }
     }, []);
 
-    async function update_inbox(updated: IInbox): Promise<void> {
-        fetch_data(updated.space_name)
+    async function update_inbox(): Promise<void> {
+        fetch_data(name)
     }
 
     return (
         <>
             <div className="inbox">
                 {data
-                    ? <SavedInboxDetail inbox={data} on_update={update_inbox} />
+                    ? <SavedInboxDetail space_name={name} inbox={data} on_update={update_inbox} />
                     : <UnsavedInboxDetail space_name={name} on_update={update_inbox} />
                 }
             </div>
