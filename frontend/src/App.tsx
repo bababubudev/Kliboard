@@ -22,7 +22,6 @@ function App() {
               path="/inbox"
               element={<Inbox />}
             >
-
             </Route>
           </Routes>
         </div>

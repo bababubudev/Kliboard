@@ -1,0 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400;600;800&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+$primary: #1aac83;
+$error: #e7195a;
+$dark: #414141;
+$s_bg: #fafafa;
+
+$space: 7ch;
+$border-rad: 20em;
+
+body {
+    font-family: "Source Code Pro", monospace;
+    font-weight: 800;
+}
+
+header {
+    background-color: $s_bg;
+    padding: 3ch 0 3ch 1ch;
+}
+
+.container {
+    a {
+        text-decoration: none;
+        color: $primary;
+    }
+}
+
+.pages {
+    .home {
+        max-width: 60vw;
+        margin: $space 1ch 0 1ch;
+    }
+
+    .inbox {
+        max-width: 80vw;
+        margin: $space 1ch 0 1ch;
+    }
+}
+
+.home {
+    form {
+        $f_bright_prim: #c8c8c8;
+        $f_bright_error: #fdb4cb;
+        $f_border_rad: 5px;
+
+        display: grid;
+        grid-template-columns: 3fr minmax(70px, 1fr);
+
+        row-gap: 0.5ch;
+        column-gap: 0.25ch;
+
+        font-size: 1.25rem;
+
+        > label {
+            transition: 0.2s ease;
+            grid-column: span 2;
+            margin-left: 0.5ch;
+
+            color: $dark;
+        }
+
+        .home-input-err {
+            color: $error;
+        }
+
+        > button {
+            background: $dark;
+            color: $primary;
+
+            font-weight: 400;
+
+            &:active {
+                color: white;
+            }
+
+            &:disabled {
+                color: $f_bright_prim;
+                background: grey;
+            }
+        }
+
+        > input {
+            background: $dark;
+            color: $s_bg;
+
+            &:focus {
+                outline-color: $primary;
+            }
+
+            &::placeholder {
+                color: $f_bright_prim;
+            }
+        }
+
+        > button,
+        > input {
+            padding: 10px 1ch;
+            text-overflow: ellipsis;
+
+            border: none;
+            border-radius: $f_border_rad;
+        }
+    }
+}
+
+.inbox {
+    form {
+        $f_bright_prim: #c8c8c8;
+        $f_bright_error: #fdb4cb;
+        $f_border_rad: 5px;
+
+        display: grid;
+        grid-template-columns: 3fr minmax(100px, 1fr);
+
+        row-gap: 0.5ch;
+        column-gap: 0.1ch;
+
+        font-size: 1.25rem;
+
+        > label {
+            transition: 0.2s ease;
+            grid-column: span 2;
+            padding: 0 0 0 0.7ch;
+            margin-left: 0.1ch;
+
+            font-weight: 800;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+
+            border: 1px;
+            border-style: none none solid none;
+            border-color: transparent;
+            border-image: linear-gradient(to right, $dark, 60%, transparent);
+            border-image-slice: 1;
+
+            color: $dark;
+        }
+
+        .home-input-err {
+            color: $error;
+        }
+
+        .save-time {
+            display: grid;
+            font-size: 0.7rem;
+            font-weight: 400;
+
+            grid-template-rows: 30px 1fr;
+            gap: 0.3ch;
+
+            justify-items: stretch;
+
+            > .submit-button {
+                color: $primary;
+                background: none;
+
+                border: 1px solid $dark;
+                border-radius: 0 0 $f_border_rad 0;
+
+                padding: 10px 1ch;
+                text-overflow: ellipsis;
+
+                &:active {
+                    color: white;
+                }
+
+                &:disabled {
+                    color: $f_bright_prim;
+                    background: grey;
+                }
+
+                > span {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    color: #8cada4;
+                }
+            }
+
+            .selector {
+                $list_height: 200px;
+
+                position: relative;
+
+                border: 1px solid $dark;
+                border-radius: 0 $f_border_rad 0 0;
+
+                background: $dark;
+                color: $f_bright_prim;
+
+                .hide_list {
+                    display: none;
+                }
+
+                > ul {
+                    display: grid;
+                    background: $dark;
+
+                    position: absolute;
+                    height: $list_height;
+                    width: calc(100% + 0.1ch);
+
+                    left: 0;
+                    top: calc(100% + 0.5ch);
+
+                    border-radius: 0 0 $f_border_rad 0;
+
+                    li {
+                        list-style-type: none;
+                        color: $f_bright_prim;
+
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        font-size: 0.7rem;
+
+                        &:not(:last-child) {
+                            border: 0.1px;
+                            border-style: none none solid none;
+                        }
+                    }
+                }
+            }
+        }
+
+        > textarea {
+            background: $dark;
+            color: $s_bg;
+
+            padding: 10px 1ch;
+            text-overflow: ellipsis;
+
+            border: none;
+            border-radius: $f_border_rad 0 0 $f_border_rad;
+
+            height: auto;
+            overflow-y: hidden;
+
+            &:focus {
+                outline-color: $primary;
+            }
+
+            &::placeholder {
+                color: $f_bright_prim;
+            }
+        }
+    }
+
+    .update-p {
+        color: #5c5c5c;
+
+        font-size: 0.7em;
+        margin-left: 0.5ch;
+    }
+}

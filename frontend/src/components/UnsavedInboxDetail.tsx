@@ -1,20 +1,19 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import InboxArea from "./InboxArea";
-import { IInbox } from "../interfaces/Inbox";
 
 interface IDetails {
     space_name: string;
-    on_update: (inbox: IInbox) => void;
+    on_update: () => void;
 }
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time] = useState<Number>(0);
+    const [removal_time, set_removal_time] = useState<number>(0);
 
     const content = {
         space_name: space_name,
         space_text: text,
-        expires_in: removal_time
+        removal: removal_time
     }
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -28,23 +27,25 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             });
 
             const json = await response.json();
-            on_update(json);
+            // console.log(json);
+
+            on_update();
         } catch (err) {
             console.error(err);
         }
     }
 
-    function handle_change(event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void {
-        if (event.target instanceof HTMLSelectElement) {
-            const expiration = new Date();
-
-            expiration.setHours(expiration.getHours() + Number(event.target.value));
-            // set_removal_time(expiration);
-
-            return;
-        }
-
+    function handle_change(event: ChangeEvent<HTMLTextAreaElement>): void {
         set_text(event.target.value);
+    }
+
+    function handle_option(change: string): void {
+        try {
+            const parsedNum = Number.parseInt(change);
+            set_removal_time(parsedNum);
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
@@ -52,10 +53,12 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             <InboxArea
                 space_name={space_name}
                 current_text={text}
+                current_time={-1}
                 updated_date={new Date().toLocaleDateString()}
 
                 handle_submit={handle_submit}
                 handle_change={handle_change}
+                handle_option={handle_option}
             />
         </>
     );

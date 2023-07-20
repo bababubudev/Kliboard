@@ -1,0 +1,10 @@
+GET http://localhost:5000/api/inbox/Lol HTTP/1.1
+
+###
+
+PATCH http://localhost:5000/api/inbox/Lol
+Content-Type: application/json
+
+{
+    "removal": 1
+}
