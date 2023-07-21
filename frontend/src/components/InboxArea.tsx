@@ -6,6 +6,7 @@ interface IAreaDetails {
     current_text: string;
     current_time: number;
     updated_date: string;
+    disable_submit: boolean;
 
     handle_submit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
     handle_change: (event: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -13,18 +14,23 @@ interface IAreaDetails {
 }
 
 
-function InboxArea({ space_name, current_text, current_time, updated_date, handle_submit, handle_change, handle_option }: IAreaDetails) {
+function InboxArea({
+    space_name,
+    current_text,
+    current_time,
+    updated_date,
+    handle_submit,
+    handle_change,
+    handle_option,
+    disable_submit
+}: IAreaDetails) {
     const list_ref = useRef<HTMLUListElement>(null);
+
     const [option, set_option] = useState<string>(get_option(current_time));
+    const [show_list, set_show_list] = useState<boolean>(false);
+    const [death_time, set_death_time] = useState<string>(new Date().toDateString());
 
-    function initiate_options() {
-        const current = list_ref.current;
-
-        if (!current) return;
-        current.classList.toggle("hide_list");
-    }
-
-    function call_options(elem: React.MouseEvent<HTMLLIElement>) {
+    function call_options(elem: React.MouseEvent<HTMLLIElement> | React.FocusEvent<HTMLLIElement>) {
         const currentText = elem.currentTarget.textContent;
         const currentTime = elem.currentTarget.getAttribute("value");
 
@@ -56,7 +62,31 @@ function InboxArea({ space_name, current_text, current_time, updated_date, handl
         if (!sibling) return;
 
         sibling.textContent = option;
-    }, [option])
+    }, [option]);
+
+    useEffect(() => {
+        const list = list_ref.current;
+        if (!list) return;
+
+        function handle_click(event: MouseEvent) {
+            const target = event.target as Node;
+            const listButton = document.getElementById("list-btn");
+
+            if (listButton && !listButton.contains(target)) {
+                set_show_list(false);
+            }
+            else {
+                set_show_list((prevState) => !prevState);
+            }
+        }
+
+        document.addEventListener("click", handle_click);
+
+        return () => {
+            document.removeEventListener("click", handle_click);
+        }
+
+    }, [show_list]);
 
     return (
         <>
@@ -75,22 +105,73 @@ function InboxArea({ space_name, current_text, current_time, updated_date, handl
                 />
 
                 <div className="save-time">
-                    <button onClick={initiate_options} type="button" className="selector">
+                    <button type="button" className="selector" id="list-btn">
                         <p>Choose time...</p>
-                        <ul ref={list_ref} id="time-list" className="hide_list">
-                            <li onClick={call_options} value="0" id="nun">Don't remove</li>
-                            <li onClick={call_options} value="1" id="hr">1 Hour</li>
-                            <li onClick={call_options} value="10" id="thr">10 Hour</li>
-                            <li onClick={call_options} value="24" id="dy">1 Day</li>
-                            <li onClick={call_options} value="240" id="tdy">10 Day</li>
+                        <ul
+                            ref={list_ref}
+                            id="time-list"
+                            className={show_list ? "show-list" : "hide-list"}
+                        >
+                            <li
+                                onClick={call_options}
+                                onFocus={call_options}
+                                value="0"
+                                id="nun"
+                                tabIndex={0}
+                            >
+                                Don't
+                                remove
+                            </li>
+                            <li
+                                onClick={call_options}
+                                onFocus={call_options}
+                                value="1"
+                                id="hr"
+                                tabIndex={0}
+                            >
+                                1 Hour
+                            </li>
+                            <li
+                                onClick={call_options}
+                                onFocus={call_options}
+                                value="10"
+                                id="thr"
+                                tabIndex={0}
+                            >
+                                10 Hour
+                            </li>
+                            <li
+                                onClick={call_options}
+                                onFocus={call_options}
+                                value="24"
+                                id="dy"
+                                tabIndex={0}
+                            >
+                                1 Day
+                            </li>
+                            <li
+                                onClick={call_options}
+                                onFocus={call_options}
+                                value="240"
+                                id="tdy"
+                                tabIndex={0}
+                            >
+                                10 Day
+                            </li>
                         </ul>
                     </button>
-                    <button type="submit" className="submit-button">
-                        <span>&#9166;</span>
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        disabled={disable_submit}
+                    >
+                        <span className="on-save"></span>
                     </button>
                 </div>
             </form>
-            <p className="update-p">{updated_date}</p>
+            <p className="update-p">
+                {updated_date}
+            </p>
         </>
     );
 }

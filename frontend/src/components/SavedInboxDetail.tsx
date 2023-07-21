@@ -12,10 +12,22 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     const [text, set_text] = useState<string>(inbox.space_text || "");
     const [removal_time, set_removal_time] = useState<number>(inbox.removal || 0);
 
-    const updatedDate = new Date(inbox.updatedAt).toLocaleDateString();
+    const getButtonState = (): boolean => {
+        return inbox.space_text === text && inbox.removal === removal_time;
+    }
+
+    const getDate = (): string => {
+        return new Date(inbox.updatedAt).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
+    }
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
+
+        if (getButtonState()) return;
 
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${space_name}`, {
@@ -52,7 +64,8 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             space_name={space_name}
             current_text={text}
             current_time={removal_time}
-            updated_date={updatedDate}
+            updated_date={getDate()}
+            disable_submit={getButtonState()}
 
             handle_change={handle_change}
             handle_submit={handle_submit}
