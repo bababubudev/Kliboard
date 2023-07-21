@@ -66,7 +66,7 @@ function Home() {
                     className="entry"
                     disabled={has_spaces || char_limit_reached}
                 >
-                    <span>&#x279f;</span>
+                    <span></span>
                 </button>
             </form>
         </div>

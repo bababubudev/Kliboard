@@ -12,8 +12,30 @@ $error: #e7195a;
 $dark: #414141;
 $s_bg: #fafafa;
 
-$space: 7ch;
+$space: 10ch;
 $border-rad: 20em;
+
+$mobile-width: 600px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+    @media (max-width: #{$mobile-width}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$desktop-width}) {
+        @content;
+    }
+}
 
 body {
     font-family: "Source Code Pro", monospace;
@@ -84,6 +106,12 @@ header {
                 color: $f_bright_prim;
                 background: grey;
             }
+
+            span::before {
+                font-weight: 200;
+                font-size: 1.2rem;
+                content: "\279F";
+            }
         }
 
         > input {
@@ -111,6 +139,8 @@ header {
 }
 
 .inbox {
+    position: relative;
+
     form {
         $f_bright_prim: #c8c8c8;
         $f_bright_error: #fdb4cb;
@@ -119,6 +149,14 @@ header {
         display: grid;
         grid-template-columns: 3fr minmax(100px, 1fr);
 
+        @include mobile {
+            display: grid;
+            grid-template-columns: none;
+
+            > label {
+            }
+        }
+
         row-gap: 0.5ch;
         column-gap: 0.1ch;
 
@@ -126,7 +164,6 @@ header {
 
         > label {
             transition: 0.2s ease;
-            grid-column: span 2;
             padding: 0 0 0 0.7ch;
             margin-left: 0.1ch;
 
@@ -141,10 +178,6 @@ header {
             border-image-slice: 1;
 
             color: $dark;
-        }
-
-        .home-input-err {
-            color: $error;
         }
 
         .save-time {
@@ -167,19 +200,44 @@ header {
                 padding: 10px 1ch;
                 text-overflow: ellipsis;
 
+                // &:hover {
+                //     border: 2px solid;
+                //     background-color: $dark;
+                //     border-color: $primary;
+                // }
+
                 &:active {
-                    color: white;
+                    background-color: $f_bright_prim;
                 }
 
                 &:disabled {
-                    color: $f_bright_prim;
-                    background: grey;
+                    span {
+                        color: $f_bright_prim;
+
+                        &:active {
+                            color: $primary;
+                        }
+
+                        &::before {
+                            font-size: 1rem;
+                            content: "saved";
+                        }
+                    }
                 }
 
                 > span {
-                    font-size: 1.5rem;
                     font-weight: 600;
-                    color: #8cada4;
+                    color: $primary;
+
+                    &:active {
+                        color: $f_bright_prim;
+                    }
+
+                    &::before {
+                        transition: 0.1s ease-out;
+                        font-size: 1.5rem;
+                        content: "\23CE";
+                    }
                 }
             }
 
@@ -194,12 +252,16 @@ header {
                 background: $dark;
                 color: $f_bright_prim;
 
-                .hide_list {
+                > .hide-list {
                     display: none;
                 }
 
-                > ul {
+                > .show-list {
                     display: grid;
+                    box-shadow: 5px 2px 10px #0000004d;
+                }
+
+                > ul {
                     background: $dark;
 
                     position: absolute;
@@ -213,7 +275,7 @@ header {
 
                     li {
                         list-style-type: none;
-                        color: $f_bright_prim;
+                        color: $primary;
 
                         display: flex;
                         align-items: center;
@@ -224,6 +286,12 @@ header {
                         &:not(:last-child) {
                             border: 0.1px;
                             border-style: none none solid none;
+                            border-color: $f_bright_prim;
+                        }
+
+                        &:hover {
+                            background-color: $s_bg;
+                            cursor: pointer;
                         }
                     }
                 }
@@ -241,6 +309,7 @@ header {
             border-radius: $f_border_rad 0 0 $f_border_rad;
 
             height: auto;
+            resize: vertical;
             overflow-y: hidden;
 
             &:focus {

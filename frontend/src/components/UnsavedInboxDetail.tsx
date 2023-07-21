@@ -8,13 +8,7 @@ interface IDetails {
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<number>(0);
-
-    const content = {
-        space_name: space_name,
-        space_text: text,
-        removal: removal_time
-    }
+    const [removal_time, set_removal_time] = useState<number>(1);
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -23,7 +17,11 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const response = await fetch("http://localhost:5000/api/inbox", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(content)
+                body: JSON.stringify({
+                    space_name: space_name,
+                    space_text: text,
+                    removal: removal_time
+                })
             });
 
             const json = await response.json();
@@ -48,13 +46,23 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         }
     }
 
+    function getDate() {
+        return new Date(Date.now())
+            .toLocaleString("en-GB", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            });
+    }
+
     return (
         <>
             <InboxArea
                 space_name={space_name}
                 current_text={text}
                 current_time={-1}
-                updated_date={new Date().toLocaleDateString()}
+                updated_date={getDate()}
+                disable_submit={false}
 
                 handle_submit={handle_submit}
                 handle_change={handle_change}
