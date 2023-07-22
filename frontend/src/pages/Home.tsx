@@ -61,7 +61,6 @@ function Home() {
                     autoComplete="off"
                     required
                 />
-
                 <button
                     type="submit"
                     id="enter"

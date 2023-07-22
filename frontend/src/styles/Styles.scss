@@ -76,10 +76,6 @@ header {
             color: $dark;
         }
 
-        .home-input-err {
-            color: $error;
-        }
-
         > button {
             background: $dark;
             color: $primary;
@@ -300,6 +296,7 @@ header {
             > label {
                 margin-bottom: 0.25ch;
                 padding-bottom: 0.15ch;
+                word-break: break-all;
             }
 
             > textarea {
@@ -331,7 +328,7 @@ header {
 
                     > ul {
                         top: 8.5ch;
-                        height: 300px;
+                        height: 200px;
 
                         border-radius: 0 0 $f_border_rad $f_border_rad;
                     }
@@ -377,6 +374,28 @@ header {
     }
 
     .detailing {
+        @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOutAnimation {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
         font-size: 0.7em;
         color: #5c5c5c;
 
@@ -419,9 +438,19 @@ header {
             }
         }
 
+        .notif-div.fade-in {
+            animation: fadeInAnimation 1s ease-in-out forwards;
+        }
+
+        .notif-div.fade-out {
+            animation: fadeOutAnimation 1s ease-in-out forwards;
+        }
+
         .update-p {
             margin-top: 0.5ch;
             margin-left: 0.5ch;
+
+            transition: all 0.2s ease;
         }
     }
 }
