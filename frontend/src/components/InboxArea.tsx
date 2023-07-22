@@ -4,8 +4,8 @@ import TextareaAutosize from "react-textarea-autosize";
 interface IAreaDetails {
     space_name: string;
     current_text: string;
+
     current_time: number;
-    updated_date: string;
     disable_submit: boolean;
 
     handle_submit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -18,7 +18,7 @@ function InboxArea({
     space_name,
     current_text,
     current_time,
-    updated_date,
+
     handle_submit,
     handle_change,
     handle_option,
@@ -28,7 +28,6 @@ function InboxArea({
 
     const [option, set_option] = useState<string>(get_option(current_time));
     const [show_list, set_show_list] = useState<boolean>(false);
-    const [death_time, set_death_time] = useState<string>(new Date().toDateString());
 
     function call_options(elem: React.MouseEvent<HTMLLIElement> | React.FocusEvent<HTMLLIElement>) {
         const currentText = elem.currentTarget.textContent;
@@ -52,8 +51,10 @@ function InboxArea({
                 return "1 Day";
             case 240:
                 return "10 Day";
-            default:
+            case -1:
                 return "Choose time...";
+            default:
+                return "Unavailable";
         }
     }
 
@@ -66,7 +67,10 @@ function InboxArea({
 
     useEffect(() => {
         const list = list_ref.current;
-        if (!list) return;
+
+
+
+        if (!list || option === "Unavailable") return;
 
         function handle_click(event: MouseEvent) {
             const target = event.target as Node;
@@ -101,7 +105,7 @@ function InboxArea({
                     autoComplete="off"
                     spellCheck="false"
                     autoFocus
-                    minRows={5}
+                    minRows={4}
                 />
 
                 <div className="save-time">
@@ -163,15 +167,12 @@ function InboxArea({
                     <button
                         type="submit"
                         className="submit-button"
-                        disabled={disable_submit}
+                        disabled={disable_submit || space_name === "prabesh"}
                     >
                         <span className="on-save"></span>
                     </button>
                 </div>
             </form>
-            <p className="update-p">
-                {updated_date}
-            </p>
         </>
     );
 }

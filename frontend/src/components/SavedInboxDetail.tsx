@@ -5,7 +5,7 @@ import InboxArea from "./InboxArea";
 interface IDetails {
     inbox: IInbox;
     space_name: string;
-    on_update: () => void;
+    on_update: (notif: string | null) => Promise<void>;
 }
 
 function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
@@ -16,18 +16,10 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         return inbox.space_text === text && inbox.removal === removal_time;
     }
 
-    const getDate = (): string => {
-        return new Date(inbox.updatedAt).toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-        });
-    }
-
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
-        if (getButtonState()) return;
+        if (getButtonState() || space_name === "prabesh") return;
 
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${space_name}`, {
@@ -37,9 +29,8 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             });
 
             const json = await response.json();
-            // console.log(json);
 
-            on_update();
+            on_update(json["message"]);
         }
         catch (err) {
             console.error(err);
@@ -64,7 +55,6 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             space_name={space_name}
             current_text={text}
             current_time={removal_time}
-            updated_date={getDate()}
             disable_submit={getButtonState()}
 
             handle_change={handle_change}

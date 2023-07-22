@@ -16,8 +16,6 @@ $space: 10ch;
 $border-rad: 20em;
 
 $mobile-width: 600px;
-$tablet-width: 768px;
-$desktop-width: 1024px;
 
 @mixin mobile {
     @media (max-width: #{$mobile-width}) {
@@ -25,14 +23,8 @@ $desktop-width: 1024px;
     }
 }
 
-@mixin tablet {
-    @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
-        @content;
-    }
-}
-
 @mixin desktop {
-    @media (min-width: #{$desktop-width}) {
+    @media (min-width: #{$mobile-width}) {
         @content;
     }
 }
@@ -55,14 +47,10 @@ header {
 }
 
 .pages {
-    .home {
-        max-width: 60vw;
-        margin: $space 1ch 0 1ch;
-    }
+    margin: $space 1ch 0 1ch;
 
-    .inbox {
-        max-width: 80vw;
-        margin: $space 1ch 0 1ch;
+    @include desktop {
+        max-width: 70vw;
     }
 }
 
@@ -144,21 +132,12 @@ header {
     form {
         $f_bright_prim: #c8c8c8;
         $f_bright_error: #fdb4cb;
-        $f_border_rad: 5px;
+        $f_border_rad: 3px;
 
         display: grid;
         grid-template-columns: 3fr minmax(100px, 1fr);
 
-        @include mobile {
-            display: grid;
-            grid-template-columns: none;
-
-            > label {
-            }
-        }
-
-        row-gap: 0.5ch;
-        column-gap: 0.1ch;
+        gap: 3px;
 
         font-size: 1.25rem;
 
@@ -185,14 +164,14 @@ header {
             font-size: 0.7rem;
             font-weight: 400;
 
-            grid-template-rows: 30px 1fr;
-            gap: 0.3ch;
+            grid-template-rows: 35px 1fr;
+            gap: 3px;
 
             justify-items: stretch;
 
             > .submit-button {
                 color: $primary;
-                background: none;
+                background: $dark;
 
                 border: 1px solid $dark;
                 border-radius: 0 0 $f_border_rad 0;
@@ -200,23 +179,14 @@ header {
                 padding: 10px 1ch;
                 text-overflow: ellipsis;
 
-                // &:hover {
-                //     border: 2px solid;
-                //     background-color: $dark;
-                //     border-color: $primary;
-                // }
-
                 &:active {
-                    background-color: $f_bright_prim;
+                    background: none;
                 }
 
                 &:disabled {
+                    background: none;
                     span {
                         color: $f_bright_prim;
-
-                        &:active {
-                            color: $primary;
-                        }
 
                         &::before {
                             font-size: 1rem;
@@ -230,13 +200,14 @@ header {
                     color: $primary;
 
                     &:active {
-                        color: $f_bright_prim;
+                        background: none;
+                        border-color: $primary;
                     }
 
                     &::before {
-                        transition: 0.1s ease-out;
-                        font-size: 1.5rem;
-                        content: "\23CE";
+                        transition: font-size 0.15s ease-out;
+                        font-size: 2rem;
+                        content: "\2BA8";
                     }
                 }
             }
@@ -258,7 +229,7 @@ header {
 
                 > .show-list {
                     display: grid;
-                    box-shadow: 5px 2px 10px #0000004d;
+                    box-shadow: 1px 3px 7px #0000004d;
                 }
 
                 > ul {
@@ -320,12 +291,137 @@ header {
                 color: $f_bright_prim;
             }
         }
+
+        @include mobile {
+            display: grid;
+            grid-template-columns: none;
+            gap: 3px;
+
+            > label {
+                margin-bottom: 0.25ch;
+                padding-bottom: 0.15ch;
+            }
+
+            > textarea {
+                border-radius: $f_border_rad $f_border_rad 0 0;
+
+                font-weight: 200;
+                font-size: 0.9rem;
+            }
+
+            .save-time {
+                grid-template-rows: none;
+                grid-template-columns: 4fr 5fr;
+
+                position: relative;
+
+                height: 60px;
+
+                > .submit-button {
+                    border-radius: 0 0 $f_border_rad 0;
+
+                    span::before {
+                        font-size: 1.7rem;
+                    }
+                }
+
+                > .selector {
+                    border: none;
+                    border-radius: 0 0 0 $f_border_rad;
+
+                    > ul {
+                        top: 8.5ch;
+                        height: 300px;
+
+                        border-radius: 0 0 $f_border_rad $f_border_rad;
+                    }
+                }
+            }
+        }
+
+        @include desktop {
+            > label {
+                grid-column: span 2;
+            }
+
+            > textarea {
+                font-size: 1.2rem;
+            }
+
+            .save-time {
+                .submit-button {
+                    &:hover {
+                        transition: background-color 0.2s ease;
+                        border: 2px solid;
+
+                        &:disabled {
+                            border-color: $f_bright_error;
+
+                            span {
+                                color: $f_bright_error;
+                            }
+                        }
+
+                        &:not(:disabled) {
+                            background-color: none;
+                            border-color: $primary;
+
+                            span {
+                                color: $primary;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    .update-p {
+    .detailing {
+        font-size: 0.7em;
         color: #5c5c5c;
 
-        font-size: 0.7em;
-        margin-left: 0.5ch;
+        .notif-div {
+            display: grid;
+            grid-template-columns: 1fr 30px;
+
+            margin-top: 0.5ch;
+            padding: 1.5ch 0;
+
+            background: $dark;
+            color: $s_bg;
+
+            border: 1px solid $error;
+            border-radius: 3px 3px 0 3px;
+
+            font-weight: 200;
+            height: minmax(30px, 1fr);
+
+            > p {
+                display: flex;
+
+                align-items: center;
+                padding-left: 2ch;
+            }
+
+            > button {
+                border: none;
+                background: none;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                span {
+                    color: $error;
+                    font-size: 0.5rem;
+                    font-weight: 800;
+                }
+            }
+        }
+
+        .update-p {
+            margin-top: 0.5ch;
+            margin-left: 0.5ch;
+        }
     }
 }

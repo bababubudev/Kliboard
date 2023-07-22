@@ -1,10 +1,10 @@
-GET http://localhost:5000/api/inbox/Lol HTTP/1.1
+GET http://localhost:5000/api/inbox/dai HTTP/1.1
 
 ###
 
-PATCH http://localhost:5000/api/inbox/Lol
+PATCH http://localhost:5000/api/inbox/dai
 Content-Type: application/json
 
 {
-    "removal": 1
+    "removal": 240
 }
