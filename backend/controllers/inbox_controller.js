@@ -1,4 +1,3 @@
-import inbox_model from "../models/inbox_model.js";
 import model from "../models/inbox_model.js"
 
 const formatDate = (dateToCheck) =>
@@ -44,7 +43,7 @@ function getTimeDifference(futureDate)
 
     if (timeDifference < 0)
     {
-        return 'This data is deleting in less than a minute...';
+        return 'This text is deleting in less than a minute...';
     }
 
     const seconds = Math.floor(timeDifference / 1000);
@@ -97,7 +96,7 @@ async function get_inbox_name(req, res)
 
         if (inbox === null)
         {
-            const message = `Hello ${formattedName}! Press [ \u2BA8 ] to save data...`
+            const message = `Hello ${formattedName}! Press [ \u2BA8 ] to save text...`
             return res.status(206).json({ greet: message });
         }
 
@@ -105,8 +104,7 @@ async function get_inbox_name(req, res)
 
         const dateDifference = getTimeDifference(new Date(expireAt));
 
-        let message = `Welcome back ${formattedName}! `;
-        message += removal <= 0 ? "Data will not be removed." : `Data is being saved for ${dateDifference}.`;
+        let message = removal <= 0 ? "Saved! Your text will not be removed." : `${formattedName}'s text is being saved for ${dateDifference}.`;
 
         if (dateDifference[0] === "T" && removal > 0)
             message = dateDifference;
@@ -155,11 +153,11 @@ async function post_inbox(req, res)
             expireAt = Date.now() + (removal * 60 * 60 * 1000);
         }
 
-        const currentDate = new Date(expires);
+        const currentDate = new Date(expireAt);
         const formattedName = space_name.charAt(0).toUpperCase() + space_name.slice(1).toLowerCase();
         const dateString = formatDate(currentDate);
 
-        let dateInfo = `Your data is being saved until `;
+        let dateInfo = `Your text is being saved until `;
 
         if (dateString[0] === "t")
         {
@@ -172,7 +170,7 @@ async function post_inbox(req, res)
 
         if (removal === 0)
         {
-            dateInfo = "Your data will not be removed!"
+            dateInfo = "Your text will not be removed!"
         }
 
         const inbox = await model.create({ space_name, space_text, removal, expireAt });
@@ -219,7 +217,7 @@ async function update_inbox(req, res)
         const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
         const dateString = formatDate(currentDate);
 
-        let dateInfo = `Your data is saved until ${dateString}`;
+        let dateInfo = `Your text is saved until ${dateString}`;
 
         if (dateString[0] === "t")
         {
@@ -230,7 +228,7 @@ async function update_inbox(req, res)
 
         if (removal === 0)
         {
-            dateInfo = "Your data will not be removed"
+            dateInfo = "Your text will not be removed"
         }
 
         await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });

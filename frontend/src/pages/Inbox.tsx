@@ -44,9 +44,8 @@ function Inbox() {
     }, []);
 
     async function update_inbox(notif: string | null = null): Promise<void> {
-        set_notify(false);
+        if (!notify) { set_notification(notif); }
         fetch_data(name);
-        set_notification(notif);
     }
 
     function close_notif() {
