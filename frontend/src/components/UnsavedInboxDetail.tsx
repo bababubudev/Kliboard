@@ -3,7 +3,7 @@ import InboxArea from "./InboxArea";
 
 interface IDetails {
     space_name: string;
-    on_update: () => void;
+    on_update: (notif: string | null) => Promise<void>;
 }
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
@@ -25,9 +25,8 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             });
 
             const json = await response.json();
-            // console.log(json);
 
-            on_update();
+            on_update(json["message"]);
         } catch (err) {
             console.error(err);
         }
@@ -46,22 +45,12 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         }
     }
 
-    function getDate() {
-        return new Date(Date.now())
-            .toLocaleString("en-GB", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric"
-            });
-    }
-
     return (
         <>
             <InboxArea
                 space_name={space_name}
                 current_text={text}
                 current_time={-1}
-                updated_date={getDate()}
                 disable_submit={false}
 
                 handle_submit={handle_submit}
