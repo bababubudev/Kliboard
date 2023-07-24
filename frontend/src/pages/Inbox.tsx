@@ -10,12 +10,11 @@ import { IInbox } from "../interfaces/Inbox";
 function Inbox() {
     const [data, set_data] = useState<IInbox | undefined>(undefined);
     const [notification, set_notification] = useState<string | null>(null);
-    const [notify, set_notify] = useState<boolean>(true);
 
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function fetch_data(name: string): Promise<void> {
+    async function fetch_data(name: string, has_notif: boolean = false): Promise<void> {
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
@@ -27,10 +26,7 @@ function Inbox() {
 
             set_data(json);
 
-            if (notify) {
-                set_notification(json["time_left"]);
-                set_notify(false);
-            }
+            if (!has_notif) set_notification(json["time_left"]);
         }
         catch (err) {
             console.log(err);
@@ -44,8 +40,8 @@ function Inbox() {
     }, []);
 
     async function update_inbox(notif: string | null = null): Promise<void> {
-        if (!notify) { set_notification(notif); }
-        fetch_data(name);
+        set_notification(notif);
+        fetch_data(name, notif !== null);
     }
 
     function close_notif() {

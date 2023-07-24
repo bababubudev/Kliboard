@@ -104,7 +104,8 @@ async function get_inbox_name(req, res)
 
         const dateDifference = getTimeDifference(new Date(expireAt));
 
-        let message = removal <= 0 ? "Saved! Your text will not be removed." : `${formattedName}'s text is being saved for ${dateDifference}.`;
+        let message = removal <= 0 ? `Welcome back ${formattedName}. Your text is here permanently`
+            : `Welcome back ${formattedName}. Your text is being saved for ${dateDifference}.`;
 
         if (dateDifference[0] === "T" && removal > 0)
             message = dateDifference;
@@ -166,15 +167,15 @@ async function post_inbox(req, res)
             })}`;
         }
 
-        dateInfo += formatDate();
+        dateInfo += ` ${formatDate(currentDate)}`;
 
         if (removal === 0)
         {
-            dateInfo = "Your text will not be removed!"
+            dateInfo = "Your text will not be removed"
         }
 
         const inbox = await model.create({ space_name, space_text, removal, expireAt });
-        return res.status(200).json({ message: `Welcome ${formattedName}! ` });
+        return res.status(200).json({ message: `${formattedName} saved succesfully! ${dateInfo}.` });
     }
     catch (err)
     {
@@ -240,8 +241,23 @@ async function update_inbox(req, res)
     }
 }
 
+async function delete_inbox(req, res)
+{
+    const name = req.params.name;
+
+    try
+    {
+        const inbox = await model.findOneAndDelete({ space_name: name });
+        res.status(200).json({ message: `${inbox.space_name} successfully deleted!` });
+    }
+    catch (err)
+    {
+        res.status(400).json({ error: err.message });
+    }
+}
+
 export
 {
     get_inbox, get_inbox_name, post_inbox,
-    update_inbox
+    update_inbox, delete_inbox
 }

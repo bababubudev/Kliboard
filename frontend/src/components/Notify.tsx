@@ -12,12 +12,14 @@ function Notify({ message, on_close }: NotifProp) {
         let innerTimeout: NodeJS.Timeout;
         let outerTimeout: NodeJS.Timeout;
 
+        set_visible(true);
+
         if (message) {
             outerTimeout = setTimeout(() => {
                 set_visible(false);
                 innerTimeout = setTimeout(() => {
                     on_close();
-                }, 1000);
+                }, 500);
             }, 5000);
 
             return () => {
@@ -25,7 +27,7 @@ function Notify({ message, on_close }: NotifProp) {
                 clearTimeout(outerTimeout);
             }
         }
-    }, [message]);
+    }, [message, on_close]);
 
     return (<>
         <div className={`notif-div ${visible ? "fade-in" : "fade-out"}`}>

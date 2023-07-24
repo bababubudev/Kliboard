@@ -377,7 +377,7 @@ header {
         @keyframes fadeInAnimation {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -392,7 +392,7 @@ header {
             }
             to {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(30px);
             }
         }
 
@@ -413,7 +413,7 @@ header {
             border-radius: 3px 3px 0 3px;
 
             font-weight: 200;
-            height: minmax(30px, 1fr);
+            height: 1fr;
 
             > p {
                 display: flex;
@@ -439,11 +439,11 @@ header {
         }
 
         .notif-div.fade-in {
-            animation: fadeInAnimation 1s ease-in-out forwards;
+            animation: fadeInAnimation 0.5s ease-in-out forwards;
         }
 
         .notif-div.fade-out {
-            animation: fadeOutAnimation 1s ease-in-out forwards;
+            animation: fadeOutAnimation 0.5s ease-in-out forwards;
         }
 
         .update-p {

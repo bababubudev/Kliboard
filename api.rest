@@ -8,3 +8,7 @@ Content-Type: application/json
 {
     "removal": 240
 }
+
+###
+
+DELETE http://localhost:5000/api/inbox/na
