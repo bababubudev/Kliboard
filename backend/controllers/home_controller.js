@@ -10,4 +10,4 @@ async function post_home(req, res)
     res.status(300).json({ message: space_name });
 }
 
-export { get_home, post_home }
+export { get_home, post_home };

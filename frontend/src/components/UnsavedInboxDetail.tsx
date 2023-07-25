@@ -41,7 +41,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const parsedNum = Number.parseInt(change);
             set_removal_time(parsedNum);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 
@@ -61,4 +61,4 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     );
 }
 
-export default UnsavedInboxDetail
+export default UnsavedInboxDetail;

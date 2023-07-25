@@ -1,4 +1,4 @@
-import model from "../models/inbox_model.js"
+import model from "../models/inbox_model.js";
 
 const formatDate = (dateToCheck) =>
 {
@@ -11,7 +11,7 @@ const formatDate = (dateToCheck) =>
         targetDate.getFullYear() === currentDate.getFullYear()
     )
     {
-        return 'today';
+        return "today";
     }
 
     const tomorrow = new Date();
@@ -22,7 +22,7 @@ const formatDate = (dateToCheck) =>
         targetDate.getFullYear() === tomorrow.getFullYear()
     )
     {
-        return 'tomorrow';
+        return "tomorrow";
     }
 
     return new Date(dateToCheck)
@@ -32,7 +32,7 @@ const formatDate = (dateToCheck) =>
             hour: "2-digit",
             minute: "2-digit"
         });
-}
+};
 
 function getTimeDifference(futureDate)
 {
@@ -43,7 +43,7 @@ function getTimeDifference(futureDate)
 
     if (timeDifference < 0)
     {
-        return 'This text is deleting in less than a minute...';
+        return "This text is deleting in less than a minute...";
     }
 
     const seconds = Math.floor(timeDifference / 1000);
@@ -53,15 +53,16 @@ function getTimeDifference(futureDate)
 
     if (days > 0)
     {
+        if (hours > 0)
+        {
+            return `${days} days and ${hours % 24} hours`;
+        }
+
         return `${days} days`;
-    }
-    else if (days > 0 && hours > 0)
-    {
-        return `${days} days and ${hours % 24} hours`;
     }
     else if (hours > 0)
     {
-        return `${hours % 24} hours`
+        return `${hours % 24} hours`;
     }
     else
     {
@@ -96,7 +97,7 @@ async function get_inbox_name(req, res)
 
         if (inbox === null)
         {
-            const message = `Hello ${formattedName}! Press [ \u2BA8 ] to save text...`
+            const message = `Hello ${formattedName}! Press [ \u2BA8 ] to save text...`;
             return res.status(206).json({ greet: message });
         }
 
@@ -118,7 +119,7 @@ async function get_inbox_name(req, res)
             createdAt: createdAt,
             updatedAt: updatedAt,
             expireAt: expireAt
-        }
+        };
 
 
         return res.status(200).json(modInbox);
@@ -158,7 +159,7 @@ async function post_inbox(req, res)
         const formattedName = space_name.charAt(0).toUpperCase() + space_name.slice(1).toLowerCase();
         const dateString = formatDate(currentDate);
 
-        let dateInfo = `Your text is being saved until `;
+        let dateInfo = "Your text is being saved until ";
 
         if (dateString[0] === "t")
         {
@@ -171,10 +172,10 @@ async function post_inbox(req, res)
 
         if (removal === 0)
         {
-            dateInfo = "Your text will not be removed"
+            dateInfo = "Your text will not be removed";
         }
 
-        const inbox = await model.create({ space_name, space_text, removal, expireAt });
+        await model.create({ space_name, space_text, removal, expireAt });
         return res.status(200).json({ message: `${formattedName} saved succesfully! ${dateInfo}.` });
     }
     catch (err)
@@ -229,7 +230,7 @@ async function update_inbox(req, res)
 
         if (removal === 0)
         {
-            dateInfo = "Your text will not be removed"
+            dateInfo = "Your text will not be removed";
         }
 
         await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });
@@ -260,4 +261,4 @@ export
 {
     get_inbox, get_inbox_name, post_inbox,
     update_inbox, delete_inbox
-}
+};

@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { IInbox } from "../interfaces/Inbox"
+import { IInbox } from "../interfaces/Inbox";
 import InboxArea from "./InboxArea";
 
 interface IDetails {
@@ -14,7 +14,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
     const getButtonState = (): boolean => {
         return inbox.space_text === text && inbox.removal === removal_time;
-    }
+    };
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -46,7 +46,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             const parsedNum = Number.parseInt(change);
             set_removal_time(parsedNum);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 
@@ -64,4 +64,4 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     );
 }
 
-export default SavedInboxDetails
+export default SavedInboxDetails;

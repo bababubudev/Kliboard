@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
     const [text, set_text] = useState<string>("");
-    const [saved_text, set_saved_text] = useState<string>((): string => {
-        return localStorage.getItem("saved") || "";
-    });
+    // const [saved_text, set_saved_text] = useState<string>((): string => {
+    //     return localStorage.getItem("saved") || "";
+    // });
 
     const has_spaces = text.includes(" ");
     const char_limit_reached = text.length > 16;
@@ -23,7 +23,7 @@ function Home() {
             return;
         }
 
-        navigate(`/inbox`, { state: { u_name: text.toLowerCase() } });
+        navigate("/inbox", { state: { u_name: text.toLowerCase() } });
     }
 
     function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
@@ -71,7 +71,7 @@ function Home() {
                 </button>
             </form>
         </div>
-    )
+    );
 }
 
-export default Home
+export default Home;

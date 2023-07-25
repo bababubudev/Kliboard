@@ -12,4 +12,4 @@ export const emptyInbox: IInbox = {
     removal: -1,
     createdAt: new Date(),
     updatedAt: new Date(),
-}
+};

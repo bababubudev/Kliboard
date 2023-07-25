@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 const inbox_data = {
     space_name: {
@@ -19,7 +19,7 @@ const inbox_data = {
         type: Date,
         default: Date.now
     }
-}
+};
 
 const Schema = mongoose.Schema;
 const inbox_schema = new Schema(inbox_data, { timestamps: true });
