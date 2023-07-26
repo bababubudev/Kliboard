@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LastEntries from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
+    const [entries, set_entries] = useState<string[]>([]);
     // const [saved_text, set_saved_text] = useState<string>((): string => {
     //     return localStorage.getItem("saved") || "";
     // });
@@ -30,7 +32,7 @@ function Home() {
         const value = event.target.value;
 
         if (!headRef.current) return;
-
+        
         if (value.includes(" ")) {
             headRef.current.textContent = "spaces are bad :/";
             headRef.current.classList.toggle("home-input-err", true);
@@ -46,6 +48,21 @@ function Home() {
 
         set_text(value);
     }
+
+    async function callEntries(){
+        try {
+            const response = await fetch("http://localhost:5000/api/", { method: "GET" });
+            const json = await response.json();
+
+            set_entries(json);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        callEntries();
+    }, []);
 
     return (
         <div className="home">
@@ -70,6 +87,7 @@ function Home() {
                     <span></span>
                 </button>
             </form>
+            {entries && <LastEntries names={entries}/>}
         </div>
     );
 }

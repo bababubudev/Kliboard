@@ -19,17 +19,17 @@ function Inbox() {
             const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
-            if (response.status === 206) {
+            if (response.status === 206 && !has_notif) {
                 set_notification(json["greet"]);
-                throw new Error(`User of name ${name} not found!`);
+                return;
             }
 
             set_data(json);
-
             if (!has_notif) set_notification(json["time_left"]);
         }
         catch (err) {
-            console.log(err);
+            if (err instanceof Error)
+                set_notification(err.message);
         }
     }
 

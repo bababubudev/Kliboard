@@ -68,8 +68,6 @@ function InboxArea({
     useEffect(() => {
         const list = list_ref.current;
 
-
-
         if (!list || option === "Unavailable") return;
 
         function handle_click(event: MouseEvent) {

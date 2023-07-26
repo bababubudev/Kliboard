@@ -32,15 +32,22 @@ $mobile-width: 600px;
 body {
     font-family: "Source Code Pro", monospace;
     font-weight: 800;
+    background: $s_bg;
+
+    @include desktop {
+        max-width: 60vw;
+        margin: auto;
+    }
 }
 
 header {
-    background-color: $s_bg;
     padding: 3ch 0 3ch 1ch;
+    border-radius: 5px;
 }
 
-.container {
+.nav-container {
     a {
+        font-size: 0.9rem;
         text-decoration: none;
         color: $primary;
     }
@@ -48,10 +55,6 @@ header {
 
 .pages {
     margin: $space 1ch 0 1ch;
-
-    @include desktop {
-        max-width: 70vw;
-    }
 }
 
 .home {
@@ -61,17 +64,22 @@ header {
         $f_border_rad: 5px;
 
         display: grid;
-        grid-template-columns: 3fr minmax(70px, 1fr);
+        grid-template-columns: 3fr minmax(0px, 1fr);
 
         row-gap: 0.5ch;
         column-gap: 0.25ch;
 
         font-size: 1.25rem;
 
+        .home-input-err {
+            color: $error;
+        }
+
         > label {
             transition: 0.2s ease;
-            grid-column: span 2;
             margin-left: 0.5ch;
+
+            grid-column: span 2;
 
             color: $dark;
         }
@@ -80,10 +88,10 @@ header {
             background: $dark;
             color: $primary;
 
-            font-weight: 400;
+            border: 2px solid transparent;
 
             &:active {
-                color: white;
+                color: $s_bg;
             }
 
             &:disabled {
@@ -92,15 +100,31 @@ header {
             }
 
             span::before {
-                font-weight: 200;
-                font-size: 1.2rem;
+                font-size: 1.5rem;
                 content: "\279F";
+            }
+
+            @include desktop {
+                &:hover {
+                    border: 2px solid $primary;
+
+                    &:disabled {
+                        border: 2px solid $f_bright_error;
+                    }
+
+                    &:not(:disabled) {
+                        span::before {
+                            color: $s_bg;
+                        }
+                    }
+                }
             }
         }
 
         > input {
             background: $dark;
             color: $s_bg;
+            border: none;
 
             &:focus {
                 outline-color: $primary;
@@ -115,9 +139,58 @@ header {
         > input {
             padding: 10px 1ch;
             text-overflow: ellipsis;
-
-            border: none;
             border-radius: $f_border_rad;
+        }
+    }
+
+    .last-updated {
+        font-size: 0.7em;
+        color: #5c5c5c;
+
+        display: grid;
+
+        margin-top: $space;
+        margin-left: 1ch;
+
+        > p {
+            margin-bottom: 1ch;
+
+            border: 3px;
+            border-style: none none solid none;
+            border-color: transparent;
+            border-image: linear-gradient(to right, $dark, 90%, transparent);
+            border-image-slice: 1;
+        }
+
+        > ul {
+            border-collapse: collapse;
+
+            > li {
+                display: grid;
+
+                padding: 1ch;
+
+                border: 1px;
+                border-style: none none solid none;
+                border-color: transparent;
+                border-image: linear-gradient(to right, $dark, 90%, transparent);
+                border-image-slice: 1;
+            }
+        }
+
+        .notif-div.fade-in {
+            animation: fadeInAnimation 0.5s ease-in-out forwards;
+        }
+
+        .notif-div.fade-out {
+            animation: fadeOutAnimation 0.5s ease-in-out forwards;
+        }
+
+        .update-p {
+            margin-top: 0.5ch;
+            margin-left: 0.5ch;
+
+            transition: all 0.2s ease;
         }
     }
 }
@@ -237,6 +310,7 @@ header {
 
                     left: 0;
                     top: calc(100% + 0.5ch);
+                    z-index: 1;
 
                     border-radius: 0 0 $f_border_rad 0;
 
@@ -296,7 +370,9 @@ header {
             > label {
                 margin-bottom: 0.25ch;
                 padding-bottom: 0.15ch;
-                word-break: break-all;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-size-adjust: 100%;
             }
 
             > textarea {
@@ -364,7 +440,7 @@ header {
                             border-color: $primary;
 
                             span {
-                                color: $primary;
+                                color: $s_bg;
                             }
                         }
                     }

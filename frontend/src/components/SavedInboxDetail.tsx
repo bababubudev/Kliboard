@@ -33,7 +33,8 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             on_update(json["message"]);
         }
         catch (err) {
-            console.error(err);
+            if (err instanceof Error)
+                on_update(err.message);
         }
     }
 

@@ -5,11 +5,3 @@ export interface IInbox {
     createdAt: Date;
     updatedAt: Date;
 }
-
-export const emptyInbox: IInbox = {
-    space_name: "",
-    space_text: "",
-    removal: -1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-};

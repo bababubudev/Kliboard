@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
+    const location = useLocation();
+
     return (
         <>
             <header>
-                <div className="container">
+                <div className="nav-container">
                     <Link to="/">
-                        <h1>Kliboard</h1>
+                        <h1>{location.pathname === "/" ? "Kliboard" : "Go Back"}</h1>
                     </Link>
                 </div>
             </header>
