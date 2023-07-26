@@ -103,7 +103,7 @@ function InboxArea({
                     autoComplete="off"
                     spellCheck="false"
                     autoFocus
-                    minRows={4}
+                    minRows={5}
                 />
 
                 <div className="save-time">

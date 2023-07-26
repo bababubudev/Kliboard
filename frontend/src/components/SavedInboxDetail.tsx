@@ -30,6 +30,11 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
             const json = await response.json();
 
+            if (response.status === 400) {
+                on_update(json["error"]);
+                return;
+            }
+            
             on_update(json["message"]);
         }
         catch (err) {

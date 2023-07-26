@@ -8,7 +8,7 @@ function Navbar() {
             <header>
                 <div className="nav-container">
                     <Link to="/">
-                        <h1>{location.pathname === "/" ? "Kliboard" : "Go Back"}</h1>
+                        <h1>{location.pathname === "/" ? "Kliboard" : "\u2B8C"}</h1>
                     </Link>
                 </div>
             </header>

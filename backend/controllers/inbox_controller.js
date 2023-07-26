@@ -233,7 +233,12 @@ async function update_inbox(req, res)
             dateInfo = "Your text will not be removed";
         }
 
-        await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });
+        const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });
+        
+        if (inbox === null) {
+            throw new Error("Something's not right! Your space is nowhere to be found...");
+        }
+
         res.status(200).json({ message: formattedName + " updated! " + dateInfo + "." });
     }
     catch (err)
@@ -249,6 +254,11 @@ async function delete_inbox(req, res)
     try
     {
         const inbox = await model.findOneAndDelete({ space_name: name });
+
+        if (inbox === null) {
+            throw new Error("Can't find to delete");    
+        }
+
         res.status(200).json({ message: `${inbox.space_name} successfully deleted!` });
     }
     catch (err)

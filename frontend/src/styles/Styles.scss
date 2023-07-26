@@ -12,6 +12,10 @@ $error: #e7195a;
 $dark: #414141;
 $s_bg: #fafafa;
 
+$f_bright_prim: #c8c8c8;
+$f_bright_error: #fdb4cb;
+$f_border_rad: 5px;
+
 $space: 10ch;
 $border-rad: 20em;
 
@@ -35,7 +39,7 @@ body {
     background: $s_bg;
 
     @include desktop {
-        max-width: 60vw;
+        max-width: 50vw;
         margin: auto;
     }
 }
@@ -47,6 +51,8 @@ header {
 
 .nav-container {
     a {
+        padding: 5px 20px;
+        display: inline-block;
         font-size: 0.9rem;
         text-decoration: none;
         color: $primary;
@@ -59,10 +65,6 @@ header {
 
 .home {
     form {
-        $f_bright_prim: #c8c8c8;
-        $f_bright_error: #fdb4cb;
-        $f_border_rad: 5px;
-
         display: grid;
         grid-template-columns: 3fr minmax(0px, 1fr);
 
@@ -199,10 +201,6 @@ header {
     position: relative;
 
     form {
-        $f_bright_prim: #c8c8c8;
-        $f_bright_error: #fdb4cb;
-        $f_border_rad: 3px;
-
         display: grid;
         grid-template-columns: 3fr minmax(100px, 1fr);
 
@@ -230,7 +228,6 @@ header {
 
         .save-time {
             display: grid;
-            font-size: 0.7rem;
             font-weight: 400;
 
             grid-template-rows: 35px 1fr;
@@ -258,7 +255,7 @@ header {
                         color: $f_bright_prim;
 
                         &::before {
-                            font-size: 1rem;
+                            font-size: 1.2rem;
                             content: "saved";
                         }
                     }
@@ -414,11 +411,13 @@ header {
 
         @include desktop {
             > label {
+                letter-spacing: 0.7rem;
+
                 grid-column: span 2;
             }
 
             > textarea {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
 
             .save-time {
@@ -472,12 +471,12 @@ header {
             }
         }
 
-        font-size: 0.7em;
         color: #5c5c5c;
+        font-size: 0.7rem;
 
         .notif-div {
             display: grid;
-            grid-template-columns: 1fr 30px;
+            grid-template-columns: 1fr 50px;
 
             margin-top: 0.5ch;
             padding: 1.5ch 0;
@@ -486,7 +485,7 @@ header {
             color: $s_bg;
 
             border: 1px solid $error;
-            border-radius: 3px 3px 0 3px;
+            border-radius: $f_border_rad $f_border_rad 0 $f_border_rad;
 
             font-weight: 200;
             height: 1fr;
@@ -510,6 +509,22 @@ header {
                     color: $error;
                     font-size: 0.5rem;
                     font-weight: 800;
+                }
+            }
+
+            @include desktop {
+                font-size: 0.9rem;
+
+                button {
+                    cursor: pointer;
+
+                    span {
+                        padding: 0 1ch;
+                        font-size: 0.7rem;
+                        &:hover {
+                            color: $primary;
+                        }
+                    }
                 }
             }
         }

@@ -24,6 +24,11 @@ function Inbox() {
                 return;
             }
 
+            if (response.status === 400){
+                set_notification(json["error"]);
+                return;
+            }
+
             set_data(json);
             if (!has_notif) set_notification(json["time_left"]);
         }

@@ -5,12 +5,9 @@ import LastEntries from "../components/LastEntries";
 function Home() {
     const [text, set_text] = useState<string>("");
     const [entries, set_entries] = useState<string[]>([]);
-    // const [saved_text, set_saved_text] = useState<string>((): string => {
-    //     return localStorage.getItem("saved") || "";
-    // });
 
     const has_spaces = text.includes(" ");
-    const char_limit_reached = text.length > 16;
+    const invalid_size = text.length < 3 || text.length > 16;
 
     const headRef = useRef<HTMLLabelElement>(null);
     const navigate = useNavigate();
@@ -18,7 +15,7 @@ function Home() {
     function handle_submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (has_spaces || char_limit_reached) {
+        if (has_spaces || invalid_size) {
             if (!headRef.current) return;
 
             headRef.current.textContent = "not allowed :/";
@@ -30,21 +27,28 @@ function Home() {
 
     function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
+        let warningText : string;
 
         if (!headRef.current) return;
         
         if (value.includes(" ")) {
-            headRef.current.textContent = "spaces are bad :/";
+            warningText = "spaces are bad :/";
             headRef.current.classList.toggle("home-input-err", true);
         }
         else if (value.length > 16) {
-            headRef.current.textContent = "too much text :/";
+            warningText = "too much text :/";
+            headRef.current.classList.toggle("home-input-err", true);
+        }
+        else if (/\d/.test(value)){
+            warningText = "numbers are bad :/";
             headRef.current.classList.toggle("home-input-err", true);
         }
         else {
-            headRef.current.textContent = "create a space";
+            warningText = "create a space";
             headRef.current.classList.toggle("home-input-err", false);
         }
+        
+        headRef.current.textContent = warningText;
 
         set_text(value);
     }
@@ -82,7 +86,11 @@ function Home() {
                     type="submit"
                     id="enter"
                     className="entry"
-                    disabled={has_spaces || char_limit_reached}
+                    disabled={
+                        has_spaces || 
+                        invalid_size ||
+                        /\d/.test(text)
+                    }
                 >
                     <span></span>
                 </button>

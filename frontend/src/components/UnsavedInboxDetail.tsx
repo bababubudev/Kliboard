@@ -26,6 +26,11 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             });
 
             const json = await response.json();
+
+            if (response.status === 400){
+                throw new Error("Somthing went wrong. Please go back and try again!");
+            }
+
             on_update(json["message"]);
         } catch (err) {
             if (err instanceof Error)
