@@ -1,11 +1,29 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+
+const no_spacenum = (value) => {
+    return !/[0-9 ]/.test(value);
+};
+
+const size_validation = (value) => {
+    return value.length <= 16 && value.length >= 3;
+};
 
 const inbox_data = {
     space_name: {
         type: String,
         required: true,
         min: 2,
-        max: 20
+        max: 16,
+        validate: [
+            {
+                validator: no_spacenum,
+                message: "Numbers and spaces not allowed"
+            },
+            {
+                validator: size_validation,
+                message: "Shouldn't be less than 3 or more than 16",
+            },
+        ]
     },
     space_text: {
         type: String,
@@ -19,7 +37,7 @@ const inbox_data = {
         type: Date,
         default: Date.now
     }
-}
+};
 
 const Schema = mongoose.Schema;
 const inbox_schema = new Schema(inbox_data, { timestamps: true });

@@ -19,5 +19,8 @@
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22"
+  },
+  "devDependencies": {
+    "eslint": "^8.45.0"
   }
 }

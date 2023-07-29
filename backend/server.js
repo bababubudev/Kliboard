@@ -1,8 +1,8 @@
-import express from "express"
-import env from "dotenv"
-import cors from "cors"
-import mongoose from "mongoose"
-import morgan from "morgan"
+import express from "express";
+import env from "dotenv";
+import cors from "cors";
+import mongoose from "mongoose";
+import morgan from "morgan";
 
 import router from "./routes/all_routes.js";
 
@@ -23,7 +23,7 @@ app.use("/api/", router);
 
 function on_connect()
 {
-    console.log(`Successfully connected to the database!`)
+    console.log("Successfully connected to the database!");
     app.listen(port, () => { console.log(`Listening on port ${port}...`); });
 }
 

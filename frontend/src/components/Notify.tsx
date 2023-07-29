@@ -20,12 +20,13 @@ function Notify({ message, on_close }: NotifProp) {
                 innerTimeout = setTimeout(() => {
                     on_close();
                 }, 500);
-            }, 5000);
+            }, 10_000);
+
 
             return () => {
                 clearTimeout(innerTimeout);
                 clearTimeout(outerTimeout);
-            }
+            };
         }
     }, [message, on_close]);
 

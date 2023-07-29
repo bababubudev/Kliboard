@@ -6,6 +6,7 @@ interface IDetails {
     on_update: (notif: string | null) => Promise<void>;
 }
 
+
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
     const [removal_time, set_removal_time] = useState<number>(1);
@@ -26,9 +27,14 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
 
             const json = await response.json();
 
+            if (response.status === 400){
+                throw new Error("Somthing went wrong. Please go back and try again!");
+            }
+
             on_update(json["message"]);
         } catch (err) {
-            console.error(err);
+            if (err instanceof Error)
+                on_update(err.message);
         }
     }
 
@@ -41,7 +47,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const parsedNum = Number.parseInt(change);
             set_removal_time(parsedNum);
         } catch (err) {
-            console.error(err)
+            console.error(err);
         }
     }
 
@@ -61,4 +67,4 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     );
 }
 
-export default UnsavedInboxDetail
+export default UnsavedInboxDetail;

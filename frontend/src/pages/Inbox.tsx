@@ -14,22 +14,27 @@ function Inbox() {
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function fetch_data(name: string, has_notif: boolean = false): Promise<void> {
+    async function fetch_data(name: string, has_notif = false): Promise<void> {
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
-            if (response.status === 206) {
+            if (response.status === 206 && !has_notif) {
                 set_notification(json["greet"]);
-                throw new Error(`User of name ${name} not found!`)
+                return;
+            }
+
+            if (response.status === 400){
+                set_notification(json["error"]);
+                return;
             }
 
             set_data(json);
-
             if (!has_notif) set_notification(json["time_left"]);
         }
         catch (err) {
-            console.log(err);
+            if (err instanceof Error)
+                set_notification(err.message);
         }
     }
 
@@ -80,4 +85,4 @@ function Inbox() {
     );
 }
 
-export default Inbox
+export default Inbox;

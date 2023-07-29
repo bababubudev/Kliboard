@@ -41,20 +41,20 @@ function InboxArea({
 
     function get_option(time: number) {
         switch (time) {
-            case 0:
-                return "Don't remove";
-            case 1:
-                return "1 Hour";
-            case 10:
-                return "10 Hour";
-            case 24:
-                return "1 Day";
-            case 240:
-                return "10 Day";
-            case -1:
-                return "Choose time...";
-            default:
-                return "Unavailable";
+        case 0:
+            return "Don't remove";
+        case 1:
+            return "1 Hour";
+        case 10:
+            return "10 Hour";
+        case 24:
+            return "1 Day";
+        case 240:
+            return "10 Day";
+        case -1:
+            return "Choose time...";
+        default:
+            return "Unavailable";
         }
     }
 
@@ -67,8 +67,6 @@ function InboxArea({
 
     useEffect(() => {
         const list = list_ref.current;
-
-
 
         if (!list || option === "Unavailable") return;
 
@@ -88,7 +86,7 @@ function InboxArea({
 
         return () => {
             document.removeEventListener("click", handle_click);
-        }
+        };
 
     }, [show_list]);
 
@@ -105,7 +103,7 @@ function InboxArea({
                     autoComplete="off"
                     spellCheck="false"
                     autoFocus
-                    minRows={4}
+                    minRows={5}
                 />
 
                 <div className="save-time">
@@ -123,7 +121,7 @@ function InboxArea({
                                 id="nun"
                                 tabIndex={0}
                             >
-                                Don't
+                                Don&apos;t
                                 remove
                             </li>
                             <li
@@ -177,4 +175,4 @@ function InboxArea({
     );
 }
 
-export default InboxArea
+export default InboxArea;
