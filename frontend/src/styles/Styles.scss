@@ -24,9 +24,9 @@ $dark-theme: (
     "shade_prim": #fafafa,
     "shade_scnd": #414141,
 
-    "f_prim": #4e4e4e,
+    "f_prim": #7a7a7a,
     "f_error": #fdb4cb,
-    "f_bg": #a8a8a8
+    "f_bg": #b4b4b4
 );
 
 :root {
@@ -54,6 +54,12 @@ body[data-theme="dark"] {
 
     .home {
         font-weight: 600;
+
+        form {
+            label {
+                color: var(--primary);
+            }
+        }
     }
 
     .inbox {
@@ -124,7 +130,7 @@ header {
 .nav-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
 
     @include mobile {
         margin: 0 2ch;
@@ -148,7 +154,6 @@ header {
         width: 5ch;
         background: none;
         border: none;
-
         span {
             &.light {
                 &::before {
@@ -172,10 +177,12 @@ header {
                 span {
                     &.light::before {
                         color: var(--shade_prim);
+                        text-shadow: 1px 3px 1px #0000002f;
                     }
 
                     &.dark::before {
                         color: var(--primary);
+                        text-shadow: 1px 3px 1px #ffffff4f;
                     }
                 }
             }
@@ -222,7 +229,7 @@ header {
 
             &:disabled {
                 color: var(--f_prim);
-                background: grey;
+                background: var(--f_bg);
             }
 
             span::before {
@@ -294,7 +301,7 @@ header {
             border: 3px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
+            border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
             border-image-slice: 1;
         }
 
@@ -303,13 +310,12 @@ header {
 
             > li {
                 display: grid;
-
                 padding: 1ch;
 
                 border: 1px;
                 border-style: none none solid none;
                 border-color: transparent;
-                border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
+                border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
                 border-image-slice: 1;
             }
         }
@@ -386,18 +392,16 @@ header {
                 &:disabled {
                     background: none;
                     span {
-                        color: var(--f_prim);
-
                         &::before {
                             font-size: 1.2rem;
                             content: "saved";
+                            color: var(--f_bg);
                         }
                     }
                 }
 
                 > span {
                     font-weight: 600;
-                    color: var(--primary);
 
                     &:active {
                         background: none;
@@ -561,7 +565,7 @@ header {
                         border: 2px solid;
 
                         &:disabled {
-                            border-color: var(--f_error);
+                            border-color: var(--error);
 
                             span {
                                 color: var(--f_error);
@@ -609,6 +613,8 @@ header {
         font-size: 0.7rem;
 
         .notif-div {
+            font-size: 0.8rem;
+
             display: grid;
             grid-template-columns: 1fr 50px;
 
@@ -619,7 +625,7 @@ header {
             color: var(--shade_scnd);
 
             border: 1px solid var(--primary);
-            border-radius: 0 0 $f_border_rad $f_border_rad;
+            border-radius: $f_border_rad $f_border_rad 0 $f_border_rad;
 
             font-weight: 200;
             height: 1fr;
@@ -647,7 +653,7 @@ header {
             }
 
             @include desktop {
-                font-size: 0.9rem;
+                font-size: 0.8rem;
 
                 button {
                     cursor: pointer;

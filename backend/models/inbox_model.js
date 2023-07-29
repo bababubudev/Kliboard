@@ -27,7 +27,7 @@ const inbox_data = {
     },
     space_text: {
         type: String,
-        default: ""
+        required: true
     },
     removal: {
         type: Number,

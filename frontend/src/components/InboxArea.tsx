@@ -25,7 +25,6 @@ function InboxArea({
     disable_submit
 }: IAreaDetails) {
     const list_ref = useRef<HTMLUListElement>(null);
-
     const [option, set_option] = useState<string>(get_option(current_time));
     const [show_list, set_show_list] = useState<boolean>(false);
 
@@ -165,7 +164,10 @@ function InboxArea({
                     <button
                         type="submit"
                         className="submit-button"
-                        disabled={disable_submit || space_name === "prabesh"}
+                        disabled={
+                            disable_submit || 
+                            current_time < -1
+                        }
                     >
                         <span className="on-save"></span>
                     </button>

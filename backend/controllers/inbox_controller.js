@@ -179,6 +179,7 @@ async function post_inbox(req, res)
     }
     catch (err)
     {
+        console.log(err);
         res.status(400).json({ error: err.message });
     }
 }
@@ -196,7 +197,7 @@ async function update_inbox(req, res)
         let { removal } = req.body;
         const allowedNums = [-1, 0, 1, 10, 24, 240];
 
-        const invalid = name === "prabesh" || !isValid || !allowedNums.includes(removal);
+        const invalid = removal < -1 || !isValid || !allowedNums.includes(removal);
 
         if (invalid)
         {

@@ -7,7 +7,7 @@ function Home() {
     const [entries, set_entries] = useState<string[]>([]);
 
     const has_spaces = text.includes(" ");
-    const invalid_size = text.length < 3 || text.length > 16;
+    const invalid_size = text.length == 0 || text.length > 16;
 
     const headRef = useRef<HTMLLabelElement>(null);
     const navigate = useNavigate();
@@ -15,10 +15,17 @@ function Home() {
     function handle_submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (has_spaces || invalid_size) {
+        if (has_spaces || invalid_size || text.length < 3) {
             if (!headRef.current) return;
 
-            headRef.current.textContent = "not allowed :/";
+            if (text.length < 3) {
+                headRef.current.textContent = "at least 3 please :/";
+                headRef.current.classList.toggle("home-input-err", true);
+            }
+            else {
+                headRef.current.textContent = "not allowed :/";
+            }
+
             return;
         }
 
@@ -80,7 +87,6 @@ function Home() {
                     placeholder="or enter an existing one..."
                     autoFocus={true}
                     autoComplete="off"
-                    required
                 />
                 <button
                     type="submit"

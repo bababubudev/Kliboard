@@ -14,6 +14,11 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
+        if (text === "") {
+            on_update("Please provide some text first! The space cannot be left empty...", true);
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:5000/api/inbox", {
                 method: "POST",
@@ -28,7 +33,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const json = await response.json();
 
             if (response.status === 400){
-                throw new Error("Somthing went wrong. Please go back and try again!");
+                throw new Error("Somthing went wrong. Please go back or try again!");
             }
 
             on_update(json["message"], false);

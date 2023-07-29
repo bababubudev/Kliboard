@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
     const location = useLocation();
-    const [light, set_light] = useState<boolean>(true);
+    const [light, set_light] = useState<boolean>(false);
 
     useEffect(() => {
         const currentBody = document.body;

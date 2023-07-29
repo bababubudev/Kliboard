@@ -19,7 +19,12 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
-        if (getButtonState() || space_name === "prabesh") return;
+        if (getButtonState()) return;
+
+        if (text === "") {
+            on_update("Please provide some text first! The space cannot be left empty...", true);
+            return;
+        }
 
         try {
             const response = await fetch(`http://localhost:5000/api/inbox/${space_name}`, {
