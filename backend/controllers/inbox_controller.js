@@ -140,7 +140,6 @@ async function post_inbox(req, res)
 
         if (contains)
         {
-            console.log("[ Duplicate entry found! ]");
             const inbox = await model.findById(contains["_id"]);
             return res.status(200).json(inbox);
         }
@@ -236,7 +235,7 @@ async function update_inbox(req, res)
         const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });
         
         if (inbox === null) {
-            throw new Error("Something's not right! Your space is nowhere to be found...");
+            throw new Error("Something's not right! Your space is nowhere to be found. Please go back!");
         }
 
         res.status(200).json({ message: formattedName + " updated! " + dateInfo + "." });

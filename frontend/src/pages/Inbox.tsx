@@ -44,9 +44,11 @@ function Inbox() {
         }
     }, []);
 
-    async function update_inbox(notif: string | null = null): Promise<void> {
+    async function update_inbox(notif: string | null = null, error = false): Promise<void> {
+        const has_notif = notif !== null;
         set_notification(notif);
-        fetch_data(name, notif !== null);
+        
+        if (!error) { fetch_data(name, has_notif); }
     }
 
     function close_notif() {

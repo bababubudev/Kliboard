@@ -7,19 +7,91 @@
     box-sizing: border-box;
 }
 
-$primary: #1aac83;
-$error: #e7195a;
-$dark: #414141;
-$s_bg: #fafafa;
+$light-theme: (
+    "primary": #1aac83,
+    "error": #e7195a,
+    "shade_prim": #414141,
+    "shade_scnd": #fafafa,
 
-$f_bright_prim: #c8c8c8;
-$f_bright_error: #fdb4cb;
+    "f_prim": #e4e4e4,
+    "f_error": #fdb4cb,
+    "f_bg": #6e6e6e
+);
+
+$dark-theme: (
+    "primary": #1aac83,
+    "error": #e7195a,
+    "shade_prim": #fafafa,
+    "shade_scnd": #414141,
+
+    "f_prim": #4e4e4e,
+    "f_error": #fdb4cb,
+    "f_bg": #a8a8a8
+);
+
+:root {
+    $active-theme: $light-theme;
+
+    @each $color, $val in $active-theme {
+        --#{$color}: #{$val};
+    }
+}
+
+body[data-theme="light"] {
+    @each $color, $val in $light-theme {
+        --#{$color}: #{$val};
+    }
+
+    .home {
+        font-weight: 800;
+    }
+}
+
+body[data-theme="dark"] {
+    @each $color, $val in $dark-theme {
+        --#{$color}: #{$val};
+    }
+
+    .home {
+        font-weight: 600;
+    }
+
+    .inbox {
+        form {
+            label {
+                color: var(--primary);
+            }
+
+            textarea {
+                font-weight: 400;
+            }
+
+            .save-time {
+                .selector {
+                    p {
+                        font-weight: 600;
+                    }
+
+                    ul {
+                        li {
+                            font-weight: 800;
+                        }
+                    }
+                }
+            }
+        }
+
+        .detailing {
+            .notif-div {
+                font-weight: 400;
+            }
+        }
+    }
+}
+
 $f_border_rad: 5px;
-
 $space: 10ch;
-$border-rad: 20em;
-
-$mobile-width: 600px;
+$mobile-width: 850px;
 
 @mixin mobile {
     @media (max-width: #{$mobile-width}) {
@@ -36,7 +108,7 @@ $mobile-width: 600px;
 body {
     font-family: "Source Code Pro", monospace;
     font-weight: 800;
-    background: $s_bg;
+    background: var(--shade_scnd);
 
     @include desktop {
         max-width: 50vw;
@@ -45,17 +117,69 @@ body {
 }
 
 header {
-    padding: 3ch 0 3ch 1ch;
+    padding: 3ch 0;
     border-radius: 5px;
 }
 
 .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include mobile {
+        margin: 0 2ch;
+    }
+
     a {
-        padding: 5px 20px;
         display: inline-block;
         font-size: 0.9rem;
         text-decoration: none;
-        color: $primary;
+        color: var(--primary);
+
+        @include desktop {
+            &:hover {
+                color: var(--error);
+                text-shadow: 1px 3px 7px #0000004d;
+            }
+        }
+    }
+
+    button {
+        width: 5ch;
+        background: none;
+        border: none;
+
+        span {
+            &.light {
+                &::before {
+                    font-size: 2rem;
+                    content: "\2600";
+                    color: var(--primary);
+                }
+            }
+
+            &.dark {
+                &::before {
+                    font-size: 2rem;
+                    content: "\2726";
+                    color: var(--shade_prim);
+                }
+            }
+        }
+
+        @include desktop {
+            &:hover {
+                span {
+                    &.light::before {
+                        color: var(--shade_prim);
+                    }
+
+                    &.dark::before {
+                        color: var(--primary);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -74,7 +198,7 @@ header {
         font-size: 1.25rem;
 
         .home-input-err {
-            color: $error;
+            color: var(--error);
         }
 
         > label {
@@ -83,21 +207,21 @@ header {
 
             grid-column: span 2;
 
-            color: $dark;
+            color: var(--shade_prim);
         }
 
         > button {
-            background: $dark;
-            color: $primary;
+            background: var(--shade_prim);
+            color: var(--primary);
 
             border: 2px solid transparent;
 
             &:active {
-                color: $s_bg;
+                color: var(--shade_scnd);
             }
 
             &:disabled {
-                color: $f_bright_prim;
+                color: var(--f_prim);
                 background: grey;
             }
 
@@ -108,15 +232,15 @@ header {
 
             @include desktop {
                 &:hover {
-                    border: 2px solid $primary;
+                    border: 2px solid var(--primary);
 
                     &:disabled {
-                        border: 2px solid $f_bright_error;
+                        border: 2px solid var(--f_error);
                     }
 
                     &:not(:disabled) {
                         span::before {
-                            color: $s_bg;
+                            color: var(--shade_scnd);
                         }
                     }
                 }
@@ -124,16 +248,16 @@ header {
         }
 
         > input {
-            background: $dark;
-            color: $s_bg;
+            background: var(--shade_prim);
+            color: var(--shade_scnd);
             border: none;
 
             &:focus {
-                outline-color: $primary;
+                outline-color: var(--primary);
             }
 
             &::placeholder {
-                color: $f_bright_prim;
+                color: var(--f_prim);
             }
         }
 
@@ -143,11 +267,21 @@ header {
             text-overflow: ellipsis;
             border-radius: $f_border_rad;
         }
+
+        @include desktop {
+            input {
+                border-radius: $f_border_rad 0 0 $f_border_rad;
+            }
+
+            button {
+                border-radius: 0 $f_border_rad $f_border_rad 0;
+            }
+        }
     }
 
     .last-updated {
         font-size: 0.7em;
-        color: #5c5c5c;
+        color: var(--shade_prim);
 
         display: grid;
 
@@ -160,7 +294,7 @@ header {
             border: 3px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, $dark, 90%, transparent);
+            border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
             border-image-slice: 1;
         }
 
@@ -175,7 +309,7 @@ header {
                 border: 1px;
                 border-style: none none solid none;
                 border-color: transparent;
-                border-image: linear-gradient(to right, $dark, 90%, transparent);
+                border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
                 border-image-slice: 1;
             }
         }
@@ -220,10 +354,10 @@ header {
             border: 1px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, $dark, 60%, transparent);
+            border-image: linear-gradient(to right, var(--shade_prim), 60%, transparent);
             border-image-slice: 1;
 
-            color: $dark;
+            color: var(--shade_prim);
         }
 
         .save-time {
@@ -236,10 +370,10 @@ header {
             justify-items: stretch;
 
             > .submit-button {
-                color: $primary;
-                background: $dark;
+                color: var(--primary);
+                background: var(--shade_prim);
 
-                border: 1px solid $dark;
+                border: 1px solid var(--shade_prim);
                 border-radius: 0 0 $f_border_rad 0;
 
                 padding: 10px 1ch;
@@ -252,7 +386,7 @@ header {
                 &:disabled {
                     background: none;
                     span {
-                        color: $f_bright_prim;
+                        color: var(--f_prim);
 
                         &::before {
                             font-size: 1.2rem;
@@ -263,11 +397,11 @@ header {
 
                 > span {
                     font-weight: 600;
-                    color: $primary;
+                    color: var(--primary);
 
                     &:active {
                         background: none;
-                        border-color: $primary;
+                        border-color: var(--primary);
                     }
 
                     &::before {
@@ -283,11 +417,11 @@ header {
 
                 position: relative;
 
-                border: 1px solid $dark;
+                border: 1px solid var(--shade_prim);
                 border-radius: 0 $f_border_rad 0 0;
 
-                background: $dark;
-                color: $f_bright_prim;
+                background: var(--shade_prim);
+                color: var(--f_prim);
 
                 > .hide-list {
                     display: none;
@@ -299,7 +433,7 @@ header {
                 }
 
                 > ul {
-                    background: $dark;
+                    background: var(--shade_prim);
 
                     position: absolute;
                     height: $list_height;
@@ -313,7 +447,7 @@ header {
 
                     li {
                         list-style-type: none;
-                        color: $primary;
+                        color: var(--primary);
 
                         display: flex;
                         align-items: center;
@@ -324,11 +458,11 @@ header {
                         &:not(:last-child) {
                             border: 0.1px;
                             border-style: none none solid none;
-                            border-color: $f_bright_prim;
+                            border-color: var(--f_prim);
                         }
 
                         &:hover {
-                            background-color: $s_bg;
+                            background-color: var(--shade_scnd);
                             cursor: pointer;
                         }
                     }
@@ -337,8 +471,8 @@ header {
         }
 
         > textarea {
-            background: $dark;
-            color: $s_bg;
+            background: var(--shade_prim);
+            color: var(--shade_scnd);
 
             padding: 10px 1ch;
             text-overflow: ellipsis;
@@ -351,11 +485,11 @@ header {
             overflow-y: hidden;
 
             &:focus {
-                outline-color: $primary;
+                outline-color: var(--primary);
             }
 
             &::placeholder {
-                color: $f_bright_prim;
+                color: var(--f_prim);
             }
         }
 
@@ -427,19 +561,19 @@ header {
                         border: 2px solid;
 
                         &:disabled {
-                            border-color: $f_bright_error;
+                            border-color: var(--f_error);
 
                             span {
-                                color: $f_bright_error;
+                                color: var(--f_error);
                             }
                         }
 
                         &:not(:disabled) {
                             background-color: none;
-                            border-color: $primary;
+                            border-color: var(--primary);
 
                             span {
-                                color: $s_bg;
+                                color: var(--shade_scnd);
                             }
                         }
                     }
@@ -471,7 +605,7 @@ header {
             }
         }
 
-        color: #5c5c5c;
+        color: var(--f_bg);
         font-size: 0.7rem;
 
         .notif-div {
@@ -481,11 +615,11 @@ header {
             margin-top: 0.5ch;
             padding: 1.5ch 0;
 
-            background: $dark;
-            color: $s_bg;
+            background: var(--shade_prim);
+            color: var(--shade_scnd);
 
-            border: 1px solid $error;
-            border-radius: $f_border_rad $f_border_rad 0 $f_border_rad;
+            border: 1px solid var(--primary);
+            border-radius: 0 0 $f_border_rad $f_border_rad;
 
             font-weight: 200;
             height: 1fr;
@@ -506,7 +640,7 @@ header {
                 align-items: center;
 
                 span {
-                    color: $error;
+                    color: var(--error);
                     font-size: 0.5rem;
                     font-weight: 800;
                 }
@@ -522,7 +656,7 @@ header {
                         padding: 0 1ch;
                         font-size: 0.7rem;
                         &:hover {
-                            color: $primary;
+                            color: var(--primary);
                         }
                     }
                 }

@@ -3,7 +3,7 @@ import InboxArea from "./InboxArea";
 
 interface IDetails {
     space_name: string;
-    on_update: (notif: string | null) => Promise<void>;
+    on_update: (notif: string | null, error: boolean) => Promise<void>;
 }
 
 
@@ -31,10 +31,10 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
                 throw new Error("Somthing went wrong. Please go back and try again!");
             }
 
-            on_update(json["message"]);
+            on_update(json["message"], false);
         } catch (err) {
             if (err instanceof Error)
-                on_update(err.message);
+                on_update(err.message, true);
         }
     }
 

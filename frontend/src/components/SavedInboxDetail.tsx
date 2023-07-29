@@ -5,7 +5,7 @@ import InboxArea from "./InboxArea";
 interface IDetails {
     inbox: IInbox;
     space_name: string;
-    on_update: (notif: string | null) => Promise<void>;
+    on_update: (notif: string | null, error: boolean) => Promise<void>;
 }
 
 function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
@@ -31,15 +31,14 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             const json = await response.json();
 
             if (response.status === 400) {
-                on_update(json["error"]);
-                return;
+                throw new Error(json["error"]);
             }
             
-            on_update(json["message"]);
+            on_update(json["message"], false);
         }
         catch (err) {
             if (err instanceof Error)
-                on_update(err.message);
+                on_update(err.message, true);
         }
     }
 
