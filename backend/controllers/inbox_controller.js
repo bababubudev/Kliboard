@@ -97,7 +97,7 @@ async function get_inbox_name(req, res)
 
         if (!all_names.includes(name.toLowerCase()))
         {
-            const message = `Hello ${formattedName}! Click [ \u2BA8 ] to save text...`;
+            const message = `Hello ${formattedName}! Press \u2BA8 to save text...`;
             return res.status(206).json({ greet: message });
         }
 

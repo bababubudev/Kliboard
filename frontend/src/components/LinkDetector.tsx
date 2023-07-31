@@ -14,7 +14,8 @@ function extract_domain(url: string): string {
 }
 
 function LinkDetector({ text }: DetectorProp) {
-    const each = text.split(" ");
+    const separators = [" ", "\n"];
+    const each = text.split(new RegExp(separators.join("|"), "g"));
     let link = "";
 
     each.forEach(elem => {
