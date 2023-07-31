@@ -34,13 +34,14 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             });
 
             const json = await response.json();
-            if (response.status === 400){
+            if (!response.ok) {
                 throw new Error("Somthing went wrong. Please go back or try again!");
             }
-            
-            set_loading(false);
+
             on_update(json["message"], json);
+            set_loading(false);
         } catch (err) {
+            set_loading(false);
             if (err instanceof Error)
                 on_update(err.message, null);
         }
@@ -59,14 +60,14 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         }
     }
 
-    async function fetch_data(name: string){
+    async function fetch_data(name: string) {
         try {
             set_loading(true);
 
-            const response = await fetch(`http://localhost:5000/api/inbox/${name}`, {method: "GET"});
+            const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
-            if (response.status === 206){
+            if (response.status === 206) {
                 on_update(json["greet"], null);
                 set_loading(false);
                 return;
@@ -79,10 +80,10 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             set_loading(false);
             on_update(json["time_left"], json);
         }
-        catch(err) {
-            if (err instanceof Error){
+        catch (err) {
+            set_loading(false);
+            if (err instanceof Error) {
                 on_update(err.message, null);
-                set_loading(false);
             }
         }
     }
@@ -91,7 +92,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         if (space_name) {
             fetch_data(space_name);
         }
-    }, [])
+    }, []);
 
     return (
         <>

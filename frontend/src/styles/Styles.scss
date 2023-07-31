@@ -30,7 +30,7 @@ $dark-theme: (
 );
 
 :root {
-    $active-theme: $light-theme;
+    $active-theme: $dark-theme;
 
     @each $color, $val in $active-theme {
         --#{$color}: #{$val};
@@ -95,7 +95,7 @@ body[data-theme="dark"] {
 
         .detailing {
             .notif-div {
-                font-weight: 400;
+                font-weight: 600;
             }
         }
     }
@@ -164,15 +164,15 @@ header {
             &.light {
                 &::before {
                     font-size: 2rem;
-                    content: "\2600";
-                    color: var(--primary);
+                    content: "\2726";
+                    color: var(--shade_prim);
                 }
             }
 
             &.dark {
                 &::before {
                     font-size: 2rem;
-                    content: "\2726";
+                    content: "\2600";
                     color: var(--shade_prim);
                 }
             }
@@ -182,7 +182,7 @@ header {
             &:hover {
                 span {
                     &.light::before {
-                        color: var(--shade_prim);
+                        color: var(--primary);
                         text-shadow: 1px 3px 1px #0000002f;
                     }
 
@@ -347,8 +347,13 @@ header {
 
         > label {
             transition: 0.2s ease;
-            padding: 0 0 0 0.7ch;
+
+            margin-bottom: 0.25ch;
             margin-left: 0.1ch;
+            padding: 0 4ch 0.15ch 0.5ch;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
 
             font-weight: 800;
             letter-spacing: 0.5rem;
@@ -513,14 +518,6 @@ header {
             grid-template-columns: none;
             gap: 3px;
 
-            > label {
-                margin-bottom: 0.25ch;
-                padding-bottom: 0.15ch;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                text-size-adjust: 100%;
-            }
-
             > textarea {
                 border-radius: $f_border_rad $f_border_rad 0 0;
 
@@ -561,7 +558,6 @@ header {
         @include desktop {
             > label {
                 letter-spacing: 0.7rem;
-
                 grid-column: span 2;
             }
 
@@ -571,6 +567,10 @@ header {
 
             .save-time {
                 .submit-button {
+                    .on-save {
+                        font-size: 2rem;
+                    }
+
                     &:hover {
                         transition: background-color 0.2s ease;
                         border: 2px solid;
@@ -701,22 +701,64 @@ header {
             }
 
             .link {
-                margin-right: 1ch;
+                margin-right: 0.5ch;
+                border: 1px solid transparent;
+                border-radius: $f_border_rad;
+
+                padding: 0 1ch;
 
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-decoration: none;
-                color: var(--f_bg);
+                background: var(--shade_prim);
+                color: var(--f_prim);
 
                 max-width: 50%;
 
                 @include desktop {
                     &:hover {
+                        border: 1px solid var(--primary);
                         color: var(--primary);
-                        text-decoration: underline;
                     }
                 }
             }
         }
+    }
+}
+
+.reload-btn {
+    width: 5ch;
+    height: 5ch;
+
+    position: absolute;
+    top: -1ch;
+    right: 0;
+
+    display: flex;
+    justify-content: space-evenly;
+
+    color: var(--shade_prim);
+    background: none;
+    border: none;
+    transition: transform 0.2s ease-in-out;
+
+    &:active {
+        color: var(--f_bg);
+    }
+
+    @include desktop {
+        &:hover {
+            transform: rotate(90deg);
+            color: var(--primary);
+        }
+
+        &:not(:hover) {
+            transform: rotate(0deg);
+        }
+    }
+
+    span {
+        font-weight: 600;
+        font-size: 1.5rem;
     }
 }

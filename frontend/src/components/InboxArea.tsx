@@ -14,7 +14,6 @@ interface IAreaDetails {
     handle_option: (change: string) => void;
 }
 
-
 function InboxArea({
     space_name,
     current_text,
@@ -29,7 +28,6 @@ function InboxArea({
 }: IAreaDetails) {
     const list_ref = useRef<HTMLUListElement>(null);
 
-    const [option, set_option] = useState<string>(get_option(current_time));
     const [show_list, set_show_list] = useState<boolean>(false);
 
     function call_options(elem: React.MouseEvent<HTMLLIElement> | React.FocusEvent<HTMLLIElement>) {
@@ -38,7 +36,6 @@ function InboxArea({
 
         if (!currentText || !currentTime) return;
 
-        set_option(currentText);
         handle_option(currentTime);
     }
 
@@ -62,16 +59,9 @@ function InboxArea({
     }
 
     useEffect(() => {
-        const sibling = list_ref.current?.previousSibling;
-        if (!sibling) return;
-
-        sibling.textContent = option;
-    }, [option]);
-
-    useEffect(() => {
         const list = list_ref.current;
 
-        if (!list || option === "Unavailable") return;
+        if (!list || current_time < -1) return;
 
         function handle_click(event: MouseEvent) {
             const target = event.target as Node;
@@ -96,7 +86,9 @@ function InboxArea({
     return (
         <>
             <form onSubmit={handle_submit}>
-                <label htmlFor="input-text">{space_name}</label>
+                <label htmlFor="input-text">
+                    {space_name}
+                </label>
                 <TextareaAutosize
                     name="content"
                     value={current_text}
@@ -111,7 +103,7 @@ function InboxArea({
                 />
                 <div className="save-time">
                     <button type="button" className="selector" id="list-btn">
-                        <p>Choose time...</p>
+                        <p>{get_option(current_time)}</p>
                         <ul
                             ref={list_ref}
                             id="time-list"

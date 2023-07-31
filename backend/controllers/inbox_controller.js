@@ -120,7 +120,6 @@ async function get_inbox_name(req, res)
             updatedAt: updatedAt
         };
 
-
         return res.status(200).json(modInbox);
     }
     catch (err)
@@ -141,7 +140,7 @@ async function post_inbox(req, res)
 
         if (contains)
         {
-            const inbox = await model.findById(contains["_id"]);
+            const inbox = await model.findOne({space_name: lowerName});
             return res.status(200).json(inbox);
         }
 
@@ -210,7 +209,11 @@ async function update_inbox(req, res)
 
         let { removal } = req.body;
         const allowedNums = [-1, 0, 1, 10, 24, 240];
-        const invalid = !isValid || !allowedNums.includes(removal);
+        const invalidUpdate = ["prabesh", "vai"];
+
+        const invalid = !isValid 
+        || !allowedNums.includes(removal) 
+        || invalidUpdate.includes(name);
 
         if (invalid)
         {
