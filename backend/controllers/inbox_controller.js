@@ -1,6 +1,7 @@
 import model from "../models/inbox_model.js";
+import { all_names } from "./home_controller.js";
 
-const formatDate = (dateToCheck) =>
+const format_date = (dateToCheck) =>
 {
     const currentDate = new Date();
     const targetDate = new Date(dateToCheck);
@@ -34,7 +35,7 @@ const formatDate = (dateToCheck) =>
         });
 };
 
-function getTimeDifference(futureDate)
+function get_time_difference(futureDate)
 {
     const currentDate = new Date();
     const targetDate = new Date(futureDate);
@@ -89,21 +90,21 @@ async function get_inbox(req, res)
 async function get_inbox_name(req, res)
 {
     const name = req.params.name;
-
+    
     try
     {
-        const inbox = await model.findOne({ space_name: name });
         const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-        if (inbox === null)
+        if (!all_names.includes(name.toLowerCase()))
         {
-            const message = `Hello ${formattedName}! Press [ \u2BA8 ] to save text...`;
+            const message = `Hello ${formattedName}! Click [ \u2BA8 ] to save text...`;
             return res.status(206).json({ greet: message });
         }
 
-        const { space_text, removal, createdAt, updatedAt, expireAt } = inbox;
+        const inbox = await model.findOne({ space_name: name });
+        const { space_text, removal, updatedAt, expireAt } = inbox;
 
-        const dateDifference = getTimeDifference(new Date(expireAt));
+        const dateDifference = get_time_difference(new Date(expireAt));
 
         let message = removal <= 0 ? `Welcome back ${formattedName}. Your text is here permanently`
             : `Welcome back ${formattedName}. Your text is being saved for ${dateDifference}.`;
@@ -116,9 +117,7 @@ async function get_inbox_name(req, res)
             space_name: name,
             space_text: space_text,
             removal: removal,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            expireAt: expireAt
+            updatedAt: updatedAt
         };
 
 
@@ -136,12 +135,18 @@ async function post_inbox(req, res)
 
     try
     {
-        const contains = await model.exists({ space_name });
+        const lowerName = space_name.toLowerCase();
+        const allowedNums = [-1, 0, 1, 10, 24, 240];
+        const contains = await model.exists({ lowerName });
 
         if (contains)
         {
             const inbox = await model.findById(contains["_id"]);
             return res.status(200).json(inbox);
+        }
+
+        if (!allowedNums.includes(removal)) {
+            throw new Error("Sent request is not valid!");
         }
 
         let expireAt;
@@ -156,7 +161,7 @@ async function post_inbox(req, res)
 
         const currentDate = new Date(expireAt);
         const formattedName = space_name.charAt(0).toUpperCase() + space_name.slice(1).toLowerCase();
-        const dateString = formatDate(currentDate);
+        const dateString = format_date(currentDate);
 
         let dateInfo = "Your text is being saved until ";
 
@@ -167,19 +172,28 @@ async function post_inbox(req, res)
             })}`;
         }
 
-        dateInfo += ` ${formatDate(currentDate)}`;
+        dateInfo += ` ${format_date(currentDate)}`;
 
         if (removal === 0)
         {
             dateInfo = "Your text will not be removed";
         }
 
-        await model.create({ space_name, space_text, removal, expireAt });
-        return res.status(200).json({ message: `${formattedName} saved succesfully! ${dateInfo}.` });
+        const inbox = await model.create({ space_name, space_text, removal, expireAt });
+        if (inbox === null) throw new Error("Something went wrong! Try again...");
+
+        const modInbox = {
+            message: `${formattedName} saved succesfully! ${dateInfo}.`,
+            space_name: inbox.space_name,
+            space_text: inbox.space_text,
+            removal: inbox.removal,
+            updatedAt: inbox.updatedAt
+        };
+
+        return res.status(200).json(modInbox);
     }
     catch (err)
     {
-        console.log(err);
         res.status(400).json({ error: err.message });
     }
 }
@@ -196,8 +210,7 @@ async function update_inbox(req, res)
 
         let { removal } = req.body;
         const allowedNums = [-1, 0, 1, 10, 24, 240];
-
-        const invalid = removal < -1 || !isValid || !allowedNums.includes(removal);
+        const invalid = !isValid || !allowedNums.includes(removal);
 
         if (invalid)
         {
@@ -217,7 +230,7 @@ async function update_inbox(req, res)
 
         const currentDate = new Date(expires);
         const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-        const dateString = formatDate(currentDate);
+        const dateString = format_date(currentDate);
 
         let dateInfo = `Your text is saved until ${dateString}`;
 
@@ -233,13 +246,18 @@ async function update_inbox(req, res)
             dateInfo = "Your text will not be removed";
         }
 
-        const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true });
-        
-        if (inbox === null) {
-            throw new Error("Something's not right! Your space is nowhere to be found. Please go back!");
-        }
+        const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expires }, { new: true }); 
+        if (inbox === null) { throw new Error("Something's not right! Your space is nowhere to be found. Please go back!"); }
 
-        res.status(200).json({ message: formattedName + " updated! " + dateInfo + "." });
+        const modInbox = {
+            message: formattedName + " updated! " + dateInfo + ".",
+            space_name: inbox.space_name,
+            space_text: inbox.space_text,
+            removal: inbox.removal,
+            updatedAt: inbox.updatedAt
+        };
+
+        res.status(200).json(modInbox);
     }
     catch (err)
     {

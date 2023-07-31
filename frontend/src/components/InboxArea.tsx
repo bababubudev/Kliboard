@@ -4,9 +4,10 @@ import TextareaAutosize from "react-textarea-autosize";
 interface IAreaDetails {
     space_name: string;
     current_text: string;
-
     current_time: number;
+    
     disable_submit: boolean;
+    is_loading: boolean;
 
     handle_submit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
     handle_change: (event: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -22,9 +23,12 @@ function InboxArea({
     handle_submit,
     handle_change,
     handle_option,
-    disable_submit
+
+    disable_submit,
+    is_loading
 }: IAreaDetails) {
     const list_ref = useRef<HTMLUListElement>(null);
+    
     const [option, set_option] = useState<string>(get_option(current_time));
     const [show_list, set_show_list] = useState<boolean>(false);
 
@@ -98,7 +102,7 @@ function InboxArea({
                     value={current_text}
                     id="input-text"
                     onChange={handle_change}
-                    placeholder="Insert any text..."
+                    placeholder={is_loading ? "Hold on..." : "Insert any text..."}
                     autoComplete="off"
                     spellCheck="false"
                     autoFocus
@@ -164,12 +168,12 @@ function InboxArea({
                     <button
                         type="submit"
                         className="submit-button"
-                        disabled={
-                            disable_submit || 
-                            current_time < -1
-                        }
+                        disabled={disable_submit || is_loading}
                     >
-                        <span className="on-save"></span>
+                        {is_loading 
+                            ? <div className="loading"><span>&#9862;</span></div>
+                            : <span className="on-save">{disable_submit ? "saved" : "\u2BA8"}</span>
+                        }  
                     </button>
                 </div>
             </form>

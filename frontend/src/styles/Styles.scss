@@ -24,9 +24,9 @@ $dark-theme: (
     "shade_prim": #fafafa,
     "shade_scnd": #414141,
 
-    "f_prim": #7a7a7a,
+    "f_prim": #6e6e6e,
     "f_error": #fdb4cb,
-    "f_bg": #b4b4b4
+    "f_bg": #e4e4e4
 );
 
 :root {
@@ -41,10 +41,6 @@ body[data-theme="light"] {
     @each $color, $val in $light-theme {
         --#{$color}: #{$val};
     }
-
-    .home {
-        font-weight: 800;
-    }
 }
 
 body[data-theme="dark"] {
@@ -53,12 +49,22 @@ body[data-theme="dark"] {
     }
 
     .home {
-        font-weight: 600;
-
         form {
-            label {
+            > label {
                 color: var(--primary);
+
+                &.home-input-err {
+                    color: var(--error);
+                }
             }
+
+            input {
+                font-weight: 600;
+            }
+        }
+
+        .last-updated {
+            font-weight: 600;
         }
     }
 
@@ -69,7 +75,7 @@ body[data-theme="dark"] {
             }
 
             textarea {
-                font-weight: 400;
+                font-weight: 600;
             }
 
             .save-time {
@@ -222,6 +228,7 @@ header {
             color: var(--primary);
 
             border: 2px solid transparent;
+            border-radius: 0 $f_border_rad $f_border_rad 0;
 
             &:active {
                 color: var(--shade_scnd);
@@ -258,6 +265,7 @@ header {
             background: var(--shade_prim);
             color: var(--shade_scnd);
             border: none;
+            border-radius: $f_border_rad 0 0 $f_border_rad;
 
             &:focus {
                 outline-color: var(--primary);
@@ -272,17 +280,6 @@ header {
         > input {
             padding: 10px 1ch;
             text-overflow: ellipsis;
-            border-radius: $f_border_rad;
-        }
-
-        @include desktop {
-            input {
-                border-radius: $f_border_rad 0 0 $f_border_rad;
-            }
-
-            button {
-                border-radius: 0 $f_border_rad $f_border_rad 0;
-            }
         }
     }
 
@@ -360,7 +357,7 @@ header {
             border: 1px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, var(--shade_prim), 60%, transparent);
+            border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
             border-image-slice: 1;
 
             color: var(--shade_prim);
@@ -391,27 +388,41 @@ header {
 
                 &:disabled {
                     background: none;
-                    span {
-                        &::before {
-                            font-size: 1.2rem;
-                            content: "saved";
-                            color: var(--f_bg);
-                        }
+                    .on-save {
+                        font-size: 1.2rem;
+                        color: var(--f_bg);
                     }
                 }
 
-                > span {
+                > .on-save {
                     font-weight: 600;
+
+                    font-size: 1.5rem;
+                    transition: font-size 0.15s ease-out;
 
                     &:active {
                         background: none;
                         border-color: var(--primary);
                     }
+                }
 
-                    &::before {
-                        transition: font-size 0.15s ease-out;
-                        font-size: 2rem;
-                        content: "\2BA8";
+                @keyframes rotator {
+                    0%,
+                    100% {
+                        transform: translateX(0%);
+                    }
+                    50% {
+                        transform: translateX(80%);
+                    }
+                }
+
+                .loading {
+                    display: flex;
+                    animation: rotator 0.7s infinite ease-in-out;
+
+                    span {
+                        color: var(--f_bg);
+                        font-size: 1.7rem;
                     }
                 }
             }
@@ -528,7 +539,7 @@ header {
                 > .submit-button {
                     border-radius: 0 0 $f_border_rad 0;
 
-                    span::before {
+                    .on-save {
                         font-size: 1.7rem;
                     }
                 }
@@ -567,7 +578,7 @@ header {
                         &:disabled {
                             border-color: var(--error);
 
-                            span {
+                            .on-save {
                                 color: var(--f_error);
                             }
                         }
@@ -576,7 +587,7 @@ header {
                             background-color: none;
                             border-color: var(--primary);
 
-                            span {
+                            .on-save {
                                 color: var(--shade_scnd);
                             }
                         }

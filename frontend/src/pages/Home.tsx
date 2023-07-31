@@ -4,7 +4,7 @@ import LastEntries from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
-    const [entries, set_entries] = useState<string[]>([]);
+    const [entries, set_entries] = useState<string[]>([]);    
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -60,19 +60,26 @@ function Home() {
         set_text(value);
     }
 
-    async function callEntries(){
-        try {
-            const response = await fetch("http://localhost:5000/api/", { method: "GET" });
-            const json = await response.json();
-
-            set_entries(json);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
     useEffect(() => {
-        callEntries();
+        let isMounted = true;
+        
+        const fetchData = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/api/", { method: "GET" });
+                const json = await response.json();
+                
+                if (!isMounted) return;
+                set_entries(json);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        fetchData();
+
+        return () => {
+            isMounted = false;
+        }
     }, []);
 
     return (

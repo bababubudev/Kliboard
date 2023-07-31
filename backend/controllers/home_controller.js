@@ -1,15 +1,17 @@
 import model from "../models/inbox_model.js";
 
+let all_names = [];
+
 async function get_home(req, res)
 {
     try
-    {
+    {  
         const inbox = await model.find().sort({updatedAt: -1});
-
         if (inbox === null) {
             return res.status(206).json({message: "no entries"});
         }
 
+        all_names = inbox.map(elem => elem.space_name);
         let names = inbox.map(elem => {
             const name = elem.space_name;
             return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
@@ -30,4 +32,4 @@ async function get_home(req, res)
     
 }
 
-export { get_home };
+export { all_names, get_home };

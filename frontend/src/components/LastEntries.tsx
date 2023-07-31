@@ -7,7 +7,7 @@ function LastEntries({ names }: NamesProp) {
         <div className="last-updated">
             <p id="box" className="box-shadow">Last Updated</p>
             <ul>
-                {names && names.map((elem, index) => (
+                {names.length > 0 && names.map((elem, index) => (
                     <li key={index}>{elem}</li>
                 ))}
             </ul>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import SavedInboxDetail from "../components/SavedInboxDetail";
@@ -8,47 +8,15 @@ import Notify from "../components/Notify";
 import { IInbox } from "../interfaces/Inbox";
 
 function Inbox() {
-    const [data, set_data] = useState<IInbox | undefined>(undefined);
-    const [notification, set_notification] = useState<string | null>(null);
+    const [data, set_data] = useState<IInbox | null>(null);
+    const [notification, set_notification] = useState<string | null>();
 
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function fetch_data(name: string, has_notif = false): Promise<void> {
-        try {
-            const response = await fetch(`http://localhost:5000/api/inbox/${name}`, { method: "GET" });
-            const json = await response.json();
-
-            if (response.status === 206 && !has_notif) {
-                set_notification(json["greet"]);
-                return;
-            }
-
-            if (response.status === 400){
-                set_notification(json["error"]);
-                return;
-            }
-
-            set_data(json);
-            if (!has_notif) set_notification(json["time_left"]);
-        }
-        catch (err) {
-            if (err instanceof Error)
-                set_notification(err.message);
-        }
-    }
-
-    useEffect(() => {
-        if (name && !data) {
-            fetch_data(name);
-        }
-    }, []);
-
-    async function update_inbox(notif: string | null = null, error = false): Promise<void> {
-        const has_notif = notif !== null;
+    async function update_inbox(notif: string | null, call: IInbox | null): Promise<void> {
+        if (call) { set_data(call); }
         set_notification(notif);
-        
-        if (!error) { fetch_data(name, has_notif); }
     }
 
     function close_notif() {
