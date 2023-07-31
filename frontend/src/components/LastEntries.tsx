@@ -7,9 +7,12 @@ function LastEntries({ names }: NamesProp) {
         <div className="last-updated">
             <p id="box" className="box-shadow">Last Updated</p>
             <ul>
-                {names.length > 0 && names.map((elem, index) => (
-                    <li key={index}>{elem}</li>
-                ))}
+                {names.length > 0
+                    ? names.map((elem, index) => (
+                        <li key={index}>{elem}</li>
+                    ))    
+                    : <li><span>&#9862; &#9862; &#9862;</span></li>
+                }
             </ul>
         </div>
     );

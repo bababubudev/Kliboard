@@ -688,11 +688,35 @@ header {
             animation: fadeOutAnimation 0.5s ease-in-out forwards;
         }
 
-        .update-p {
+        .extras {
             margin-top: 0.5ch;
-            margin-left: 0.5ch;
 
-            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .update-p {
+                margin-left: 0.5ch;
+                transition: all 0.2s ease;
+            }
+
+            .link {
+                margin-right: 1ch;
+
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-decoration: none;
+                color: var(--f_bg);
+
+                max-width: 50%;
+
+                @include desktop {
+                    &:hover {
+                        color: var(--primary);
+                        text-decoration: underline;
+                    }
+                }
+            }
         }
     }
 }

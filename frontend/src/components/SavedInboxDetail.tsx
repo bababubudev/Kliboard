@@ -14,9 +14,9 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     const [loading, set_loading] = useState<boolean>(false);
 
     const disable_button = (): boolean => {
-        return (inbox.space_text === text 
-        && inbox.removal === removal_time)
-        || removal_time < -1;
+        return (inbox.space_text === text
+            && inbox.removal === removal_time)
+            || removal_time < -1;
     };
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -38,16 +38,16 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             });
 
             const json = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(json["error"]);
             }
-            
+
             on_update(json["message"], json);
             set_loading(false);
         }
         catch (err) {
-            if (err instanceof Error){
+            if (err instanceof Error) {
                 on_update(err.message, null);
                 set_loading(true);
             }
@@ -56,6 +56,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
     function handle_change(event: ChangeEvent<HTMLTextAreaElement>): void {
         set_text(event.target.value);
+
     }
 
     function handle_option(change: string): void {

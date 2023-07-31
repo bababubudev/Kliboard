@@ -5,7 +5,7 @@ interface IAreaDetails {
     space_name: string;
     current_text: string;
     current_time: number;
-    
+
     disable_submit: boolean;
     is_loading: boolean;
 
@@ -28,7 +28,7 @@ function InboxArea({
     is_loading
 }: IAreaDetails) {
     const list_ref = useRef<HTMLUListElement>(null);
-    
+
     const [option, set_option] = useState<string>(get_option(current_time));
     const [show_list, set_show_list] = useState<boolean>(false);
 
@@ -44,20 +44,20 @@ function InboxArea({
 
     function get_option(time: number) {
         switch (time) {
-        case 0:
-            return "Don't remove";
-        case 1:
-            return "1 Hour";
-        case 10:
-            return "10 Hour";
-        case 24:
-            return "1 Day";
-        case 240:
-            return "10 Day";
-        case -1:
-            return "Choose time...";
-        default:
-            return "Unavailable";
+            case 0:
+                return "Don't remove";
+            case 1:
+                return "1 Hour";
+            case 10:
+                return "10 Hour";
+            case 24:
+                return "1 Day";
+            case 240:
+                return "10 Day";
+            case -1:
+                return "Choose time...";
+            default:
+                return "Unavailable";
         }
     }
 
@@ -105,10 +105,10 @@ function InboxArea({
                     placeholder={is_loading ? "Hold on..." : "Insert any text..."}
                     autoComplete="off"
                     spellCheck="false"
+                    disabled={current_time < -1}
                     autoFocus
                     minRows={5}
                 />
-
                 <div className="save-time">
                     <button type="button" className="selector" id="list-btn">
                         <p>Choose time...</p>
@@ -170,10 +170,10 @@ function InboxArea({
                         className="submit-button"
                         disabled={disable_submit || is_loading}
                     >
-                        {is_loading 
+                        {is_loading
                             ? <div className="loading"><span>&#9862;</span></div>
                             : <span className="on-save">{disable_submit ? "saved" : "\u2BA8"}</span>
-                        }  
+                        }
                     </button>
                 </div>
             </form>

@@ -137,7 +137,7 @@ async function post_inbox(req, res)
     {
         const lowerName = space_name.toLowerCase();
         const allowedNums = [-1, 0, 1, 10, 24, 240];
-        const contains = await model.exists({ lowerName });
+        const contains = all_names.includes(lowerName);
 
         if (contains)
         {

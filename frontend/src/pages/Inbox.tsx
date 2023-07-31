@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import SavedInboxDetail from "../components/SavedInboxDetail";
 import UnsavedInboxDetail from "../components/UnsavedInboxDetail";
 import Notify from "../components/Notify";
+import LinkDetector from "../components/LinkDetector";
 
 import { IInbox } from "../interfaces/Inbox";
 
@@ -14,8 +15,8 @@ function Inbox() {
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function update_inbox(notif: string | null, call: IInbox | null): Promise<void> {
-        if (call) { set_data(call); }
+    async function update_inbox(notif: string | null, response: IInbox | null): Promise<void> {
+        if (response) { set_data(response); }
         set_notification(notif);
     }
 
@@ -43,12 +44,16 @@ function Inbox() {
 
                 <div className="detailing">
                     {notification && <Notify message={notification} on_close={close_notif} />}
-                    <p className="update-p">
-                        {data
-                            ? getDate(data.updatedAt)
-                            : getDate()
-                        }
-                    </p>
+                    <div className="extras">
+                        <p className="update-p">
+                            {data
+                                ? getDate(data.updatedAt)
+                                : getDate()
+                            }
+                        </p>
+
+                        {data?.space_text && <LinkDetector text={data.space_text} />}
+                    </div>
                 </div>
             </div>
         </>
