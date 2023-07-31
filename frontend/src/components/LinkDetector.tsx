@@ -16,10 +16,17 @@ function extract_domain(url: string): string {
 function LinkDetector({ text }: DetectorProp) {
     const separators = [" ", "\n"];
     const each = text.split(new RegExp(separators.join("|"), "g"));
-    let link = "";
 
+    let link = "";
     each.forEach(elem => {
-        check_link(elem) ? link = elem : "";
+        if (!check_link(elem)) return;
+
+        if (elem.startsWith("https://") || elem.startsWith("http://")) {
+            link = elem;
+            return;
+        }
+
+        link = "https://" + elem;
     });
 
 
