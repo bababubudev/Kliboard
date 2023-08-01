@@ -24,7 +24,7 @@ app.use("/api/", router);
 function on_connect()
 {
     console.log("Successfully connected to the database!");
-    app.listen(port, "kliboard.railway.internal" ,() => { console.log(`Listening on port ${port}...`); });
+    app.listen(port, "kliboardapi.railway.internal" ,() => { console.log(`Listening on port ${port}...`); });
 }
 
 function on_fail(err)
