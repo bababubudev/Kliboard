@@ -41,20 +41,20 @@ function InboxArea({
 
     function get_option(time: number) {
         switch (time) {
-            case 0:
-                return "Don't remove";
-            case 1:
-                return "1 Hour";
-            case 10:
-                return "10 Hour";
-            case 24:
-                return "1 Day";
-            case 240:
-                return "10 Day";
-            case -1:
-                return "Choose time...";
-            default:
-                return "Unavailable";
+        case 0:
+            return "Don't remove";
+        case 1:
+            return "1 Hour";
+        case 10:
+            return "10 Hour";
+        case 24:
+            return "1 Day";
+        case 240:
+            return "10 Day";
+        case -1:
+            return "Choose time...";
+        default:
+            return "Unavailable";
         }
     }
 
