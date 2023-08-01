@@ -101,7 +101,7 @@ async function get_inbox_name(req, res)
 
         if (!all_names.includes(name.toLowerCase()))
         {
-            const message = `Hello ${formattedName}! Provide the text and press on send button to save the text...`;
+            const message = `Hello ${formattedName}! Provide the text and press send button to save the text...`;
             return res.status(206).json({ greet: message });
         }
 
