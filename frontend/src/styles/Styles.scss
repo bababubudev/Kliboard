@@ -121,6 +121,7 @@ body {
     font-family: "Source Code Pro", monospace;
     font-weight: 800;
     background: var(--shade_scnd);
+    margin-bottom: 150px;
 
     @include desktop {
         max-width: 50vw;
