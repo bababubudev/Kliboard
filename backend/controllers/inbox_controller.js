@@ -281,29 +281,8 @@ async function update_inbox(req, res)
         res.status(400).json({ error: err.message });
     }
 }
-
-async function delete_inbox(req, res)
-{
-    const name = req.params.name;
-
-    try
-    {
-        const inbox = await model.findOneAndDelete({ space_name: name });
-
-        if (inbox === null) {
-            throw new Error("Can't find to delete");    
-        }
-
-        res.status(200).json({ message: `${inbox.space_name} successfully deleted!` });
-    }
-    catch (err)
-    {
-        res.status(400).json({ error: err.message });
-    }
-}
-
 export
 {
     get_inbox, get_inbox_name, post_inbox,
-    update_inbox, delete_inbox
+    update_inbox
 };
