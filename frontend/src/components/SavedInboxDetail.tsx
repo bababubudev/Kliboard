@@ -30,7 +30,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
         try {
             set_loading(true);
-            const response = await fetch(`https://kliboardapi-production.up.railway.app/api/inbox/${space_name}`, {
+            const response = await fetch(`https://kliboard.railway.internal:5000/api/inbox/${space_name}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ space_text: data.space_text, removal: data.removal })

@@ -23,7 +23,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
 
         try {
             set_loading(true);
-            const response = await fetch("https://kliboardapi-production.up.railway.app/api/inbox", {
+            const response = await fetch("https://kliboard.railway.internal:5000/api/inbox", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -64,7 +64,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         try {
             set_loading(true);
 
-            const response = await fetch(`https://kliboardapi-production.up.railway.app/api/inbox/${name}`, { method: "GET" });
+            const response = await fetch(`https://kliboard.railway.internal:5000/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
             if (response.status === 206) {
