@@ -2,4 +2,4 @@
 I try again with better knowledge!
 
 
-[Visit the site](https://www.kliboard.xyz)
+[Visit the site](https://kliboard.xyz)
