@@ -65,7 +65,7 @@ function Home() {
         
         const fetchData = async () => {
             try {
-                const response = await fetch("https://kliboardapi.railway.internal:5000/api/", { method: "GET" });
+                const response = await fetch("https://kliboardapi-production.up.railway.app/api/", { method: "GET" });
                 const json = await response.json();
                 
                 if (!isMounted) return;
