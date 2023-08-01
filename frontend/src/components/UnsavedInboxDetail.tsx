@@ -77,7 +77,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             }
 
             set_loading(false);
-            on_update(json["time_left"], json);
+            on_update(json["message"], json);
         }
         catch (err) {
             set_loading(false);
