@@ -7,7 +7,7 @@ export default defineConfig({
         react(),
     ],
     server: {
-        port: Number(process.env.PORT) || 5000,
-        host: "0.0.0.0"
+        port: process.env.NODE_ENV === "production" ? Number(process.env.PORT)|| 5000 : 5173,
+        host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
     }
 });

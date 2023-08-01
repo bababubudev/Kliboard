@@ -2,6 +2,11 @@ import model from "../models/inbox_model.js";
 
 let all_names = [];
 
+const get_all_names = async () => {
+    const inbox = await model.find({}, {space_name: -1}).sort({updatedAt: -1});
+    return inbox.map(item => item.space_name);
+}; 
+
 async function get_home(req, res)
 {
     try
@@ -12,9 +17,8 @@ async function get_home(req, res)
         }
 
         all_names = inbox.map(elem => elem.space_name);
-        let names = inbox.map(elem => {
-            const name = elem.space_name;
-            return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+        let names = all_names.map(elem => {
+            return elem.charAt(0).toUpperCase() + elem.slice(1).toLowerCase();
         });
 
         const maxNames = 4;
@@ -32,4 +36,4 @@ async function get_home(req, res)
     
 }
 
-export { all_names, get_home };
+export { all_names, get_all_names, get_home };

@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
+import { SaveIcon, SavedIcon } from "../icons/Icons";
+
 interface IAreaDetails {
     space_name: string;
     current_text: string;
@@ -103,7 +105,7 @@ function InboxArea({
                 />
                 <div className="save-time">
                     <button type="button" className="selector" id="list-btn">
-                        <p>{get_option(current_time)}</p>
+                        <p>{!is_loading ? get_option(current_time) : "Hold on"}</p>
                         <ul
                             ref={list_ref}
                             id="time-list"
@@ -164,7 +166,7 @@ function InboxArea({
                     >
                         {is_loading
                             ? <div className="loading"><span>&#9862;</span></div>
-                            : <span className="on-save">{disable_submit ? "saved" : "\u2BA8"}</span>
+                            : <div className="on-save">{disable_submit ? <SavedIcon /> : <SaveIcon />}</div>
                         }
                     </button>
                 </div>

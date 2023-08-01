@@ -1,5 +1,5 @@
 import model from "../models/inbox_model.js";
-import { all_names } from "./home_controller.js";
+import { all_names as home_names, get_all_names } from "./home_controller.js";
 
 const format_date = (dateToCheck) =>
 {
@@ -94,6 +94,10 @@ async function get_inbox_name(req, res)
     try
     {
         const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+        
+        let all_names = home_names.length === 0 || home_names === null
+            ? await get_all_names()
+            : home_names;
 
         if (!all_names.includes(name.toLowerCase()))
         {
@@ -113,11 +117,11 @@ async function get_inbox_name(req, res)
             message = dateDifference;
 
         const modInbox = {
-            time_left: message,
+            message: message,
             space_name: name,
-            space_text: space_text,
-            removal: removal,
-            updatedAt: updatedAt
+            space_text,
+            removal,
+            updatedAt
         };
 
         return res.status(200).json(modInbox);
@@ -136,12 +140,22 @@ async function post_inbox(req, res)
     {
         const lowerName = space_name.toLowerCase();
         const allowedNums = [-1, 0, 1, 10, 24, 240];
+        let all_names = home_names.length === 0 || home_names === null ? await get_all_names(): home_names;
         const contains = all_names.includes(lowerName);
 
         if (contains)
         {
-            const inbox = await model.findOne({space_name: lowerName});
-            return res.status(200).json(inbox);
+            const {space_name, space_text, removal, updatedAt} = await model.findOne({space_name: lowerName});
+            
+            const modInbox = {
+                message: "It is already posted before!",
+                space_name,
+                space_text,
+                removal,
+                updatedAt
+            };
+
+            return res.status(200).json(modInbox);
         }
 
         if (!allowedNums.includes(removal)) {

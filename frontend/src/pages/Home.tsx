@@ -65,7 +65,7 @@ function Home() {
         
         const fetchData = async () => {
             try {
-                const response = await fetch("https://kliboardapi-production.up.railway.app/api/", { method: "GET" });
+                const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/`, { method: "GET" });
                 const json = await response.json();
                 
                 if (!isMounted) return;
@@ -105,7 +105,7 @@ function Home() {
                         /\d/.test(text)
                     }
                 >
-                    <span></span>
+                    <span> &raquo; </span>
                 </button>
             </form>
             {entries && <LastEntries names={entries}/>}

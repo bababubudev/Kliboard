@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { LightIcon, DarkIcon } from "../icons/Icons";
 
 function Navbar() {
-    const location = useLocation();
     const [light, set_light] = useState<boolean>(false);
 
     useEffect(() => {
@@ -36,14 +36,14 @@ function Navbar() {
             <header>
                 <div className="nav-container">
                     <Link to="/">
-                        <h1>{location.pathname === "/" ? "Kliboard" : "\u2B8C"}</h1>
+                        <h1>Kliboard</h1>
                     </Link>
 
                     <button 
                         type="button"
                         onClick={toggle_light}
                     >
-                        <span className={light ? "light" : "dark"}></span>
+                        {light ? <DarkIcon /> : <LightIcon />}
                     </button>
                 </div>
             </header>

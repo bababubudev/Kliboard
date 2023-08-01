@@ -26,7 +26,7 @@ $dark-theme: (
 
     "f_prim": #6e6e6e,
     "f_error": #fdb4cb,
-    "f_bg": #e4e4e4
+    "f_bg": #bebebe
 );
 
 :root {
@@ -136,7 +136,7 @@ header {
 .nav-container {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-end;
 
     @include mobile {
         margin: 0 2ch;
@@ -144,52 +144,33 @@ header {
 
     a {
         display: inline-block;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         text-decoration: none;
         color: var(--primary);
 
         @include desktop {
             &:hover {
                 color: var(--error);
-                text-shadow: 1px 3px 7px #0000004d;
+                text-shadow: 1px 3px 1px #0000004d;
             }
         }
     }
 
     button {
-        width: 5ch;
         background: none;
         border: none;
-        span {
-            &.light {
-                &::before {
-                    font-size: 2rem;
-                    content: "\2726";
-                    color: var(--shade_prim);
-                }
-            }
+        padding: 0 1ch;
 
-            &.dark {
-                &::before {
-                    font-size: 2rem;
-                    content: "\2600";
-                    color: var(--shade_prim);
-                }
-            }
+        svg {
+            fill: var(--shade_prim);
+            transition: 0.1s ease-out;
         }
 
         @include desktop {
             &:hover {
-                span {
-                    &.light::before {
-                        color: var(--primary);
-                        text-shadow: 1px 3px 1px #0000002f;
-                    }
-
-                    &.dark::before {
-                        color: var(--primary);
-                        text-shadow: 1px 3px 1px #ffffff4f;
-                    }
+                svg {
+                    fill: var(--primary);
+                    filter: drop-shadow(1px 3px 1px #0000004d);
                 }
             }
         }
@@ -239,9 +220,8 @@ header {
                 background: var(--f_bg);
             }
 
-            span::before {
+            span {
                 font-size: 1.5rem;
-                content: "\279F";
             }
 
             @include desktop {
@@ -375,8 +355,6 @@ header {
             grid-template-rows: 35px 1fr;
             gap: 3px;
 
-            justify-items: stretch;
-
             > .submit-button {
                 color: var(--primary);
                 background: var(--shade_prim);
@@ -389,26 +367,29 @@ header {
 
                 &:active {
                     background: none;
+
+                    svg {
+                        fill: var(--shade_prim);
+                    }
                 }
 
                 &:disabled {
                     background: none;
-                    .on-save {
-                        font-size: 1.2rem;
-                        color: var(--f_bg);
+                    border: 1px solid var(--f_bg);
+
+                    svg {
+                        fill: var(--f_bg);
                     }
                 }
 
-                > .on-save {
-                    font-weight: 600;
+                .on-save {
+                    display: flex;
+                    justify-content: center;
+                }
 
-                    font-size: 1.5rem;
+                svg {
                     transition: font-size 0.15s ease-out;
-
-                    &:active {
-                        background: none;
-                        border-color: var(--primary);
-                    }
+                    fill: var(--primary);
                 }
 
                 @keyframes rotator {
@@ -535,10 +516,6 @@ header {
 
                 > .submit-button {
                     border-radius: 0 0 $f_border_rad 0;
-
-                    .on-save {
-                        font-size: 1.7rem;
-                    }
                 }
 
                 > .selector {
@@ -567,29 +544,21 @@ header {
 
             .save-time {
                 .submit-button {
-                    .on-save {
-                        font-size: 2rem;
-                    }
-
                     &:hover {
                         transition: background-color 0.2s ease;
                         border: 2px solid;
 
                         &:disabled {
-                            border-color: var(--error);
+                            border-color: var(--f_error);
 
-                            .on-save {
-                                color: var(--f_error);
+                            svg {
+                                fill: var(--f_error);
                             }
                         }
 
                         &:not(:disabled) {
                             background-color: none;
                             border-color: var(--primary);
-
-                            .on-save {
-                                color: var(--shade_scnd);
-                            }
                         }
                     }
                 }
@@ -658,7 +627,7 @@ header {
 
                 span {
                     color: var(--error);
-                    font-size: 0.5rem;
+                    font-size: 0.7rem;
                     font-weight: 800;
                 }
             }
@@ -710,15 +679,15 @@ header {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-decoration: none;
-                background: var(--shade_prim);
-                color: var(--f_prim);
+                background: var(--f_bg);
+                color: var(--shade_scnd);
 
                 max-width: 50%;
 
                 @include desktop {
                     &:hover {
                         border: 1px solid var(--primary);
-                        color: var(--primary);
+                        background: var(--shade_prim);
                     }
                 }
             }
@@ -727,38 +696,33 @@ header {
 }
 
 .reload-btn {
-    width: 5ch;
-    height: 5ch;
-
     position: absolute;
-    top: -1ch;
-    right: 0;
+    right: 1ch;
 
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 
-    color: var(--shade_prim);
     background: none;
     border: none;
-    transition: transform 0.2s ease-in-out;
 
-    &:active {
-        color: var(--f_bg);
-    }
+    svg {
+        transition: transform 0.5s ease;
+        fill: var(--f_bg);
 
-    @include desktop {
-        &:hover {
-            transform: rotate(90deg);
-            color: var(--primary);
+        &:active {
+            fill: var(--f_bg);
         }
 
-        &:not(:hover) {
-            transform: rotate(0deg);
-        }
-    }
+        @include desktop {
+            &:hover {
+                transform: rotate(180deg);
+                fill: var(--primary);
+            }
 
-    span {
-        font-weight: 600;
-        font-size: 1.5rem;
+            &:not(:hover) {
+                transform: rotate(0deg);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { IInbox } from "../interfaces/Inbox";
 import InboxArea from "./InboxArea";
+import { ReloadIcon } from "../icons/Icons";
 
 interface IDetails {
     inbox: IInbox;
@@ -30,7 +31,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
         try {
             set_loading(true);
-            const response = await fetch(`https://kliboardapi-production.up.railway.app/api/inbox/${space_name}`, {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox/${space_name}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ space_text: data.space_text, removal: data.removal })
@@ -68,10 +69,12 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     }
 
     async function fetch_data(name: string) {
+        if (loading) return;
+
         try {
             set_loading(true);
 
-            const response = await fetch(`https://kliboardapi-production.up.railway.app/api/inbox/${name}`, { method: "GET" });
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
             if (!response.ok) {
@@ -93,17 +96,14 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
     return (
         <>
-            {disable_button() &&
-                <button
-                    type="button"
-                    className="reload-btn"
-                    tabIndex={0}
-                    onClick={() => { fetch_data(inbox.space_name); }}
-                >
-                    <span>&#128472;</span>
-                </button>
-            }
-
+            <button
+                type="button"
+                className="reload-btn"
+                tabIndex={0}
+                onClick={() => { fetch_data(inbox.space_name); }}
+            >
+                <ReloadIcon />
+            </button>
             <InboxArea
                 space_name={space_name}
                 current_text={data.space_text || ""}
