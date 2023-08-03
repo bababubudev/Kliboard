@@ -5,7 +5,5 @@ import App from "./App.tsx";
 import "./styles/Styles.scss";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
+    <App />
 );

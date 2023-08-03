@@ -415,8 +415,7 @@ header {
             }
 
             .selector {
-                $list_height: 200px;
-
+                $list_height: 250px;
                 position: relative;
 
                 border: 1px solid var(--shade_prim);
@@ -435,17 +434,15 @@ header {
                 }
 
                 > ul {
-                    background: var(--shade_prim);
-
                     position: absolute;
-                    height: $list_height;
-                    width: calc(100% + 0.1ch);
 
-                    left: 0;
-                    top: calc(100% + 0.5ch);
                     z-index: 1;
+                    background: var(--shade_prim);
+                    width: calc(100% + 2px);
+                    height: $list_height;
 
-                    border-radius: 0 0 $f_border_rad 0;
+                    left: -1px;
+                    top: calc(100% + 0.5ch);
 
                     li {
                         list-style-type: none;
@@ -456,7 +453,6 @@ header {
                         justify-content: center;
 
                         font-size: 0.7rem;
-
                         &:not(:last-child) {
                             border: 0.1px;
                             border-style: none none solid none;
@@ -512,7 +508,6 @@ header {
                 grid-template-columns: 4fr 5fr;
 
                 position: relative;
-
                 height: 60px;
 
                 > .submit-button {
@@ -525,9 +520,14 @@ header {
 
                     > ul {
                         top: 8.5ch;
-                        height: 200px;
+                        height: 250px;
+                        width: 226%;
 
                         border-radius: 0 0 $f_border_rad $f_border_rad;
+
+                        li {
+                            font-size: 0.8rem;
+                        }
                     }
                 }
             }
@@ -597,7 +597,7 @@ header {
             font-size: 0.8rem;
 
             display: grid;
-            grid-template-columns: 1fr 50px;
+            grid-template-columns: 1fr 30px;
 
             margin-top: 0.5ch;
             padding: 1.5ch 0;
@@ -613,6 +613,7 @@ header {
 
             > p {
                 display: flex;
+                font-size: 0.85rem;
 
                 align-items: center;
                 padding-left: 2ch;
@@ -621,6 +622,7 @@ header {
             > button {
                 border: none;
                 background: none;
+                margin-right: 1ch;
 
                 display: flex;
                 justify-content: center;
@@ -724,6 +726,29 @@ header {
             &:not(:hover) {
                 transform: rotate(0deg);
             }
+        }
+    }
+
+    &:disabled {
+        @keyframes is-loading {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        svg {
+            animation: is-loading 0.5s infinite ease-in-out;
+            fill: var(--shade_prim);
+        }
+    }
+
+    &:active {
+        svg {
+            background-color: var(--f_prim);
+            border-radius: 100%;
         }
     }
 }

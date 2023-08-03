@@ -31,34 +31,39 @@ function InboxArea({
     const list_ref = useRef<HTMLUListElement>(null);
 
     const [show_list, set_show_list] = useState<boolean>(false);
+    const [option, set_option] = useState<string>(get_option(current_time));
 
     function call_options(elem: React.MouseEvent<HTMLLIElement> | React.FocusEvent<HTMLLIElement>) {
         const currentText = elem.currentTarget.textContent;
         const currentTime = elem.currentTarget.getAttribute("value");
 
         if (!currentText || !currentTime) return;
-
+        set_option(currentText);
         handle_option(currentTime);
     }
 
     function get_option(time: number) {
         switch (time) {
         case 0:
-            return "Don't remove";
+            return "5 Minutes";
         case 1:
             return "1 Hour";
         case 10:
-            return "10 Hour";
+            return "10 Hours";
         case 24:
             return "1 Day";
         case 240:
-            return "10 Day";
+            return "10 Days";
         case -1:
-            return "Choose time...";
+            return "Choose Time";
         default:
             return "Unavailable";
         }
     }
+
+    useEffect(() => {
+        set_option(get_option(current_time));
+    }, [current_time]);
 
     useEffect(() => {
         const list = list_ref.current;
@@ -99,13 +104,13 @@ function InboxArea({
                     placeholder={is_loading ? "Hold on..." : "Insert any text..."}
                     autoComplete="off"
                     spellCheck="false"
-                    disabled={current_time < -1}
+                    readOnly={current_time < -1}
                     autoFocus
                     minRows={5}
                 />
                 <div className="save-time">
                     <button type="button" className="selector" id="list-btn">
-                        <p>{!is_loading ? get_option(current_time) : "Hold on"}</p>
+                        <p>{!is_loading ? option : "Hold on"}</p>
                         <ul
                             ref={list_ref}
                             id="time-list"
@@ -115,11 +120,10 @@ function InboxArea({
                                 onClick={call_options}
                                 onFocus={call_options}
                                 value="0"
-                                id="nun"
+                                id="on-view"
                                 tabIndex={0}
                             >
-                                Don&apos;t
-                                remove
+                                5 Minutes
                             </li>
                             <li
                                 onClick={call_options}
@@ -137,7 +141,7 @@ function InboxArea({
                                 id="thr"
                                 tabIndex={0}
                             >
-                                10 Hour
+                                10 Hours
                             </li>
                             <li
                                 onClick={call_options}
@@ -155,7 +159,7 @@ function InboxArea({
                                 id="tdy"
                                 tabIndex={0}
                             >
-                                10 Day
+                                10 Days
                             </li>
                         </ul>
                     </button>

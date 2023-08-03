@@ -12,7 +12,7 @@ interface IDetails {
 function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     const [data, set_data] = useState<IInbox>(inbox);
     const [loading, set_loading] = useState<boolean>(false);
-
+    
     const disable_button = (): boolean => {
         return (inbox.space_text === data.space_text
             && inbox.removal === data.removal)
@@ -25,7 +25,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         if (disable_button()) return;
 
         if (data.space_text === "") {
-            on_update("Please provide some text first! The space cannot be left empty...", null);
+            on_update("Please provide some text first! The space cannot be left empty.", null);
             return;
         }
 
@@ -37,10 +37,18 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 body: JSON.stringify({ space_text: data.space_text, removal: data.removal })
             });
 
+            const remainingRequests = response.headers.get("X-RateLimit-Warning");
             const json = await response.json();
-
+            
             if (!response.ok) {
                 throw new Error(json["error"]);
+            }
+            
+            if (remainingRequests) {
+                on_update(`!!! Warning your request limit is about to run out !!! [ ${parseInt(remainingRequests)} ] requests remaining !!!`, json);
+                set_loading(false);
+
+                return;
             }
 
             on_update(json["message"], json);
@@ -73,7 +81,6 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
         try {
             set_loading(true);
-
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
@@ -81,9 +88,8 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 throw new Error(json["error"]);
             }
 
-            on_update("Your updates have been applied.", json);
             set_data(json);
-
+            on_update(null, json);
             set_loading(false);
         }
         catch (err) {
@@ -96,14 +102,18 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
     return (
         <>
-            <button
-                type="button"
-                className="reload-btn"
-                tabIndex={0}
-                onClick={() => { fetch_data(inbox.space_name); }}
-            >
-                <ReloadIcon />
-            </button>
+            {inbox.removal > -1
+                ? <button
+                    type="button"
+                    className="reload-btn"
+                    tabIndex={0}
+                    onClick={() => { fetch_data(inbox.space_name); }}
+                    disabled={loading}
+                >
+                    <ReloadIcon />
+                </button>
+                : null
+            }
             <InboxArea
                 space_name={space_name}
                 current_text={data.space_text || ""}

@@ -9,7 +9,7 @@ interface IDetails {
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<number>(1);
+    const [removal_time, set_removal_time] = useState<number>(-1);
     const [loading, set_loading] = useState<boolean>(false);
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -20,6 +20,10 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             return;
         }
 
+        if (removal_time < 0) {
+            set_removal_time(0);
+        }
+
         try {
             set_loading(true);
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox`, {
@@ -28,7 +32,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
                 body: JSON.stringify({
                     space_name: space_name,
                     space_text: text,
-                    removal: removal_time
+                    removal: removal_time === -1 ? 0 : removal_time
                 })
             });
 
@@ -98,8 +102,8 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             <InboxArea
                 space_name={space_name}
                 current_text={text}
-                current_time={-1}
-                disable_submit={false}
+                current_time={removal_time}
+                disable_submit={false || removal_time < -1}
                 is_loading={loading}
 
                 handle_submit={handle_submit}
