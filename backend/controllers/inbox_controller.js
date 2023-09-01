@@ -51,7 +51,7 @@ function get_time_difference(futureDate)
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 0)
+    if (days >= 1)
     {
         if (hours > 0)
         {
@@ -60,7 +60,7 @@ function get_time_difference(futureDate)
 
         return `${days} days`;
     }
-    else if (hours > 0)
+    else if (hours >= 1)
     {
         return `${hours % 24} hours`;
     }
@@ -85,7 +85,7 @@ function create_response(removal, space_name) {
     const formattedName = space_name.charAt(0).toUpperCase() + space_name.slice(1).toLowerCase();
     const dateString = format_date(currentDate);
 
-    let dateInfo = `Your space is being saved until ${dateString}`;
+    let dateInfo = ` until ${dateString}`;
     if (dateString[0] === "t")
     {
         dateInfo += ` at ${currentDate.toLocaleTimeString("en-GB", {
@@ -93,7 +93,7 @@ function create_response(removal, space_name) {
         })}`;
     }
 
-    if (removal === 0) { dateInfo = "Your space is being saved for 5 minutes"; }
+    if (removal === 0) { dateInfo = " for 5 minutes"; }
 
     return { expireAt, dateInfo, formattedName };
 }
@@ -120,12 +120,11 @@ async function get_inbox_name(req, res)
     
     try
     {
-        const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
         const exists = await model.exists({space_name: name.toLowerCase()});
 
         if (!exists)
         {
-            const message = `Hello ${formattedName}! Press \u27A4 to save your space...`;
+            const message = "Press \u27A4 button to save";
             return res.status(206).json({ greet: message });
         }
 
@@ -134,8 +133,8 @@ async function get_inbox_name(req, res)
 
         const dateDifference = get_time_difference(new Date(expireAt));
 
-        let message = removal < 0 ? `Welcome to ${formattedName}. This specific space is made to not be changeable by the creator.`
-            : `Welcome back ${formattedName}. Your space is being saved for ${dateDifference}.`;
+        let message = removal < 0 ? `welcome to ${inbox.space_name}! space cannot be changed`
+            : `Welcome back ${inbox.space_name}! space removing in ${dateDifference}`;
 
         if (dateDifference[0] === "T" && removal >= 0)
             message = dateDifference;
@@ -191,7 +190,7 @@ async function post_inbox(req, res)
         if (inbox === null) throw new Error("Something went wrong! Try again...");
 
         const modInbox = {
-            message: `${formattedName} saved succesfully! ${dateInfo}.`,
+            message: `${formattedName} saved ${dateInfo}`,
             space_name: inbox.space_name,
             space_text: inbox.space_text,
             removal: inbox.removal,
@@ -233,10 +232,10 @@ async function update_inbox(req, res)
         const {expireAt, dateInfo, formattedName} = create_response(removal, name, true);
 
         const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expireAt }, { new: true }); 
-        if (inbox === null) { throw new Error("Something's not right! Your space is nowhere to be found. Please go back!"); }
+        if (inbox === null) { throw new Error("space is nowhere to be found :/"); }
 
         const modInbox = {
-            message: formattedName + " updated! " + dateInfo + ".",
+            message: formattedName + " is now saved " + dateInfo,
             space_name: inbox.space_name,
             space_text: inbox.space_text,
             removal: inbox.removal,

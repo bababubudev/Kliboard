@@ -16,7 +16,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         event.preventDefault();
 
         if (text === "") {
-            on_update("Please provide some text first! The space cannot be left empty...", null);
+            on_update("Please provide some text first", null);
             return;
         }
 
@@ -38,7 +38,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
 
             const json = await response.json();
             if (!response.ok) {
-                throw new Error("Somthing went wrong. Please go back or try again!");
+                throw new Error("Somthing went wrong :/");
             }
 
             on_update(json["message"], json);

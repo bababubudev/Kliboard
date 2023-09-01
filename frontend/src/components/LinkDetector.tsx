@@ -36,7 +36,7 @@ function LinkDetector({ text }: DetectorProp) {
                 <a
                     href={link}
                     target="_blank"
-                    rel="noopener noreffer"
+                    rel="noopener noreffer noreferrer"
                     className="link"
                 >
                     {extract_domain(link)}

@@ -12,6 +12,7 @@ $light-theme: (
     "error": #e7195a,
     "shade_prim": #414141,
     "shade_scnd": #fafafa,
+    "shade_prim_faded": #4141419e,
 
     "f_prim": #e4e4e4,
     "f_error": #fdb4cb,
@@ -23,11 +24,16 @@ $dark-theme: (
     "error": #e7195a,
     "shade_prim": #fafafa,
     "shade_scnd": #414141,
+    "shade_prim_faded": #fafafa9e,
 
     "f_prim": #6e6e6e,
     "f_error": #fdb4cb,
     "f_bg": #bebebe
 );
+
+#root {
+    position: relative;
+}
 
 :root {
     $active-theme: $dark-theme;
@@ -130,8 +136,10 @@ body {
 }
 
 header {
+    position: relative;
     padding: 3ch 0;
-    border-radius: 5px;
+    z-index: 100;
+    background: var(--shade_scnd);
 }
 
 .nav-container {
@@ -321,12 +329,10 @@ header {
     form {
         display: grid;
         grid-template-columns: 3fr minmax(100px, 1fr);
-
         gap: 3px;
 
-        font-size: 1.25rem;
-
         > label {
+            font-size: 1.25rem;
             transition: 0.2s ease;
 
             margin-bottom: 0.25ch;
@@ -441,7 +447,6 @@ header {
                     width: calc(100% + 2px);
                     height: $list_height;
 
-                    left: -1px;
                     top: calc(100% + 0.5ch);
 
                     li {
@@ -472,7 +477,7 @@ header {
             background: var(--shade_prim);
             color: var(--shade_scnd);
 
-            padding: 10px 1ch;
+            padding: 1ch 1ch;
             text-overflow: ellipsis;
 
             border: none;
@@ -521,7 +526,7 @@ header {
                     > ul {
                         top: 8.5ch;
                         height: 250px;
-                        width: 226%;
+                        width: calc(100svw - 20px);
 
                         border-radius: 0 0 $f_border_rad $f_border_rad;
 
@@ -563,102 +568,19 @@ header {
                         }
                     }
                 }
+
+                .selector {
+                    ul {
+                        left: -1px;
+                    }
+                }
             }
         }
     }
 
     .detailing {
-        @keyframes fadeInAnimation {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeOutAnimation {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-        }
-
         color: var(--f_bg);
         font-size: 0.7rem;
-
-        .notif-div {
-            font-size: 0.8rem;
-
-            display: grid;
-            grid-template-columns: 1fr 30px;
-
-            margin-top: 0.5ch;
-            padding: 1.5ch 0;
-
-            background: var(--shade_prim);
-            color: var(--shade_scnd);
-
-            border: 1px solid var(--primary);
-            border-radius: $f_border_rad $f_border_rad 0 $f_border_rad;
-
-            font-weight: 200;
-            height: 1fr;
-
-            > p {
-                display: flex;
-                font-size: 0.85rem;
-
-                align-items: center;
-                padding-left: 2ch;
-            }
-
-            > button {
-                border: none;
-                background: none;
-                margin-right: 1ch;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                span {
-                    color: var(--error);
-                    font-size: 0.7rem;
-                    font-weight: 800;
-                }
-            }
-
-            @include desktop {
-                font-size: 0.8rem;
-
-                button {
-                    cursor: pointer;
-
-                    span {
-                        padding: 0 1ch;
-                        font-size: 0.7rem;
-                        &:hover {
-                            color: var(--primary);
-                        }
-                    }
-                }
-            }
-        }
-
-        .notif-div.fade-in {
-            animation: fadeInAnimation 0.5s ease-in-out forwards;
-        }
-
-        .notif-div.fade-out {
-            animation: fadeOutAnimation 0.5s ease-in-out forwards;
-        }
 
         .extras {
             margin-top: 0.5ch;
@@ -751,4 +673,73 @@ header {
             border-radius: 100%;
         }
     }
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutAnimation {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+.notif-div {
+    position: absolute;
+    top: 12ch;
+    right: 1ch;
+
+    margin-top: 0.5ch;
+    margin-left: 1ch;
+    padding: 1ch 2ch;
+
+    background: var(--shade_prim_faded);
+    color: var(--shade_scnd);
+
+    border: none;
+    border-radius: 20px 0 20px 20px;
+
+    height: 1fr;
+
+    > p {
+        font-size: 0.55rem;
+        font-weight: 600;
+
+        text-align: left;
+        text-transform: lowercase;
+        letter-spacing: 0.09rem;
+    }
+
+    @include desktop {
+        cursor: pointer;
+        &:hover {
+            border-color: var(--error);
+            color: var(--error);
+        }
+
+        > p {
+            font-size: 0.66rem;
+        }
+    }
+}
+
+.notif-div.fade-in {
+    animation: fadeInAnimation 0.5s ease-in-out forwards;
+}
+
+.notif-div.fade-out {
+    animation: fadeOutAnimation 0.5s ease-in-out forwards;
 }

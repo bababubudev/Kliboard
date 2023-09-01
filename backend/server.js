@@ -15,7 +15,7 @@ mongoose.connect(process.env.DBURI, {
 const app = express();
 const port = process.env.PORT || 5001;
 const rate_limit_duration = 86400000;
-const max_requests_per_IP = 10;
+const max_requests_per_IP = 100;
 
 const req_counts = new Map();
 

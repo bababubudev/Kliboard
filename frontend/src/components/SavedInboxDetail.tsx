@@ -25,7 +25,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         if (disable_button()) return;
 
         if (data.space_text === "") {
-            on_update("Please provide some text first! The space cannot be left empty.", null);
+            on_update("Please provide some text first", null);
             return;
         }
 
@@ -45,7 +45,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             }
             
             if (remainingRequests) {
-                on_update(`!!! Warning your request limit is about to run out !!! [ ${parseInt(remainingRequests)} ] requests remaining !!!`, json);
+                on_update("warning: request limit almost reached", null);
                 set_loading(false);
 
                 return;
@@ -77,8 +77,6 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     }
 
     async function fetch_data(name: string) {
-        if (loading) return;
-
         try {
             set_loading(true);
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox/${name}`, { method: "GET" });
@@ -88,8 +86,15 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 throw new Error(json["error"]);
             }
 
+            if (json.space_text == data.space_text && json.removal == data.removal){
+                on_update("space is up to date", data);
+                set_loading(false);
+                return;
+            } 
+            
             set_data(json);
-            on_update(null, json);
+            on_update("space updated", json);
+
             set_loading(false);
         }
         catch (err) {

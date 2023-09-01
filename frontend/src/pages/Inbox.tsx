@@ -43,7 +43,6 @@ function Inbox() {
                 }
 
                 <div className="detailing">
-                    {notification && <Notify message={notification} on_close={close_notif} />}
                     <div className="extras">
                         <p className="update-p">
                             {data
@@ -56,6 +55,7 @@ function Inbox() {
                     </div>
                 </div>
             </div>
+            {notification && <Notify message={notification} on_close={close_notif} />}
         </>
     );
 }

@@ -31,10 +31,12 @@ function Notify({ message, on_close }: NotifProp) {
     }, [message, on_close]);
 
     return (<>
-        <div className={`notif-div ${visible ? "fade-in" : "fade-out"}`}>
+        <button 
+            className={`notif-div ${visible ? "fade-in" : "fade-out"}`}
+            onClick={on_close}
+        >
             <p>{message}</p>
-            <button onClick={on_close}><span>&#9587;</span></button>
-        </div>
+        </button>
     </>);
 }
 
