@@ -190,7 +190,7 @@ async function post_inbox(req, res)
         if (inbox === null) throw new Error("Something went wrong! Try again...");
 
         const modInbox = {
-            message: `${formattedName} saved ${dateInfo}`,
+            message: `${formattedName} saved${dateInfo}`,
             space_name: inbox.space_name,
             space_text: inbox.space_text,
             removal: inbox.removal,
