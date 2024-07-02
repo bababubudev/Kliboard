@@ -72,6 +72,7 @@ function Home() {
                 set_entries(json);
             } catch (err) {
                 console.error(err);
+                set_entries(["Unable to connect..."]);
             }
         };
 

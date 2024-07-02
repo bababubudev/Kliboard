@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 function App() {
     return (
         <>
-            <BrowserRouter>
+            <BrowserRouter basename="/Kliboard/">
                 <Navbar />
                 <div className="pages">
                     <Routes>
