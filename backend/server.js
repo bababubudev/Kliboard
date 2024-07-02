@@ -1,6 +1,7 @@
 import express from "express";
 import env from "dotenv";
 import cors from "cors";
+import { corsOptions } from "./config/corsOptions.js";
 import mongoose from "mongoose";
 import morgan from "morgan";
 
@@ -20,7 +21,7 @@ const max_requests_per_IP = 10;
 const req_counts = new Map();
 
 app.use(express.json());
-app.use(cors({ exposedHeaders: ["X-RateLimit-Warning"] }));
+app.use(cors(corsOptions, { exposedHeaders: ["X-RateLimit-Warning"] }));
 app.use(morgan("dev"));
 app.use(limiter_middleware);
 app.use("/api/", router);
