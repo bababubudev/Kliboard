@@ -32,7 +32,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      - name: Print environment variable
+        run: echo ${{ env.VITE_REACT_APP_API_BASE_URL }}
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
