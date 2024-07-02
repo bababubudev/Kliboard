@@ -27,6 +27,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      VITE_REACT_APP_API_BASE_URL=https://kliboard.onrender.com
     steps:
       - name: Checkout
         uses: actions/checkout@v4
