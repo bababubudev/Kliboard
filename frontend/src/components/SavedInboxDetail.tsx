@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { IInbox } from "../interfaces/Inbox";
 import InboxArea from "./InboxArea";
-import { ReloadIcon } from "../icons/Icons";
+import { ReloadIcon } from "../Icons";
 
 interface IDetails {
     inbox: IInbox;
@@ -12,7 +12,7 @@ interface IDetails {
 function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     const [data, set_data] = useState<IInbox>(inbox);
     const [loading, set_loading] = useState<boolean>(false);
-    
+
     const disable_button = (): boolean => {
         return (inbox.space_text === data.space_text
             && inbox.removal === data.removal)
@@ -39,11 +39,11 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
 
             const remainingRequests = response.headers.get("X-RateLimit-Warning");
             const json = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(json["error"]);
             }
-            
+
             if (remainingRequests) {
                 on_update("warning: request limit almost reached", null);
                 set_loading(false);
@@ -86,12 +86,12 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 throw new Error(json["error"]);
             }
 
-            if (json.space_text == data.space_text && json.removal == data.removal){
+            if (json.space_text == data.space_text && json.removal == data.removal) {
                 on_update("space is up to date", data);
                 set_loading(false);
                 return;
-            } 
-            
+            }
+
             set_data(json);
             on_update("space updated", json);
 

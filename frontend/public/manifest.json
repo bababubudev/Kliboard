@@ -3,7 +3,7 @@
   "short_name": "Kliboard",
   "icons": [
     {
-      "src": "https://kliboard.xyz/src/icons/clip.png",
+      "src": "clip.png",
       "type": "image/png",
       "sizes": "180x180"
     }

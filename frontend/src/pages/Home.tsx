@@ -4,7 +4,7 @@ import LastEntries from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
-    const [entries, set_entries] = useState<string[]>([]);    
+    const [entries, set_entries] = useState<string[]>([]);
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -34,10 +34,10 @@ function Home() {
 
     function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        let warningText : string;
+        let warningText: string;
 
         if (!headRef.current) return;
-        
+
         if (value.includes(" ")) {
             warningText = "spaces are bad :/";
             headRef.current.classList.toggle("home-input-err", true);
@@ -46,7 +46,7 @@ function Home() {
             warningText = "too much text :/";
             headRef.current.classList.toggle("home-input-err", true);
         }
-        else if (/\d/.test(value)){
+        else if (/\d/.test(value)) {
             warningText = "numbers are bad :/";
             headRef.current.classList.toggle("home-input-err", true);
         }
@@ -54,7 +54,7 @@ function Home() {
             warningText = "create a space";
             headRef.current.classList.toggle("home-input-err", false);
         }
-        
+
         headRef.current.textContent = warningText;
 
         set_text(value);
@@ -62,12 +62,12 @@ function Home() {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         const fetchData = async () => {
             try {
                 const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/`, { method: "GET" });
                 const json = await response.json();
-                
+
                 if (!isMounted) return;
                 set_entries(json);
             } catch (err) {
@@ -100,7 +100,7 @@ function Home() {
                     id="enter"
                     className="entry"
                     disabled={
-                        has_spaces || 
+                        has_spaces ||
                         invalid_size ||
                         /\d/.test(text)
                     }
@@ -108,7 +108,7 @@ function Home() {
                     <span> &raquo; </span>
                 </button>
             </form>
-            {entries && <LastEntries names={entries}/>}
+            {entries && <LastEntries names={entries} />}
         </div>
     );
 }

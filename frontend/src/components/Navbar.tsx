@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LightIcon, DarkIcon } from "../icons/Icons";
+import { LightIcon, DarkIcon } from "../Icons";
 
 function Navbar() {
     const [light, set_light] = useState<boolean>(false);
@@ -8,7 +8,7 @@ function Navbar() {
     useEffect(() => {
         const currentBody = document.body;
         const currentTheme = light ? "light" : "dark";
-        
+
         currentBody.setAttribute("data-theme", currentTheme);
     }, [light]);
 
@@ -17,7 +17,7 @@ function Navbar() {
 
         set_light(prev => !prev);
         const currentTheme = light ? "dark" : "light";
-        
+
         if (!storedTheme || storedTheme !== currentTheme) {
             localStorage.setItem("theme", currentTheme);
         }
@@ -25,7 +25,7 @@ function Navbar() {
 
     useEffect(() => {
         const storedTheme = localStorage.getItem("theme");
-        
+
         if (storedTheme) {
             set_light(storedTheme === "dark" ? false : true);
         }
@@ -39,7 +39,7 @@ function Navbar() {
                         <h1>Kliboard</h1>
                     </Link>
 
-                    <button 
+                    <button
                         type="button"
                         onClick={toggle_light}
                     >
