@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { IInbox } from "../interfaces/Inbox";
 import InboxArea from "./InboxArea";
-import { ReloadIcon } from "../Icons";
 import type { TMessage } from "./Notify";
+import SavedInboxMenu from "./SavedInboxMenu";
 
 interface IDetails {
     inbox: IInbox;
@@ -109,18 +109,31 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         }
     }
 
+    async function copy_data() {
+        try {
+            set_loading(true);
+            if (data.space_text) {
+                console.log(data.space_text);
+                await navigator.clipboard.writeText(data.space_text);
+                set_loading(false);
+                on_update({message: "Text copied to clipboard", status: "success"}, null);
+            }
+            else {
+                on_update({message: "It seems the field is empty. Nothing to copy", status: "info"}, null);
+            }
+        } catch (err) {
+            on_update({message: "Oops, something went wrong :/", status: "error"}, null);
+        }
+    }
+
     return (
         <>
             {inbox.removal > -1
-                ? <button
-                    type="button"
-                    className="reload-btn"
-                    tabIndex={0}
-                    onClick={() => { fetch_data(inbox.space_name); }}
-                    disabled={loading}
-                >
-                    <ReloadIcon />
-                </button>
+                ? <SavedInboxMenu 
+                    fetch_data={() => {fetch_data(data.space_name);}}
+                    loading={loading}
+                    copy_data={copy_data}
+                />
                 : null
             }
             <InboxArea

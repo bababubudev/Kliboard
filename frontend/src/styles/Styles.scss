@@ -1,3 +1,4 @@
+@use "./hamburger.scss";
 @import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;400;600;800&display=swap");
 
 * {
@@ -146,6 +147,17 @@ header {
     z-index: 100;
     background: var(--shade_scnd);
     box-shadow: 0 4px 50px rgba(0, 0, 0, 0.25);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
 
 .nav-container {
@@ -638,9 +650,10 @@ header {
     }
 }
 
-.reload-btn {
+.menu-btn {
     position: absolute;
     right: 1ch;
+    top: -0.5ch;
 
     display: flex;
     justify-content: space-evenly;
@@ -648,47 +661,113 @@ header {
 
     background: none;
     border: none;
+}
 
-    svg {
-        transition: transform 0.5s ease;
-        fill: var(--f_bg);
+.saved-data-options {
+    position: absolute;
+    right: 5ch;
+    top: -0.25ch;
 
-        &:active {
-            fill: var(--f_bg);
-        }
+    background: var(--primary);
+    padding-inline: 1ch;
+    padding-top: 0.3ch;
+    border-radius: 2ch;
 
-        @include desktop {
-            &:hover {
-                transform: rotate(180deg);
-                fill: var(--primary);
-            }
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap: 1ch;
 
-            &:not(:hover) {
-                transform: rotate(0deg);
-            }
-        }
-    }
+    max-height: 3ch;
 
-    &:disabled {
-        @keyframes is-loading {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+    &.hidden {
+        width: 0;
+        opacity: 0;
+        transition:
+            opacity 0.3s ease-out,
+            width 0.3s ease-in-out;
 
-        svg {
-            animation: is-loading 0.5s infinite ease-in-out;
-            fill: var(--shade_prim);
+        .reload-btn,
+        .copy-btn {
+            opacity: 0;
         }
     }
 
-    &:active {
-        svg {
-            background-color: var(--f_prim);
-            border-radius: 100%;
+    &.shown {
+        width: 10ch;
+        transition: width 0.3s ease-in-out;
+
+        .reload-btn,
+        .copy-btn {
+            transition: opacity 0.7s ease-in;
+            opacity: 1;
+
+            background: none;
+            border: none;
+
+            svg {
+                width: 3ch;
+                height: 3ch;
+                fill: var(--shade_scnd);
+                filter: drop-shadow(1px 1px 1px rgb(0, 0, 0, 0.25));
+                border-radius: 2ch;
+
+                &:active {
+                    fill: var(--f_bg);
+                }
+            }
+
+            &:active {
+                svg {
+                    fill: var(--shade_prim);
+                    border-radius: 100%;
+                }
+            }
+        }
+
+        .copy-btn {
+            svg {
+                @include desktop {
+                    &:hover {
+                        fill: var(--f_bg);
+                    }
+                }
+            }
+        }
+
+        .reload-btn {
+            svg {
+                transition: transform 0.5s ease;
+                filter: drop-shadow(1px 1px 1px rgb(0, 0, 0, 0.25));
+
+                @include desktop {
+                    &:hover {
+                        transform: rotate(180deg);
+                        fill: var(--f_bg);
+                    }
+
+                    &:not(:hover) {
+                        transform: rotate(0deg);
+                    }
+                }
+            }
+
+            &:disabled {
+                @keyframes is-loading {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                svg {
+                    animation: is-loading 0.5s infinite ease-in-out;
+                    fill: var(--shade_scnd);
+                }
+            }
         }
     }
 }
