@@ -2,21 +2,23 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { IInbox } from "../interfaces/Inbox";
 import InboxArea from "./InboxArea";
 import { ReloadIcon } from "../Icons";
+import type { TMessage } from "./Notify";
 
 interface IDetails {
     inbox: IInbox;
     space_name: string;
-    on_update: (notif: string | null, data: IInbox | null) => Promise<void>;
+    on_update: (notif: TMessage, data: IInbox | null) => Promise<void>;
 }
 
 function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
     const [data, set_data] = useState<IInbox>(inbox);
     const [loading, set_loading] = useState<boolean>(false);
+    const [limit, set_limit] = useState<boolean>(false);
 
     const disable_button = (): boolean => {
         return (inbox.space_text === data.space_text
             && inbox.removal === data.removal)
-            || data.removal < -1;
+            || data.removal < -1 || limit;
     };
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
@@ -25,7 +27,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         if (disable_button()) return;
 
         if (data.space_text === "") {
-            on_update("Please provide some text first", null);
+            on_update({message: "Oops, textbox was empty...", status: "error"}, null);
             return;
         }
 
@@ -37,26 +39,19 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 body: JSON.stringify({ space_text: data.space_text, removal: data.removal })
             });
 
-            const remainingRequests = response.headers.get("X-RateLimit-Warning");
             const json = await response.json();
 
             if (!response.ok) {
+                if (response.status === 429) set_limit(true);
                 throw new Error(json["error"]);
             }
 
-            if (remainingRequests) {
-                on_update("warning: request limit almost reached", null);
-                set_loading(false);
-
-                return;
-            }
-
-            on_update(json["message"], json);
+            on_update({message: json["message"], status: "success"}, json);
             set_loading(false);
         }
         catch (err) {
             if (err instanceof Error) {
-                on_update(err.message, null);
+                on_update({message: err.message, status: "error"}, null);
             }
             set_loading(false);
         }
@@ -87,19 +82,28 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             }
 
             if (json.space_text == data.space_text && json.removal == data.removal) {
-                on_update("space is up to date", data);
+                on_update({message: "Space is up to date.", status: "info"}, data);
                 set_loading(false);
+
+                setTimeout(() => {
+                    on_update({message: json["message"], status: "info"}, null);
+                }, 5_500);
+
                 return;
             }
 
             set_data(json);
-            on_update("space updated", json);
+            on_update({message: "Space upated!", status: "success"}, json);
+
+            setTimeout(() => {
+                on_update({message: json["message"], status: "info"}, null);
+            }, 5_500);
 
             set_loading(false);
         }
         catch (err) {
             if (err instanceof Error) {
-                on_update(err.message, null);
+                on_update({message: err.message, status: "error"}, null);
             }
             set_loading(false);
         }

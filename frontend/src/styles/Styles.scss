@@ -7,8 +7,17 @@
     box-sizing: border-box;
 }
 
+*::after {
+    box-sizing: border-box;
+}
+
+*::before {
+    box-sizing: border-box;
+}
+
 $light-theme: (
     "primary": #1aac83,
+    "info": #468585,
     "error": #e7195a,
     "shade_prim": #414141,
     "shade_scnd": #fafafa,
@@ -21,6 +30,7 @@ $light-theme: (
 
 $dark-theme: (
     "primary": #1aac83,
+    "info": #468585,
     "error": #e7195a,
     "shade_prim": #fafafa,
     "shade_scnd": #414141,
@@ -30,10 +40,6 @@ $dark-theme: (
     "f_error": #fdb4cb,
     "f_bg": #bebebe
 );
-
-#root {
-    position: relative;
-}
 
 :root {
     $active-theme: $dark-theme;
@@ -132,11 +138,6 @@ body {
     font-weight: 800;
     background: var(--shade_scnd);
     margin-bottom: 150px;
-
-    @include desktop {
-        max-width: 50vw;
-        margin: auto;
-    }
 }
 
 header {
@@ -144,14 +145,17 @@ header {
     padding: 3ch 0;
     z-index: 100;
     background: var(--shade_scnd);
+    box-shadow: 0 4px 50px rgba(0, 0, 0, 0.25);
 }
 
 .nav-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-end;
 
     @include mobile {
+        display: flex;
+        justify-content: space-between;
         margin: 0 2ch;
     }
 
@@ -191,7 +195,12 @@ header {
 }
 
 .pages {
+    position: relative;
     margin: $space 1ch 0 1ch;
+    @include desktop {
+        max-width: 50vw;
+        margin: 10ch auto;
+    }
 }
 
 .home {
@@ -341,10 +350,12 @@ header {
 
             margin-bottom: 0.25ch;
             margin-left: 0.1ch;
-            padding: 0 4ch 0.15ch 0.5ch;
+            padding: 0 4ch 0.25ch 0.5ch;
 
             overflow: hidden;
             text-overflow: ellipsis;
+
+            text-shadow: 3px 2px 3px rgba(0, 0, 0, 0.25);
 
             font-weight: 800;
             letter-spacing: 0.5rem;
@@ -353,7 +364,7 @@ header {
             border: 1px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, var(--shade_prim), 90%, transparent);
+            border-image: linear-gradient(to right, var(--shade_prim), 95%, transparent);
             border-image-slice: 1;
 
             color: var(--shade_prim);
@@ -366,12 +377,15 @@ header {
             grid-template-rows: 35px 1fr;
             gap: 3px;
 
+            box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.25);
+
             > .submit-button {
                 color: var(--primary);
                 background: var(--shade_prim);
 
                 border: 1px solid var(--shade_prim);
                 border-radius: 0 0 $f_border_rad 0;
+                box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.25);
 
                 padding: 10px 1ch;
                 text-overflow: ellipsis;
@@ -682,61 +696,98 @@ header {
 @keyframes fadeInAnimation {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateX(-30px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 
 @keyframes fadeOutAnimation {
     from {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
     }
     to {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateX(30px);
     }
 }
 
 .notif-div {
     position: absolute;
-    top: 12ch;
     right: 1ch;
+    top: -7.5ch;
 
-    margin-top: 0.5ch;
-    margin-left: 1ch;
-    padding: 1ch 2ch;
-
-    background: var(--shade_prim_faded);
-    color: var(--shade_scnd);
-
+    background: none;
     border: none;
-    border-radius: 20px 0 20px 20px;
 
-    height: 1fr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1ch;
 
     > p {
+        padding: 1ch 1.5ch;
+        border-radius: 2ch;
+        color: var(--shade_prim);
+
         font-size: 0.55rem;
         font-weight: 600;
 
         text-align: left;
-        text-transform: lowercase;
         letter-spacing: 0.09rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    svg {
+        width: 3ch;
+        height: 3ch;
+
+        fill: var(--shade_scnd);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+        border-radius: 2ch;
+        padding: 0.25ch;
     }
 
     @include desktop {
         cursor: pointer;
-        &:hover {
-            border-color: var(--error);
-            color: var(--error);
-        }
 
         > p {
             font-size: 0.66rem;
         }
+    }
+}
+
+.notif-div.success {
+    p {
+        border: 1px solid var(--primary);
+    }
+
+    svg {
+        fill: var(--primary);
+    }
+}
+
+.notif-div.error {
+    p {
+        border: 1px solid var(--error);
+    }
+
+    svg {
+        fill: var(--error);
+    }
+}
+
+.notif-div.info {
+    p {
+        border: 1px solid var(--info);
+    }
+
+    svg {
+        fill: var(--info);
     }
 }
 

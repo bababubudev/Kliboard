@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+import { NotifBell } from "../Icons";
+export type TMessage = { 
+    message: string,
+    status: "error" | "success" | "info" 
+} | null;
 
 interface NotifProp {
-    message: string,
+    notification: TMessage,
     on_close: () => void;
 }
-
-function Notify({ message, on_close }: NotifProp) {
+function Notify({ notification, on_close }: NotifProp) {
     const [visible, set_visible] = useState<boolean>(true);
 
     useEffect(() => {
@@ -14,13 +18,13 @@ function Notify({ message, on_close }: NotifProp) {
 
         set_visible(true);
 
-        if (message) {
+        if (notification) {
             outerTimeout = setTimeout(() => {
                 set_visible(false);
                 innerTimeout = setTimeout(() => {
                     on_close();
                 }, 500);
-            }, 10_000);
+            }, 5_000);
 
 
             return () => {
@@ -28,14 +32,15 @@ function Notify({ message, on_close }: NotifProp) {
                 clearTimeout(outerTimeout);
             };
         }
-    }, [message, on_close]);
+    }, [notification, on_close]);
 
     return (<>
-        <button 
-            className={`notif-div ${visible ? "fade-in" : "fade-out"}`}
+        <button
+            className={`notif-div ${visible ? "fade-in" : "fade-out"} ${notification?.status}`}
             onClick={on_close}
         >
-            <p>{message}</p>
+            <p>{notification?.message}</p>
+            <NotifBell />
         </button>
     </>);
 }

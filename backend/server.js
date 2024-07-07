@@ -16,7 +16,7 @@ mongoose.connect(process.env.DBURI, {
 const app = express();
 const port = process.env.PORT || 5001;
 const rate_limit_duration = 86400000;
-const max_requests_per_IP = 10;
+const max_requests_per_IP = 15;
 
 const req_counts = new Map();
 
@@ -57,7 +57,7 @@ function limiter_middleware(req, res, next) {
         const record = req_counts.get(ip);
 
         if (record.count >= max_requests_per_IP && current_time - record.last_req_time < rate_limit_duration) {
-            return res.status(409).json({error: "Too many requests. Please try again later."});
+            return res.status(429).json({error: "Oops, looks like you've hit the request limit."});
         }
 
         if (current_time - record.last_req_time >= rate_limit_duration) {
@@ -72,10 +72,5 @@ function limiter_middleware(req, res, next) {
         req_counts.set(ip, record);
     }
 
-    if (current_usage === Math.floor(max_requests_per_IP / 2)){
-        const remainingRequests = max_requests_per_IP - current_usage;
-        res.set("X-RateLimit-Warning", remainingRequests);
-    }
-    
     next();
 }

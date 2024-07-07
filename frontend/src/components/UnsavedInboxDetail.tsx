@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import InboxArea from "./InboxArea";
 import { IInbox } from "../interfaces/Inbox";
+import type { TMessage } from "./Notify";
 
 interface IDetails {
     space_name: string;
-    on_update: (notif: string | null, data: IInbox | null) => Promise<void>;
+    on_update: (notif: TMessage, data: IInbox | null) => Promise<void>;
 }
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
@@ -16,7 +17,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         event.preventDefault();
 
         if (text === "") {
-            on_update("Please provide some text first", null);
+            on_update({message: "Oops, textbox was empty...", status: "error"},  null);
             return;
         }
 
@@ -38,15 +39,15 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
 
             const json = await response.json();
             if (!response.ok) {
-                throw new Error("Somthing went wrong :/");
+                throw new Error("Something went wrong :/");
             }
 
-            on_update(json["message"], json);
+            on_update({message: json["message"], status: "success"}, json);
             set_loading(false);
         } catch (err) {
             set_loading(false);
             if (err instanceof Error)
-                on_update(err.message, null);
+                on_update({message: err.message, status: "error"}, null);
         }
     }
 
@@ -71,7 +72,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             const json = await response.json();
 
             if (response.status === 206) {
-                on_update(json["greet"], null);
+                on_update({message: json["greet"], status: "info"}, null);
                 set_loading(false);
                 return;
             }
@@ -81,12 +82,12 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
             }
 
             set_loading(false);
-            on_update(json["message"], json);
+            on_update({message: json["message"], status: "info"}, json);
         }
         catch (err) {
             set_loading(false);
             if (err instanceof Error) {
-                on_update(err.message, null);
+                on_update({message: err.message, status: "error"}, null);
             }
         }
     }

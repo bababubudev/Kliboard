@@ -4,18 +4,19 @@ import { useLocation } from "react-router-dom";
 import SavedInboxDetail from "../components/SavedInboxDetail";
 import UnsavedInboxDetail from "../components/UnsavedInboxDetail";
 import Notify from "../components/Notify";
+import type { TMessage } from "../components/Notify";
 import LinkDetector from "../components/LinkDetector";
 
 import { IInbox } from "../interfaces/Inbox";
 
 function Inbox() {
     const [data, set_data] = useState<IInbox | null>(null);
-    const [notification, set_notification] = useState<string | null>();
+    const [notification, set_notification] = useState<TMessage>(null);
 
     const location = useLocation();
     const name: string = location.state?.u_name;
 
-    async function update_inbox(notif: string | null, response: IInbox | null): Promise<void> {
+    async function update_inbox(notif: TMessage, response: IInbox | null): Promise<void> {
         if (response) { set_data(response); }
         set_notification(notif);
     }
@@ -55,7 +56,7 @@ function Inbox() {
                     </div>
                 </div>
             </div>
-            {notification && <Notify message={notification} on_close={close_notif} />}
+            {notification && <Notify notification={notification} on_close={close_notif} />}
         </>
     );
 }

@@ -10,6 +10,6 @@ export default defineConfig({
     ],
     server: {
         port: process.env.NODE_ENV === "production" ? Number(process.env.PORT)|| 5000 : 5173,
-        host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
+        host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"
     }
 });

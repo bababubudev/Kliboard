@@ -43,7 +43,7 @@ function get_time_difference(futureDate)
 
     if (timeDifference < 0)
     {
-        return "This space is deleting in less than a minute...";
+        return "Oh no, this space clearing very soon";
     }
 
     const seconds = Math.floor(timeDifference / 1000);
@@ -53,24 +53,25 @@ function get_time_difference(futureDate)
 
     if (days >= 1)
     {
-        if (hours > 0)
-        {
-            return `${days} days and ${hours % 24} hours`;
-        }
-
+        if (days === 1) return "a day";
         return `${days} days`;
     }
     else if (hours >= 1)
     {
+        if (hours % 24 === 1) return "an hour";
         return `${hours % 24} hours`;
     }
-    else
+    else if (minutes >= 1)
     {
-        return `${minutes % 60} minutes and ${seconds % 60} seconds`;
+        if (minutes % 60 === 1) return "a minute";
+        return `${minutes % 60} minutes`;
+    }
+    else {
+        return `${seconds % 60} seconds`;
     }
 }
 
-function create_response(removal, space_name) {
+function create_response(removal) {
     let expireAt;
     switch (removal) {
     case 0:
@@ -82,7 +83,6 @@ function create_response(removal, space_name) {
     }
 
     const currentDate = new Date(expireAt);
-    const formattedName = space_name.charAt(0).toUpperCase() + space_name.slice(1).toLowerCase();
     const dateString = format_date(currentDate);
 
     let dateInfo = ` until ${dateString}`;
@@ -95,7 +95,7 @@ function create_response(removal, space_name) {
 
     if (removal === 0) { dateInfo = " for 5 minutes"; }
 
-    return { expireAt, dateInfo, formattedName };
+    return { expireAt, dateInfo };
 }
 
 async function get_inbox(req, res)
@@ -132,9 +132,11 @@ async function get_inbox_name(req, res)
         const { space_text, removal, updatedAt, expireAt } = inbox;
 
         const dateDifference = get_time_difference(new Date(expireAt));
+        const response = dateDifference.length > 10 
+            ? dateDifference 
+            : `This space is will be removed in ${dateDifference}.`;
 
-        let message = removal < 0 ? `welcome to ${inbox.space_name}! space cannot be changed`
-            : `Welcome back ${inbox.space_name}! space removing in ${dateDifference}`;
+        let message = removal < 0 ? "Oops, this space is taken!" : response;
 
         if (dateDifference[0] === "T" && removal >= 0)
             message = dateDifference;
@@ -184,13 +186,13 @@ async function post_inbox(req, res)
             throw new Error("Sent request is not valid!");
         }
 
-        const {expireAt, dateInfo, formattedName} = create_response(removal, space_name);
+        const {expireAt, dateInfo} = create_response(removal, space_name);
 
         const inbox = await model.create({ space_name, space_text, removal, expireAt });
         if (inbox === null) throw new Error("Something went wrong! Try again...");
 
         const modInbox = {
-            message: `${formattedName} saved${dateInfo}`,
+            message: `Space saved${dateInfo}`,
             space_name: inbox.space_name,
             space_text: inbox.space_text,
             removal: inbox.removal,
@@ -229,13 +231,13 @@ async function update_inbox(req, res)
             throw new Error("Sent request is not valid!");
         }
 
-        const {expireAt, dateInfo, formattedName} = create_response(removal, name, true);
+        const {expireAt, dateInfo} = create_response(removal, name, true);
 
         const inbox = await model.findOneAndUpdate({ space_name: name }, { ...req.body, expireAt: expireAt }, { new: true }); 
-        if (inbox === null) { throw new Error("space is nowhere to be found :/"); }
+        if (inbox === null) { throw new Error("Oops this space couldn't be found :/"); }
 
         const modInbox = {
-            message: formattedName + " is now saved " + dateInfo,
+            message: "Space saved " + dateInfo,
             space_name: inbox.space_name,
             space_text: inbox.space_text,
             removal: inbox.removal,
