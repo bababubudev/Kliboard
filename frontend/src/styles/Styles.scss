@@ -309,11 +309,14 @@ header {
 
         > p {
             margin-bottom: 1ch;
+            padding-bottom: 1ch;
+            font-weight: 800;
+            text-transform: lowercase;
 
-            border: 3px;
+            border: 2px;
             border-style: none none solid none;
             border-color: transparent;
-            border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
+            border-image: linear-gradient(to right, var(--f_bg), 80%, transparent);
             border-image-slice: 1;
         }
 
@@ -332,24 +335,16 @@ header {
                 border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
                 border-image-slice: 1;
 
-                p {
-                    &:last-child {
-                        text-align: end;
-                        color: var(--shade_scnd);
-                        font-size: 0.8em;
-                        padding: 0.5ch 2ch;
-                        margin-left: auto;
+                .date-updated {
+                    text-align: end;
+                    color: var(--shade_scnd);
+                    font-size: 0.8em;
+                    font-weight: 600;
+                    padding: 0.5ch 2ch;
+                    margin-left: auto;
 
-                        border-radius: 2ch;
-                        background-color: var(--info);
-                    }
-                }
-
-                &:last-child {
-                    p {
-                        border: none;
-                        background: none;
-                    }
+                    border-radius: 2ch;
+                    background-color: var(--info);
                 }
             }
         }

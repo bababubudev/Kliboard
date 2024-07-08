@@ -4,7 +4,7 @@ import LastEntries, {Entry} from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
-    const [entries, set_entries] = useState<Entry[]>();
+    const [entries, set_entries] = useState<Entry[]>([]);
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -109,7 +109,7 @@ function Home() {
                     <span> &raquo; </span>
                 </button>
             </form>
-            {entries && <LastEntries entries={entries} />}
+            {<LastEntries entries={entries} />}
         </div>
     );
 }
