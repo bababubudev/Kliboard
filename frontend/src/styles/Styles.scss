@@ -236,6 +236,7 @@ header {
             grid-column: span 2;
 
             color: var(--shade_prim);
+            text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.25);
         }
 
         > button {
@@ -321,6 +322,8 @@ header {
 
             > li {
                 display: grid;
+                grid-template-columns: 1fr 1fr;
+                justify-content: space-between;
                 padding: 1ch;
 
                 border: 1px;
@@ -328,6 +331,26 @@ header {
                 border-color: transparent;
                 border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
                 border-image-slice: 1;
+
+                p {
+                    &:last-child {
+                        text-align: end;
+                        color: var(--shade_scnd);
+                        font-size: 0.8em;
+                        padding: 0.5ch 2ch;
+                        margin-left: auto;
+
+                        border-radius: 2ch;
+                        background-color: var(--info);
+                    }
+                }
+
+                &:last-child {
+                    p {
+                        border: none;
+                        background: none;
+                    }
+                }
             }
         }
 
@@ -388,8 +411,6 @@ header {
 
             grid-template-rows: 35px 1fr;
             gap: 3px;
-
-            box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.25);
 
             > .submit-button {
                 color: var(--primary);
@@ -454,6 +475,7 @@ header {
                 $list_height: 250px;
                 position: relative;
 
+                box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.25);
                 border: 1px solid var(--shade_prim);
                 border-radius: 0 $f_border_rad 0 0;
 
@@ -700,7 +722,7 @@ header {
 
         .reload-btn,
         .copy-btn {
-            transition: opacity 0.7s ease-in;
+            transition: opacity 0.3s ease-in;
             opacity: 1;
 
             background: none;

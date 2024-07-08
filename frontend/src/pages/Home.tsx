@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LastEntries from "../components/LastEntries";
+import LastEntries, {Entry} from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
-    const [entries, set_entries] = useState<string[]>([]);
+    const [entries, set_entries] = useState<Entry[]>();
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -69,10 +69,10 @@ function Home() {
                 const json = await response.json();
 
                 if (!isMounted) return;
-                set_entries(json);
+                set_entries(json.entries);
             } catch (err) {
                 console.error(err);
-                set_entries(["Unable to connect..."]);
+                set_entries([{name: "Oops! Couldn't connect to the server..."}]);
             }
         };
 
@@ -109,7 +109,7 @@ function Home() {
                     <span> &raquo; </span>
                 </button>
             </form>
-            {entries && <LastEntries names={entries} />}
+            {entries && <LastEntries entries={entries} />}
         </div>
     );
 }
