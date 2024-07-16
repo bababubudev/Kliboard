@@ -4,7 +4,9 @@ export interface Entry {
 }
 
 interface EntriesProp {
-    entries: Entry[]
+    entries: Entry[],
+    navigate_to: (name: string) => void,
+    has_error: boolean;
 }
 
 const formatPastDate = (dateToCheck: Date): string => {
@@ -16,6 +18,7 @@ const formatPastDate = (dateToCheck: Date): string => {
     const differenceInMinutes = Math.floor(differenceInSeconds / 60);
     const differenceInHours = Math.floor(differenceInMinutes / 60);
     const differenceInDays = Math.floor(differenceInHours / 24);
+    const differenceInWeeks = Math.floor(differenceInDays / 7);
     const differenceInMonths = currentDate.getMonth() - targetDate.getMonth() + (12 * (currentDate.getFullYear() - targetDate.getFullYear()));
     const differenceInYears = currentDate.getFullYear() - targetDate.getFullYear();
 
@@ -33,6 +36,10 @@ const formatPastDate = (dateToCheck: Date): string => {
         return "a day ago";
     } else if (differenceInDays < 7) {
         return `${differenceInDays} days ago`;
+    } else if (differenceInWeeks === 1) {
+        return "a week ago";
+    } else if (differenceInWeeks < 4) {
+        return `${differenceInWeeks} weeks ago`;
     } else if (differenceInMonths === 1) {
         return "a month ago";
     } else if (differenceInMonths < 12) {
@@ -44,28 +51,39 @@ const formatPastDate = (dateToCheck: Date): string => {
     }
 };
 
-function LastEntries({ entries }: EntriesProp) {
+
+function LastEntries({ entries, navigate_to, has_error }: EntriesProp) {
     function getDate(date: Date | undefined) {
         if (!date) return "";
         return formatPastDate(date);
     }
 
+    const on_entry_click = (name: string) => {
+        if (name === "...") return;
+        navigate_to(name);
+    }; 
+
     return (
         <div className="last-updated">
-            <p id="box">LAST UPDATED SPACES</p>
+            <p id="box">{entries.length > 0 ? "LAST " : has_error ? "": "LOADING "} UPDATED SPACES {has_error ? "NOT FOUND" : ""}</p>
             <ul>
                 {entries.length > 0
                     ? entries.map((entry, index) => (
-                        <li key={index}>
+                        <button 
+                            key={index}
+                            onClick={_=>{on_entry_click(entry.name);}}
+                        >
                             <p>{entry.name}</p>
                             {entry.updated &&
                                 <p className="date-updated">
                                     {getDate(entry.updated)}
                                 </p>
                             }
-                        </li>
+                        </button>
                     ))    
-                    : <li><span>&#9862; &#9862; &#9862;</span></li>
+                    :  has_error 
+                        ? <p style={{color:"var(--f_bg)"}}>Connection failed</p> 
+                        : <li className="loading-text"></li>
                 }
             </ul>
         </div>

@@ -136,7 +136,6 @@ $mobile-width: 850px;
 
 body {
     font-family: "Source Code Pro", monospace;
-    font-weight: 800;
     background: var(--shade_scnd);
     margin-bottom: 150px;
 }
@@ -233,6 +232,7 @@ header {
             transition: 0.2s ease;
             margin-left: 0.5ch;
 
+            font-weight: 800;
             grid-column: span 2;
 
             color: var(--shade_prim);
@@ -322,18 +322,27 @@ header {
 
         > ul {
             border-collapse: collapse;
+            list-style: none;
 
-            > li {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
+            > button {
+                display: flex;
                 justify-content: space-between;
+                align-items: center;
+                width: 100%;
                 padding: 1ch;
 
+                color: var(--shade_prim);
+                background: none;
                 border: 1px;
                 border-style: none none solid none;
                 border-color: transparent;
                 border-image: linear-gradient(to right, var(--f_bg), 90%, transparent);
                 border-image-slice: 1;
+
+                p {
+                    font-family: "Source Code Pro", monospace;
+                    font-size: 0.8em;
+                }
 
                 .date-updated {
                     text-align: end;
@@ -347,14 +356,26 @@ header {
                     background-color: var(--info);
                 }
             }
-        }
 
-        .notif-div.fade-in {
-            animation: fadeInAnimation 0.5s ease-in-out forwards;
-        }
+            .loading-text::after {
+                content: "";
+                animation: dots 2s ease infinite;
+            }
 
-        .notif-div.fade-out {
-            animation: fadeOutAnimation 0.5s ease-in-out forwards;
+            @keyframes dots {
+                0% {
+                    content: "";
+                }
+                33% {
+                    content: "\2686";
+                }
+                66% {
+                    content: "\2686  \2686";
+                }
+                100% {
+                    content: "\2686  \2686  \2686";
+                }
+            }
         }
 
         .update-p {
@@ -669,8 +690,10 @@ header {
 
 .menu-btn {
     position: absolute;
-    right: 1ch;
-    top: -0.5ch;
+    right: 0.5ch;
+    top: -0.25ch;
+    padding: 0 2ch;
+    z-index: 100;
 
     display: flex;
     justify-content: space-evenly;
@@ -708,6 +731,7 @@ header {
         .reload-btn,
         .copy-btn {
             opacity: 0;
+            right: -5ch;
         }
     }
 

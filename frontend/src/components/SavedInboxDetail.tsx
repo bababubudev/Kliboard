@@ -27,7 +27,7 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         if (disable_button()) return;
 
         if (data.space_text === "") {
-            on_update({message: "Oops, textbox was empty...", status: "error"}, null);
+            on_update({message: "Uh-oh, you left the text-box empty. Try again!", status: "error"}, null);
             return;
         }
 
@@ -113,29 +113,26 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         try {
             set_loading(true);
             if (data.space_text) {
-                console.log(data.space_text);
                 await navigator.clipboard.writeText(data.space_text);
-                set_loading(false);
                 on_update({message: "Text copied to clipboard", status: "success"}, null);
             }
             else {
-                on_update({message: "It seems the field is empty. Nothing to copy", status: "info"}, null);
+                on_update({message: "Oh ohh, there is nothing to copy...", status: "info"}, null);
             }
+            set_loading(false);
         } catch (err) {
             on_update({message: "Oops, something went wrong :/", status: "error"}, null);
+            set_loading(false);
         }
     }
 
     return (
         <>
-            {inbox.removal > -1
-                ? <SavedInboxMenu 
-                    fetch_data={() => {fetch_data(data.space_name);}}
-                    loading={loading}
-                    copy_data={copy_data}
-                />
-                : null
-            }
+            <SavedInboxMenu 
+                fetch_data={() => {fetch_data(data.space_name);}}
+                loading={loading}
+                copy_data={copy_data}
+            />
             <InboxArea
                 space_name={space_name}
                 current_text={data.space_text || ""}

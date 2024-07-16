@@ -5,6 +5,7 @@ import LastEntries, {Entry} from "../components/LastEntries";
 function Home() {
     const [text, set_text] = useState<string>("");
     const [entries, set_entries] = useState<Entry[]>([]);
+    const [connnecton_error, set_connection_error] = useState<boolean>(false);
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -29,7 +30,7 @@ function Home() {
             return;
         }
 
-        navigate("/inbox", { state: { u_name: text.toLowerCase() } });
+        on_navigation_call(text.toLowerCase());
     }
 
     function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
@@ -60,6 +61,10 @@ function Home() {
         set_text(value);
     }
 
+    function on_navigation_call(user_name: string) {
+        navigate("/inbox", { state: { u_name: user_name } });
+    }
+
     useEffect(() => {
         let isMounted = true;
 
@@ -71,8 +76,12 @@ function Home() {
                 if (!isMounted) return;
                 set_entries(json.entries);
             } catch (err) {
-                console.error(err);
-                set_entries([{name: "Oops! Couldn't connect to the server..."}]);
+                set_connection_error(true);
+                set_entries([]);
+                
+                if (!headRef.current) return;
+                headRef.current.textContent = "connection error";
+                headRef.current.classList.toggle("home-input-err", true);
             }
         };
 
@@ -92,7 +101,7 @@ function Home() {
                     value={text}
                     id="input-text"
                     onChange={handle_change}
-                    placeholder="or enter an existing one..."
+                    placeholder={connnecton_error ? "try reloading the page...": "or enter an existing one..."}
                     autoFocus={true}
                     autoComplete="off"
                 />
@@ -106,10 +115,15 @@ function Home() {
                         /\d/.test(text)
                     }
                 >
-                    <span> &raquo; </span>
+                    
+                    {connnecton_error ? <span>!</span> : <span> &raquo; </span>}
                 </button>
             </form>
-            {<LastEntries entries={entries} />}
+            <LastEntries 
+                entries={entries} 
+                navigate_to={on_navigation_call}
+                has_error={connnecton_error}
+            />
         </div>
     );
 }
