@@ -3,7 +3,7 @@
 Kliboard is a simple text-saving application that allows users to create and manage text spaces with a specified duration for automatic removal. The application is built using Vite, React, and TypeScript for the frontend, while the backend utilizes Express.js and MongoDB for data storage. Visit this website [here](https://bababubudev.github.io/Kliboard/)
 
 ---
-![image](https://github.com/bababubudev/Kliboard/assets/51091892/3c9be8af-6c0d-402d-8bee-86dcaec9e466)
+![image](https://github.com/bababubudev/Kliboard/assets/51091892/f3e85629-2702-4331-8e57-b855f5484833)
 ***
 
 ## Table of Contents
