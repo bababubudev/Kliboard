@@ -30,7 +30,7 @@ function Home() {
             return;
         }
 
-        on_navigation_call(text.toLowerCase());
+        on_navigation_call(text);
     }
 
     function handle_change(event: React.ChangeEvent<HTMLInputElement>) {
@@ -62,7 +62,7 @@ function Home() {
     }
 
     function on_navigation_call(user_name: string) {
-        navigate("/inbox", { state: { u_name: user_name } });
+        navigate("/inbox", { state: { u_name: user_name.toLowerCase() } });
     }
 
     useEffect(() => {
