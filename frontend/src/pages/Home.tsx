@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LastEntries, {Entry} from "../components/LastEntries";
+import LastEntries, { Entry } from "../components/LastEntries";
 
 function Home() {
     const [text, set_text] = useState<string>("");
     const [entries, set_entries] = useState<Entry[]>([]);
     const [connnecton_error, set_connection_error] = useState<boolean>(false);
+    const [loading_text, set_loading_text] = useState<string>("");
 
     const has_spaces = text.includes(" ");
     const invalid_size = text.length == 0 || text.length > 16;
@@ -67,18 +68,26 @@ function Home() {
 
     useEffect(() => {
         let isMounted = true;
+        let loadingTimeout: NodeJS.Timeout;
 
         const fetchData = async () => {
             try {
+                loadingTimeout = setTimeout(() => {
+                    if (isMounted) {
+                        set_loading_text("fetching may take a while...(est. 1 minute)");
+                    }
+                }, 5_000);
+
                 const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/`, { method: "GET" });
                 const json = await response.json();
 
                 if (!isMounted) return;
                 set_entries(json.entries);
+                set_loading_text("");
             } catch (err) {
                 set_connection_error(true);
                 set_entries([]);
-                
+
                 if (!headRef.current) return;
                 headRef.current.textContent = "connection error";
                 headRef.current.classList.toggle("home-input-err", true);
@@ -89,6 +98,7 @@ function Home() {
 
         return () => {
             isMounted = false;
+            clearTimeout(loadingTimeout);
         };
     }, []);
 
@@ -101,7 +111,7 @@ function Home() {
                     value={text}
                     id="input-text"
                     onChange={handle_change}
-                    placeholder={connnecton_error ? "try reloading the page...": "or enter an existing one..."}
+                    placeholder={connnecton_error ? "try reloading the page..." : "or enter an existing one..."}
                     autoFocus={true}
                     autoComplete="off"
                 />
@@ -115,12 +125,15 @@ function Home() {
                         /\d/.test(text)
                     }
                 >
-                    
+
                     {connnecton_error ? <span>!</span> : <span> &raquo; </span>}
                 </button>
             </form>
-            <LastEntries 
-                entries={entries} 
+            <p className="slow-connection">
+                {(entries.length === 0 && !connnecton_error) && loading_text}
+            </p>
+            <LastEntries
+                entries={entries}
                 navigate_to={on_navigation_call}
                 has_error={connnecton_error}
             />

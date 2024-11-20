@@ -63,7 +63,7 @@ body[data-theme="dark"] {
 
     .home {
         form {
-            > label {
+            >label {
                 color: var(--primary);
 
                 &.home-input-err {
@@ -208,6 +208,7 @@ header {
 .pages {
     position: relative;
     margin: $space 1ch 0 1ch;
+
     @include desktop {
         max-width: 50vw;
         margin: 10ch auto;
@@ -215,6 +216,21 @@ header {
 }
 
 .home {
+    position: relative;
+
+    .slow-connection {
+        position: absolute;
+        top: calc($space + 3ch);
+        left: 1ch;
+
+        font-weight: 200;
+        text-transform: lowercase;
+
+        border: none;
+        color: var(--shade_prim);
+        font-size: 0.7em;
+    }
+
     form {
         display: grid;
         grid-template-columns: 3fr minmax(0px, 1fr);
@@ -228,7 +244,7 @@ header {
             color: var(--error);
         }
 
-        > label {
+        >label {
             transition: 0.2s ease;
             margin-left: 0.5ch;
 
@@ -239,7 +255,7 @@ header {
             text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.25);
         }
 
-        > button {
+        >button {
             background: var(--shade_prim);
             color: var(--primary);
 
@@ -276,7 +292,7 @@ header {
             }
         }
 
-        > input {
+        >input {
             background: var(--shade_prim);
             color: var(--shade_scnd);
             border: none;
@@ -291,8 +307,8 @@ header {
             }
         }
 
-        > button,
-        > input {
+        >button,
+        >input {
             padding: 10px 1ch;
             text-overflow: ellipsis;
         }
@@ -307,24 +323,24 @@ header {
         margin-top: $space;
         margin-left: 1ch;
 
-        > p {
+        >p {
             margin-bottom: 1ch;
             padding-bottom: 1ch;
-            font-weight: 800;
+            font-weight: 600;
             text-transform: lowercase;
 
-            border: 2px;
+            border: 1px;
             border-style: none none solid none;
             border-color: transparent;
             border-image: linear-gradient(to right, var(--f_bg), 80%, transparent);
             border-image-slice: 1;
         }
 
-        > ul {
+        >ul {
             border-collapse: collapse;
             list-style: none;
 
-            > button {
+            >button {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -366,12 +382,15 @@ header {
                 0% {
                     content: "";
                 }
+
                 33% {
                     content: "\2686";
                 }
+
                 66% {
                     content: "\2686  \2686";
                 }
+
                 100% {
                     content: "\2686  \2686  \2686";
                 }
@@ -395,7 +414,7 @@ header {
         grid-template-columns: 3fr minmax(100px, 1fr);
         gap: 3px;
 
-        > label {
+        >label {
             font-size: 1.25rem;
             transition: 0.2s ease;
 
@@ -428,7 +447,7 @@ header {
             grid-template-rows: 35px 1fr;
             gap: 3px;
 
-            > .submit-button {
+            >.submit-button {
                 color: var(--primary);
                 background: var(--shade_prim);
 
@@ -467,10 +486,12 @@ header {
                 }
 
                 @keyframes rotator {
+
                     0%,
                     100% {
                         transform: translateX(0%);
                     }
+
                     50% {
                         transform: translateX(80%);
                     }
@@ -498,16 +519,16 @@ header {
                 background: var(--shade_prim);
                 color: var(--f_prim);
 
-                > .hide-list {
+                >.hide-list {
                     display: none;
                 }
 
-                > .show-list {
+                >.show-list {
                     display: grid;
                     box-shadow: 1px 3px 7px #0000004d;
                 }
 
-                > ul {
+                >ul {
                     position: absolute;
 
                     z-index: 1;
@@ -526,6 +547,7 @@ header {
                         justify-content: center;
 
                         font-size: 0.7rem;
+
                         &:not(:last-child) {
                             border: 0.1px;
                             border-style: none none solid none;
@@ -541,7 +563,7 @@ header {
             }
         }
 
-        > textarea {
+        >textarea {
             background: var(--shade_prim);
             color: var(--shade_scnd);
 
@@ -569,7 +591,7 @@ header {
             grid-template-columns: none;
             gap: 3px;
 
-            > textarea {
+            >textarea {
                 border-radius: $f_border_rad $f_border_rad 0 0;
 
                 font-weight: 200;
@@ -583,15 +605,15 @@ header {
                 position: relative;
                 height: 60px;
 
-                > .submit-button {
+                >.submit-button {
                     border-radius: 0 0 $f_border_rad 0;
                 }
 
-                > .selector {
+                >.selector {
                     border: none;
                     border-radius: 0 0 0 $f_border_rad;
 
-                    > ul {
+                    >ul {
                         top: 8.5ch;
                         height: 250px;
                         width: calc(100svw - 20px);
@@ -607,12 +629,12 @@ header {
         }
 
         @include desktop {
-            > label {
+            >label {
                 letter-spacing: 0.7rem;
                 grid-column: span 2;
             }
 
-            > textarea {
+            >textarea {
                 font-size: 1rem;
             }
 
@@ -799,6 +821,7 @@ header {
                     0% {
                         transform: rotate(0deg);
                     }
+
                     100% {
                         transform: rotate(360deg);
                     }
@@ -818,6 +841,7 @@ header {
         opacity: 0;
         transform: translateX(-30px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -829,6 +853,7 @@ header {
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(30px);
@@ -848,7 +873,7 @@ header {
     align-items: center;
     gap: 1ch;
 
-    > p {
+    >p {
         padding: 1ch 1.5ch;
         border-radius: 2ch;
         color: var(--shade_prim);
@@ -875,7 +900,7 @@ header {
     @include desktop {
         cursor: pointer;
 
-        > p {
+        >p {
             font-size: 0.66rem;
         }
     }

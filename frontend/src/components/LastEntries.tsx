@@ -51,7 +51,6 @@ const formatPastDate = (dateToCheck: Date): string => {
     }
 };
 
-
 function LastEntries({ entries, navigate_to, has_error }: EntriesProp) {
     function getDate(date: Date | undefined) {
         if (!date) return "";
@@ -61,17 +60,17 @@ function LastEntries({ entries, navigate_to, has_error }: EntriesProp) {
     const on_entry_click = (name: string) => {
         if (name === "...") return;
         navigate_to(name);
-    }; 
+    };
 
     return (
         <div className="last-updated">
-            <p id="box">{entries.length > 0 ? "LAST " : has_error ? "": "LOADING "} UPDATED SPACES {has_error ? "NOT FOUND" : ""}</p>
+            <p>{entries.length > 0 ? "LAST " : has_error ? "" : "LOADING "} UPDATED SPACES {has_error ? "NOT FOUND" : ""}</p>
             <ul>
                 {entries.length > 0
                     ? entries.map((entry, index) => (
-                        <button 
+                        <button
                             key={index}
-                            onClick={_=>{on_entry_click(entry.name);}}
+                            onClick={_ => { on_entry_click(entry.name); }}
                         >
                             <p>{entry.name}</p>
                             {entry.updated &&
@@ -80,9 +79,9 @@ function LastEntries({ entries, navigate_to, has_error }: EntriesProp) {
                                 </p>
                             }
                         </button>
-                    ))    
-                    :  has_error 
-                        ? <p style={{color:"var(--f_bg)"}}>Connection failed</p> 
+                    ))
+                    : has_error
+                        ? <p style={{ color: "var(--f_bg)" }}>Connection failed</p>
                         : <li className="loading-text"></li>
                 }
             </ul>
