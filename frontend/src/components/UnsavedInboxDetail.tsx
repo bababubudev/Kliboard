@@ -4,20 +4,20 @@ import { IInbox } from "../interfaces/Inbox";
 import type { TMessage } from "./Notify";
 
 interface IDetails {
-    space_name: string;
+    space_name: string | undefined;
     on_update: (notif: TMessage, data: IInbox | null) => Promise<void>;
 }
 
 function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     const [text, set_text] = useState<string>("");
-    const [removal_time, set_removal_time] = useState<number>(-1);
+    const [removal_time, set_removal_time] = useState<number>(space_name === undefined ? -2 : -1);
     const [loading, set_loading] = useState<boolean>(false);
 
     async function handle_submit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
 
         if (text === "") {
-            on_update({message: "Oops, textbox was empty...", status: "error"},  null);
+            on_update({ message: "Oops, textbox was empty...", status: "error" }, null);
             return;
         }
 
@@ -27,6 +27,7 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
 
         try {
             set_loading(true);
+
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -42,12 +43,12 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
                 throw new Error("Something went wrong :/");
             }
 
-            on_update({message: json["message"], status: "success"}, json);
+            on_update({ message: json["message"], status: "success" }, json);
             set_loading(false);
         } catch (err) {
             set_loading(false);
             if (err instanceof Error)
-                on_update({message: err.message, status: "error"}, null);
+                on_update({ message: err.message, status: "error" }, null);
         }
     }
 
@@ -64,15 +65,19 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
         }
     }
 
-    async function fetch_data(name: string) {
+    async function fetch_data(name: string): Promise<void> {
         try {
             set_loading(true);
+
+            const timeout = setTimeout(() => {
+                on_update({ message: "Fetching may take a while...(est. 1 minute)", status: "info" }, null);
+            }, 5000);
 
             const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api/inbox/${name}`, { method: "GET" });
             const json = await response.json();
 
             if (response.status === 206) {
-                on_update({message: json["greet"], status: "info"}, null);
+                on_update({ message: json["greet"], status: "info" }, null);
                 set_loading(false);
                 return;
             }
@@ -81,13 +86,14 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
                 throw new Error(json["error"]);
             }
 
+            clearTimeout(timeout);
             set_loading(false);
-            on_update({message: json["message"], status: "info"}, json);
+            on_update({ message: json["message"], status: "info" }, json);
         }
         catch (err) {
             set_loading(false);
             if (err instanceof Error) {
-                on_update({message: err.message, status: "error"}, null);
+                on_update({ message: err.message, status: "error" }, null);
             }
         }
     }
@@ -101,10 +107,10 @@ function UnsavedInboxDetail({ space_name, on_update }: IDetails) {
     return (
         <>
             <InboxArea
-                space_name={space_name}
+                space_name={space_name || "Empty space"}
                 current_text={text}
                 current_time={removal_time}
-                disable_submit={false || removal_time < -1}
+                disable_submit={space_name === undefined || removal_time < -1}
                 is_loading={loading}
 
                 handle_submit={handle_submit}

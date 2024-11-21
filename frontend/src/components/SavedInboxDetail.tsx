@@ -6,7 +6,7 @@ import SavedInboxMenu from "./SavedInboxMenu";
 
 interface IDetails {
     inbox: IInbox;
-    space_name: string;
+    space_name: string | undefined;
     on_update: (notif: TMessage, data: IInbox | null) => Promise<void>;
 }
 
@@ -25,9 +25,10 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
         event.preventDefault();
 
         if (disable_button()) return;
+        if (space_name === undefined) return;
 
         if (data.space_text === "") {
-            on_update({message: "Uh-oh, you left the text-box empty. Try again!", status: "error"}, null);
+            on_update({ message: "Uh-oh, you left the text-box empty. Try again!", status: "error" }, null);
             return;
         }
 
@@ -46,12 +47,12 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
                 throw new Error(json["error"]);
             }
 
-            on_update({message: json["message"], status: "success"}, json);
+            on_update({ message: json["message"], status: "success" }, json);
             set_loading(false);
         }
         catch (err) {
             if (err instanceof Error) {
-                on_update({message: err.message, status: "error"}, null);
+                on_update({ message: err.message, status: "error" }, null);
             }
             set_loading(false);
         }
@@ -82,28 +83,28 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             }
 
             if (json.space_text == data.space_text && json.removal == data.removal) {
-                on_update({message: "Space is up to date.", status: "info"}, data);
+                on_update({ message: "Space is up to date.", status: "info" }, data);
                 set_loading(false);
 
                 setTimeout(() => {
-                    on_update({message: json["message"], status: "info"}, null);
+                    on_update({ message: json["message"], status: "info" }, null);
                 }, 5_500);
 
                 return;
             }
 
             set_data(json);
-            on_update({message: "Space upated!", status: "success"}, json);
+            on_update({ message: "Space upated!", status: "success" }, json);
 
             setTimeout(() => {
-                on_update({message: json["message"], status: "info"}, null);
+                on_update({ message: json["message"], status: "info" }, null);
             }, 5_500);
 
             set_loading(false);
         }
         catch (err) {
             if (err instanceof Error) {
-                on_update({message: err.message, status: "error"}, null);
+                on_update({ message: err.message, status: "error" }, null);
             }
             set_loading(false);
         }
@@ -114,27 +115,27 @@ function SavedInboxDetails({ inbox, on_update, space_name }: IDetails) {
             set_loading(true);
             if (data.space_text) {
                 await navigator.clipboard.writeText(data.space_text);
-                on_update({message: "Text copied to clipboard", status: "success"}, null);
+                on_update({ message: "Text copied to clipboard", status: "success" }, null);
             }
             else {
-                on_update({message: "Oh ohh, there is nothing to copy...", status: "info"}, null);
+                on_update({ message: "Oh ohh, there is nothing to copy...", status: "info" }, null);
             }
             set_loading(false);
         } catch (err) {
-            on_update({message: "Oops, something went wrong :/", status: "error"}, null);
+            on_update({ message: "Oops, something went wrong :/", status: "error" }, null);
             set_loading(false);
         }
     }
 
     return (
         <>
-            <SavedInboxMenu 
-                fetch_data={() => {fetch_data(data.space_name);}}
+            <SavedInboxMenu
+                fetch_data={() => { fetch_data(data.space_name); }}
                 loading={loading}
                 copy_data={copy_data}
             />
             <InboxArea
-                space_name={space_name}
+                space_name={space_name || "Empty Space"}
                 current_text={data.space_text || ""}
                 current_time={data.removal}
                 disable_submit={disable_button()}

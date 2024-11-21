@@ -14,7 +14,7 @@ function Inbox() {
     const [notification, set_notification] = useState<TMessage>(null);
 
     const location = useLocation();
-    const name: string = location.state?.u_name;
+    const name: string | undefined = location.state?.u_name;
 
     async function update_inbox(notif: TMessage, response: IInbox | null): Promise<void> {
         if (response) { set_data(response); }
