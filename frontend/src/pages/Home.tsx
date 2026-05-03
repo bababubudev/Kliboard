@@ -68,7 +68,7 @@ function Home() {
 
     useEffect(() => {
         let isMounted = true;
-        let loadingTimeout: NodeJS.Timeout;
+        let loadingTimeout: ReturnType<typeof setTimeout>;
 
         const fetchData = async () => {
             try {
@@ -82,7 +82,7 @@ function Home() {
                 const json = await response.json();
 
                 if (!isMounted) return;
-                set_entries(json.entries);
+                set_entries(json.entries ?? []);
                 set_loading_text("");
             } catch (err) {
                 set_connection_error(true);
