@@ -13,8 +13,8 @@ function Notify({ notification, on_close }: NotifProp) {
     const [visible, set_visible] = useState<boolean>(true);
 
     useEffect(() => {
-        let innerTimeout: NodeJS.Timeout;
-        let outerTimeout: NodeJS.Timeout;
+        let innerTimeout: ReturnType<typeof setTimeout>;
+        let outerTimeout: ReturnType<typeof setTimeout>;
 
         set_visible(true);
 
