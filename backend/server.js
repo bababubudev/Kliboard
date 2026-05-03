@@ -4,14 +4,13 @@ import cors from "cors";
 import { corsOptions } from "./config/corsOptions.js";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import dns from "dns";
 
 import router from "./routes/all_routes.js";
 
 env.config();
-mongoose.connect(process.env.DBURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(on_connect).catch(on_fail);
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+mongoose.connect(process.env.DBURI).then(on_connect).catch(on_fail);
 
 const app = express();
 const port = process.env.PORT || 5001;
